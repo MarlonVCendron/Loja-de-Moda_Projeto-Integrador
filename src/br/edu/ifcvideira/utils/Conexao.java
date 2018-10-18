@@ -13,7 +13,7 @@ public class Conexao {
 	private final static String banco = "postgres";
 	private final static String url = "jdbc:postgresql://" + host + ":" + porta + "/" + banco;
 	private static Connection conexao = null;
-	    
+	
 	public static Connection conectar(){
 		 try {
 			 Class.forName(driver);
