@@ -15,7 +15,7 @@ public class ProdutoDao{
 	
 	public void CadastrarProduto(Produto pr) throws SQLException, Exception{
 		try{
-			String sql = "INSERT INTO Produtoes (nome , valor_unitario , tamanho, id_categoria, id_fornecedor, status ) VALUES (?,?,?,?,?,?)";
+			String sql = "INSERT INTO produtos (nome , valor_unitario , tamanho, id_categoria, id_fornecedor, status ) VALUES (?,?,?,?,?,?)";
 			java.sql.PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
 			sqlPrep.setString(1, pr.getNome());
 			sqlPrep.setDouble(2, pr.getValor_unitario());
@@ -36,7 +36,7 @@ public class ProdutoDao{
 
 	public void AlterarProduto(Produto pr) throws Exception {
 		try{
-			String sql = "UPDATE Produto SET nome=?, valor_unitario=?, tamanho=?, id_categoria=?, id_fornecedor=?, status=? WHERE id=?";
+			String sql = "UPDATE produtos SET nome=?, valor_unitario=?, tamanho=?, id_categoria=?, id_fornecedor=?, status=? WHERE id=?";
 			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
 			sqlPrep.setString(1, pr.getNome());
 			sqlPrep.setDouble(2, pr.getValor_unitario());
@@ -53,7 +53,7 @@ public class ProdutoDao{
 
 	public void deletarProduto(Produto pr) throws Exception{
 		try{
-			String sql = "DELETE FROM Produto WHERE id=? ";
+			String sql = "DELETE FROM produtos WHERE id=? ";
 			PreparedStatement sqlPrep = (PreparedStatement) Conexao.conectar().prepareStatement(sql);
 			sqlPrep.setInt(1, pr.getId());
 			sqlPrep.execute();
@@ -65,13 +65,13 @@ public class ProdutoDao{
 	public List<Object> buscarTodos() throws SQLException, Exception{
 		List<Object> Produto = new ArrayList<Object>();
 		try {
-			String sql = "SELECT * FROM Produto";
+			String sql = "SELECT * FROM produtos";
 			java.sql.Statement state = Conexao.conectar().createStatement();
 			ResultSet rs = state.executeQuery(sql);
 			
 			while (rs.next())
 			{
-				Object[] linha = {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),rs.getString(6)};
+				Object[] linha = {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),rs.getString(6),rs.getString(7)};
 				Produto.add(linha);
 			}
 			state.close();
@@ -84,7 +84,7 @@ public class ProdutoDao{
 	
 	public int RetornarProximoidProduto() throws Exception {
 		try{
-			String sql ="SELECT MAX(id)+1 AS id FROM Produto ";
+			String sql ="SELECT MAX(id)+1 AS id FROM produtos ";
 			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
 			ResultSet rs = sqlPrep.executeQuery();
 			if (rs.next()){

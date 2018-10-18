@@ -38,7 +38,7 @@ public class FornecedorDao{
 
 	public void AlterarFornecedor(Fornecedor fo) throws Exception {
 		try{
-			String sql = "UPDATE Fornecedor SET nome=?, cnpj=?, email=?, telefone=?, rua=?, bairro=?, cidade=?, estado=? WHERE id=?";
+			String sql = "UPDATE fornecedores SET nome=?, cnpj=?, email=?, telefone=?, rua=?, bairro=?, cidade=?, estado=? WHERE id=?";
 			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
 			sqlPrep.setString(1, fo.getNome());
 			sqlPrep.setString(2, fo.getCnpj());
@@ -57,7 +57,7 @@ public class FornecedorDao{
 
 	public void deletarFornecedor(Fornecedor fo) throws Exception{
 		try{
-			String sql = "DELETE FROM Fornecedor WHERE id=? ";
+			String sql = "DELETE FROM fornecedores WHERE id=? ";
 			PreparedStatement sqlPrep = (PreparedStatement) Conexao.conectar().prepareStatement(sql);
 			sqlPrep.setInt(1, fo.getId());
 			sqlPrep.execute();
@@ -69,13 +69,13 @@ public class FornecedorDao{
 	public List<Object> buscarTodos() throws SQLException, Exception{
 		List<Object> Fornecedor = new ArrayList<Object>();
 		try {
-			String sql = "SELECT * FROM Fornecedor";
+			String sql = "SELECT * FROM fornecedores";
 			java.sql.Statement state = Conexao.conectar().createStatement();
 			ResultSet rs = state.executeQuery(sql);
 			
 			while (rs.next())
 			{
-				Object[] linha = {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)};
+				Object[] linha = {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8),rs.getString(9)};
 				Fornecedor.add(linha);
 			}
 			state.close();
@@ -88,7 +88,7 @@ public class FornecedorDao{
 	
 	public int RetornarProximoidFornecedor() throws Exception {
 		try{
-			String sql ="SELECT MAX(id)+1 AS id FROM Fornecedor ";
+			String sql ="SELECT MAX(id)+1 AS id FROM fornecedores ";
 			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
 			ResultSet rs = sqlPrep.executeQuery();
 			if (rs.next()){
