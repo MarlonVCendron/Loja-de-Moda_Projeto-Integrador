@@ -1,5 +1,6 @@
 package br.edu.ifcvideira.Classes;
 
+import java.sql.Timestamp;
 public class Usuario {
 	private int id_usuario;
 	private int tipo_usuario;

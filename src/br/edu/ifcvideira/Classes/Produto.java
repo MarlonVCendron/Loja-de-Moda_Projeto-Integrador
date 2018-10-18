@@ -3,56 +3,56 @@ package br.edu.ifcvideira.Classes;
 import java.sql.Timestamp;
 
 public class Produto {
-	private int id_produto;
-	private String nome_produto;
-	private double valor_unitario_produto;
-	private String tamanho_produto;
-	private int id_categoria_produto;
-	private int id_fornecedor_produto;
-	private int status_produto;
+	private int id;
+	private String nome;
+	private double valorUnitario;
+	private String tamanho;
+	private int idCategoria;
+	private int idFornecedor;
+	private int status;
 	
 	
 	
-	public int getId_produto() {
-		return id_produto;
+	public int getId() {
+		return id;
 	}
-	public void setId_produto(int id_produto) {
-		this.id_produto = id_produto;
+	public void setId(int id) {
+		this.id = id;
 	}
-	public String getNome_produto() {
-		return nome_produto;
+	public String getNome() {
+		return nome;
 	}
-	public void setNome_produto(String nome_produto) {
-		this.nome_produto = nome_produto;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
-	public double getValor_unitario_produto() {
-		return valor_unitario_produto;
+	public double getValor_unitario() {
+		return valorUnitario;
 	}
-	public void setValor_unitario_produto(double valor_unitario_produto) {
-		this.valor_unitario_produto = valor_unitario_produto;
+	public void setValor_unitario(double valor_unitario) {
+		this.valorUnitario = valor_unitario;
 	}
-	public String getTamanho_produto() {
-		return tamanho_produto;
+	public String getTamanho() {
+		return tamanho;
 	}
-	public void setTamanho_produto(String tamanho_produto) {
-		this.tamanho_produto = tamanho_produto;
+	public void setTamanho(String tamanho) {
+		this.tamanho = tamanho;
 	}
-	public int getId_categoria_produto() {
-		return id_categoria_produto;
+	public int getId_categoria() {
+		return idCategoria;
 	}
-	public void setId_categoria_produto(int id_categoria_produto) {
-		this.id_categoria_produto = id_categoria_produto;
+	public void setId_categoria(int id_categoria) {
+		this.idCategoria = id_categoria;
 	}
-	public int getId_fornecedor_produto() {
-		return id_fornecedor_produto;
+	public int getId_fornecedor() {
+		return idFornecedor;
 	}
-	public void setId_fornecedor_produto(int id_fornecedor_produto) {
-		this.id_fornecedor_produto = id_fornecedor_produto;
+	public void setId_fornecedor(int id_fornecedor) {
+		this.idFornecedor = id_fornecedor;
 	}
-	public int getStatus_produto() {
-		return status_produto;
+	public int getStatus() {
+		return status;
 	}
-	public void setStatus_produto(int status_produto) {
-		this.status_produto = status_produto;
+	public void setStatus(int status) {
+		this.status = status;
 	}
 }

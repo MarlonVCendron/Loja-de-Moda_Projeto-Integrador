@@ -2,108 +2,107 @@ package br.edu.ifcvideira.Classes;
 
 import java.sql.Timestamp;
 
-public class Cliente {
+public class Fornecedor {
 	
-	private int id_fornecedor;
-	private String nome_fornecedor;
-	private String cnpj_fornecedor;
-	private String email_fornecedor;
-	private String telefone_fornecedor;
-	private String rua_fornecedor;
-	private String bairro_fornecedor;
-	private String cidade_fornecedor;
-	private String estado_fornecedor;
+	private int id;
+	private String nome;
+	private String cnpj;
+	private String email;
+	private String telefone;
+	private String rua;
+	private String bairro;
+	private String cidade;
+	private String estado;
 	
 	
 	
-	public int getId_fornecedor() {
-		return id_fornecedor;
+	public int getId() {
+		return id;
 	}
 
 
-	public void setId_fornecedor(int id_fornecedor) {
-		this.id_fornecedor = id_fornecedor;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 
-	public String getNome_fornecedor() {
-		return nome_fornecedor;
+	public String getNome() {
+		return nome;
 	}
 
 
-	public void setNome_fornecedor(String nome_fornecedor) {
-		this.nome_fornecedor = nome_fornecedor;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 
-	public String getCnpj_fornecedor() {
-		return cnpj_fornecedor;
+	public String getCnpj() {
+		return cnpj;
 	}
 
 
-	public void setCnpj_fornecedor(String cnpj_fornecedor) {
-		this.cnpj_fornecedor = cnpj_fornecedor;
+	public void setCnpj(String cnpj) {
+		this.cnpj = cnpj;
 	}
 
 
-	public String getEmail_fornecedor() {
-		return email_fornecedor;
+	public String getEmail() {
+		return email;
 	}
 
 
-	public void setEmail_fornecedor(String email_fornecedor) {
-		this.email_fornecedor = email_fornecedor;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 
-	public String getTelefone_fornecedor() {
-		return telefone_fornecedor;
+	public String getTelefone() {
+		return telefone;
 	}
 
 
-	public void setTelefone_fornecedor(String telefone_fornecedor) {
-		this.telefone_fornecedor = telefone_fornecedor;
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
 	}
 
 
-	public String getRua_fornecedor() {
-		return rua_fornecedor;
+	public String getRua() {
+		return rua;
 	}
 
 
-	public void setRua_fornecedor(String rua_fornecedor) {
-		this.rua_fornecedor = rua_fornecedor;
+	public void setRua(String rua) {
+		this.rua = rua;
 	}
 
 
-	public String getBairro_fornecedor() {
-		return bairro_fornecedor;
+	public String getBairro() {
+		return bairro;
 	}
 
 
-	public void setBairro_fornecedor(String bairro_fornecedor) {
-		this.bairro_fornecedor = bairro_fornecedor;
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
 	}
 
 
-	public String getCidade_fornecedor() {
-		return cidade_fornecedor;
+	public String getCidade() {
+		return cidade;
 	}
 
 
-	public void setCidade_fornecedor(String cidade_fornecedor) {
-		this.cidade_fornecedor = cidade_fornecedor;
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
 	}
 
 
-	public String getEstado_fornecedor() {
-		return estado_fornecedor;
+	public String getEstado() {
+		return estado;
 	}
 
 
-	public void setEstado_fornecedor(String estado_fornecedor) {
-		this.estado_fornecedor = estado_fornecedor;
+	public void setEstado(String estado) {
+		this.estado = estado;
 	}
 
-
-
+}
