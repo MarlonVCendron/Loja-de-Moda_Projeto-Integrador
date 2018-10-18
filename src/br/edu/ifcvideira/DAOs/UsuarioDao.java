@@ -8,24 +8,23 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import br.edu.ifcvideira.Classes.Cliente;
+import br.edu.ifcvideira.Classes.Usuario;
 import br.edu.ifcvideira.utils.Conexao;
 
-public class ClienteDao{
-	
-	public void CadastrarCliente(Cliente cl) throws SQLException, Exception{
+public class UsuarioDao {
+	public void CadastrarUsuario(Usuario us) throws SQLException, Exception{
 		try{
-			String sql = "INSERT INTO cliente (nome, cpf, telefone, celular, data_cadastro, rua, bairro, cidade, estado) VALUES (?,?,?,?,?,?,?,?,?)";
+			String sql = "INSERT INTO usuario (nome, tipo, nome, senha, cpf, rg, telefone, celular, data_cadastro, status) VALUES (?,?,?,?,?,?,?,?,?)";
 			java.sql.PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
-			sqlPrep.setString(1, cl.getNome());
-			sqlPrep.setString(2, cl.getCpf());
-			sqlPrep.setString(3, cl.getTelefone());
-			sqlPrep.setString(4, cl.getCelular());
-			sqlPrep.setTimestamp(5, cl.getDataCadastro());
-			sqlPrep.setString(6, cl.getRua());
-			sqlPrep.setString(7, cl.getBairro());
-			sqlPrep.setString(8, cl.getCidade());
-			sqlPrep.setString(9, cl.getEstado());
+			sqlPrep.setInt(1, us.getTipo());
+			sqlPrep.setString(2, us.getNome());
+			sqlPrep.setString(3, us.getSenha());
+			sqlPrep.setString(4, us.getCpf());
+			sqlPrep.setString(5, us.getRg());
+			sqlPrep.setString(6, us.getTelefone());
+			sqlPrep.setString(7, us.getCelular());
+			sqlPrep.setTimestamp(8, us.getDataCadastro());
+			sqlPrep.setInt(9, us.getStatus());
 			sqlPrep.execute();
 			
 		} catch(SQLException e) {
@@ -36,31 +35,31 @@ public class ClienteDao{
 		}
 	}
 
-	public void AlterarCliente(Cliente cl) throws Exception {
+	public void AlterarUsuario(Usuario us) throws Exception {
 		try{
-			String sql = "UPDATE cliente SET nome=?, cpf=?, telefone=?, celular=?, data_cadastro=?, rua=?, bairro=?, cidade=?, estado=? WHERE id=?";
+			String sql = "UPDATE usuario SET tipo=?, nome=?, senha=?, cpf=?, rg=?, telefone=?, celular=?, data_cadastro=?, status=? WHERE id=?";
 			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
-			sqlPrep.setString(1, cl.getNome());
-			sqlPrep.setString(2, cl.getCpf());
-			sqlPrep.setString(3, cl.getTelefone());
-			sqlPrep.setString(4, cl.getCelular());
-			sqlPrep.setTimestamp(5, cl.getDataCadastro());
-			sqlPrep.setString(6, cl.getRua());
-			sqlPrep.setString(7, cl.getBairro());
-			sqlPrep.setString(8, cl.getCidade());
-			sqlPrep.setString(9, cl.getEstado());
-			sqlPrep.setInt(10, cl.getId());
+			sqlPrep.setInt(1, us.getTipo());
+			sqlPrep.setString(2, us.getNome());
+			sqlPrep.setString(3, us.getSenha());
+			sqlPrep.setString(4, us.getCpf());
+			sqlPrep.setString(5, us.getRg());
+			sqlPrep.setString(6, us.getTelefone());
+			sqlPrep.setString(7, us.getCelular());
+			sqlPrep.setTimestamp(8, us.getDataCadastro());
+			sqlPrep.setInt(9, us.getStatus());
+			sqlPrep.setInt(10, us.getId());
 			sqlPrep.execute();
 		}catch(Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
 	}
 
-	public void deletarCliente(Cliente cl) throws Exception{
+	public void deletarUsuario(Usuario us) throws Exception{
 		try{
-			String sql = "DELETE FROM cliente WHERE id=? ";
+			String sql = "DELETE FROM usuario WHERE id=? ";
 			PreparedStatement sqlPrep = (PreparedStatement) Conexao.conectar().prepareStatement(sql);
-			sqlPrep.setInt(1, cl.getId());
+			sqlPrep.setInt(1, us.getId());
 			sqlPrep.execute();
 		} catch (SQLException e){
 			JOptionPane.showMessageDialog(null, e.getMessage());
@@ -68,28 +67,28 @@ public class ClienteDao{
 	}
 	
 	public List<Object> buscarTodos() throws SQLException, Exception{
-		List<Object> cliente = new ArrayList<Object>();
+		List<Object> Usuario = new ArrayList<Object>();
 		try {
-			String sql = "SELECT * FROM cliente";
+			String sql = "SELECT * FROM usuario";
 			java.sql.Statement state = Conexao.conectar().createStatement();
 			ResultSet rs = state.executeQuery(sql);
 			
 			while (rs.next())
 			{
 				Object[] linha = {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9)};
-				cliente.add(linha);
+				Usuario.add(linha);
 			}
 			state.close();
 			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
-		return cliente;
+		return Usuario;
 	}
 	
-	public int RetornarProximoCodigoCliente() throws Exception {
+	public int RetornarProximoCodigoUsuario() throws Exception {
 		try{
-			String sql ="SELECT MAX(id)+1 AS id FROM cliente ";
+			String sql ="SELECT MAX(id)+1 AS id FROM usuario ";
 			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
 			ResultSet rs = sqlPrep.executeQuery();
 			if (rs.next()){
