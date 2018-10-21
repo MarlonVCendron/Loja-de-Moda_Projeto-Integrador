@@ -1,7 +1,5 @@
 package br.edu.ifcvideira.Classes;
 
-import java.sql.Timestamp;
-
 public class Categoria {
 	private int id;
 	private String descricao;

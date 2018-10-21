@@ -1,10 +1,7 @@
 package br.edu.ifcvideira.Classes;
 
 import java.sql.Timestamp;
-<<<<<<< HEAD
-=======
 
->>>>>>> e26d5206d88de3ef033d48783bf1e95fc89f587a
 public class Usuario {
 	private int id;
 	private int tipo;
