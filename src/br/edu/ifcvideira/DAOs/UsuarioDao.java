@@ -14,7 +14,7 @@ import br.edu.ifcvideira.utils.Conexao;
 public class UsuarioDao {
 	public void CadastrarUsuario(Usuario us) throws SQLException, Exception{
 		try{
-			String sql = "INSERT INTO usuario (nome, tipo, nome, senha, cpf, rg, telefone, celular, data_cadastro, status) VALUES (?,?,?,?,?,?,?,?,?)";
+			String sql = "INSERT INTO usuario (tipo, nome, senha, cpf, rg, telefone, celular, data_cadastro, status) VALUES (?,?,?,?,?,?,?,?,?)";
 			java.sql.PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
 			sqlPrep.setInt(1, us.getTipo());
 			sqlPrep.setString(2, us.getNome());
@@ -84,6 +84,28 @@ public class UsuarioDao {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
 		return Usuario;
+	}
+	
+	public List<Object> buscarUsuario(String nome) throws SQLException, Exception{
+		List<Object> info = new ArrayList<>();
+		try {
+			String sql = "SELECT id, senha FROM usuario WHERE nome=?";
+			//java.sql.Statement state = Conexao.conectar().createStatement();
+			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
+			sqlPrep.setString(1, nome);
+			ResultSet rs = sqlPrep.executeQuery();
+			
+			while (rs.next())
+			{
+				info.add(rs.getInt(1));
+				info.add(rs.getString(2));
+			}
+			sqlPrep.close();
+			
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
+		return info;
 	}
 	
 	public int RetornarProximoCodigoUsuario() throws Exception {
