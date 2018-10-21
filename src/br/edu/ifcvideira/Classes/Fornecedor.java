@@ -1,7 +1,5 @@
 package br.edu.ifcvideira.Classes;
 
-import java.sql.Timestamp;
-
 public class Fornecedor {
 	
 	private int id;
