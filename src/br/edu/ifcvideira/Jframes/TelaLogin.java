@@ -39,6 +39,7 @@ import javax.swing.JSeparator;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
+import javax.swing.JTextPane;
 
 
 public class TelaLogin extends JFrame {
@@ -59,6 +60,7 @@ public class TelaLogin extends JFrame {
 	
 	Color corTexto = new Color(75, 80, 85);
 	Color corGeral = new Color(118, 184, 184);
+	Color corSeparador = new Color(176, 176, 176);
 	Point posMouseInicial;
 	
 	
@@ -87,7 +89,7 @@ public class TelaLogin extends JFrame {
 		int largura = 800;
 		int altura = 700;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds((tela.width / 2) - (largura / 2), (tela.height / 2) - (altura / 2), 985, 652);
+		setBounds((tela.width / 2) - (largura / 2), (tela.height / 2) - (altura / 2), 982, 652);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -147,6 +149,41 @@ public class TelaLogin extends JFrame {
 		lblRepitaASenha.setBounds(551, 423, 163, 42);
 		panelCadastro.add(lblRepitaASenha);
 		
+		JSeparator spNome = new JSeparator();
+		spNome.setBackground(corSeparador);
+		spNome.setBounds(713, 137, 215, 2);
+		panelCadastro.add(spNome);
+		
+		JSeparator spCpf = new JSeparator();
+		spCpf.setBackground(corSeparador);
+		spCpf.setBounds(713, 192, 215, 2);
+		panelCadastro.add(spCpf);
+		
+		JSeparator spRg = new JSeparator();
+		spRg.setBackground(corSeparador);
+		spRg.setBounds(713, 247, 215, 2);
+		panelCadastro.add(spRg);
+		
+		JSeparator spTelefone = new JSeparator();
+		spTelefone.setBackground(corSeparador);
+		spTelefone.setBounds(713, 302, 215, 2);
+		panelCadastro.add(spTelefone);
+		
+		JSeparator spCelular = new JSeparator();
+		spCelular.setBackground(corSeparador);
+		spCelular.setBounds(713, 357, 215, 2);
+		panelCadastro.add(spCelular);
+		
+		JSeparator spSenha = new JSeparator();
+		spSenha.setBackground(corSeparador);
+		spSenha.setBounds(713, 412, 215, 2);
+		panelCadastro.add(spSenha);
+		
+		JSeparator spRepetir = new JSeparator();
+		spRepetir.setBackground(corSeparador);
+		spRepetir.setBounds(713, 467, 215, 2);
+		panelCadastro.add(spRepetir);
+		
 		tfNome = new JTextField();
 		tfNome.setForeground(corTexto);
 		tfNome.setFont(new Font("Roboto", Font.PLAIN, 18));
@@ -160,6 +197,11 @@ public class TelaLogin extends JFrame {
 				if(tfNome.getText().length() < 1) {
 					camposCorretos[0] = false;
 				}
+				spNome.setBackground(corSeparador);
+			}
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				spNome.setBackground(corGeral);
 			}
 		});
 		tfNome.setColumns(10);
@@ -180,6 +222,11 @@ public class TelaLogin extends JFrame {
 				String numerosCpf = tfCpf.getText();
 				numerosCpf = numerosCpf.replaceAll("[^\\w]", "");
 				camposCorretos[1] = (numerosCpf.length() < 11) ? false : true;
+				spCpf.setBackground(corSeparador);
+			}
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				spCpf.setBackground(corGeral);
 			}
 		});
 		tfCpf.setColumns(10);
@@ -200,6 +247,11 @@ public class TelaLogin extends JFrame {
 				String numerosRg = tfRg.getText();
 				numerosRg = numerosRg.replaceAll("[^\\w]", "");
 				camposCorretos[2] = (numerosRg.length() < 7) ? false : true;
+				spRg.setBackground(corSeparador);
+			}
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				spRg.setBackground(corGeral);
 			}
 		});
 		tfRg.setColumns(10);
@@ -220,6 +272,11 @@ public class TelaLogin extends JFrame {
 				String numerosTelefone = tfTelefone.getText();
 				numerosTelefone = numerosTelefone.replaceAll("[^\\w]", "");
 				camposCorretos[3] = (numerosTelefone.length() < 10) ? false : true;
+				spTelefone.setBackground(corSeparador);
+			}
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				spTelefone.setBackground(corGeral);
 			}
 		});
 		tfTelefone.setColumns(10);
@@ -243,6 +300,11 @@ public class TelaLogin extends JFrame {
 				if(numerosCelular.length() == 0) {
 					camposCorretos[4] = true;
 				}
+				spCelular.setBackground(corSeparador);
+			}
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				spCelular.setBackground(corGeral);
 			}
 		});
 		tfCelular.setColumns(10);
@@ -258,6 +320,11 @@ public class TelaLogin extends JFrame {
 			@Override
 			public void focusLost(FocusEvent e) {
 				camposCorretos[5] = (pfSenha.getPassword().length < 8) ? false : true;
+				spSenha.setBackground(corSeparador);
+			}
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				spSenha.setBackground(corGeral);
 			}
 		});
 		pfSenha.setColumns(10);
@@ -273,46 +340,16 @@ public class TelaLogin extends JFrame {
 			@Override
 			public void focusLost(FocusEvent e) {
 				camposCorretos[6] = (pfRepetir.getText().equals(pfSenha.getText())) ? true : false;
+				spRepetir.setBackground(corSeparador);
+			}
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				spRepetir.setBackground(corGeral);
 			}
 		});
 		pfRepetir.setBounds(713, 435, 215, 32);
 		panelCadastro.add(pfRepetir);
 		pfRepetir.setColumns(10);
-		
-		JSeparator separator = new JSeparator();
-		separator.setBackground(new Color(176, 176, 176));
-		separator.setBounds(713, 137, 215, 2);
-		panelCadastro.add(separator);
-		
-		JSeparator separator_1 = new JSeparator();
-		separator_1.setBackground(new Color(176, 176, 176));
-		separator_1.setBounds(713, 192, 215, 2);
-		panelCadastro.add(separator_1);
-		
-		JSeparator separator_2 = new JSeparator();
-		separator_2.setBackground(new Color(176, 176, 176));
-		separator_2.setBounds(713, 247, 215, 2);
-		panelCadastro.add(separator_2);
-		
-		JSeparator separator_3 = new JSeparator();
-		separator_3.setBackground(new Color(176, 176, 176));
-		separator_3.setBounds(713, 302, 215, 2);
-		panelCadastro.add(separator_3);
-		
-		JSeparator separator_4 = new JSeparator();
-		separator_4.setBackground(new Color(176, 176, 176));
-		separator_4.setBounds(713, 357, 215, 2);
-		panelCadastro.add(separator_4);
-		
-		JSeparator separator_5 = new JSeparator();
-		separator_5.setBackground(new Color(176, 176, 176));
-		separator_5.setBounds(713, 412, 215, 2);
-		panelCadastro.add(separator_5);
-		
-		JSeparator separator_6 = new JSeparator();
-		separator_6.setBackground(new Color(176, 176, 176));
-		separator_6.setBounds(713, 467, 215, 2);
-		panelCadastro.add(separator_6);
 		
 		JPanel panelCampos = new JPanel();
 		panelCampos.setBounds(477, 41, 506, 612);
@@ -352,6 +389,11 @@ public class TelaLogin extends JFrame {
 		});
 		btnCadastrar.setFont(new Font("Roboto", Font.PLAIN, 18));
 		btnCadastrar.setForeground(corTexto);
+		
+		JTextPane txtpnDassad = new JTextPane();
+		txtpnDassad.setText("dassad");
+		txtpnDassad.setBounds(40, 505, 60, 66);
+		panelCampos.add(txtpnDassad);
 		
 		JPanel panelEsquerda = new JPanel();
 		panelEsquerda.setBackground(corGeral);
