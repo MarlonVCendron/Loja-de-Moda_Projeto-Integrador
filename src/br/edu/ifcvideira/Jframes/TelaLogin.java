@@ -15,6 +15,7 @@ import javax.swing.UIManager;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Window;
 import java.awt.event.FocusAdapter;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPasswordField;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -40,6 +42,9 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
 import javax.swing.JTextPane;
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+import java.awt.Component;
+import javax.swing.Icon;
 
 
 public class TelaLogin extends JFrame {
@@ -62,6 +67,9 @@ public class TelaLogin extends JFrame {
 	Color corGeral = new Color(118, 184, 184);
 	Color corSeparador = new Color(176, 176, 176);
 	Point posMouseInicial;
+	
+	ImageIcon imageIconX = new ImageIcon(TelaLogin.class.getResource("/br/edu/ifcvideira/img/xerro.png"));
+	Image imagemX = imageIconX.getImage().getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH);
 	
 	
 	/**
@@ -198,6 +206,10 @@ public class TelaLogin extends JFrame {
 					camposCorretos[0] = false;
 				}
 				spNome.setBackground(corSeparador);
+				
+				if(!camposCorretos[0]) {
+					spNome.setBackground(new Color(2));
+				}
 			}
 			@Override
 			public void focusGained(FocusEvent arg0) {
@@ -210,6 +222,7 @@ public class TelaLogin extends JFrame {
 		
 		try {
 			MaskFormatter tfCpfFormatter = new MaskFormatter("###.###.###-##");
+			tfCpfFormatter.setPlaceholderCharacter('_');
 			tfCpf = new JFormattedTextField(tfCpfFormatter);
 			tfCpf.setForeground(corTexto);
 			tfCpf.setFont(new Font("Roboto", Font.PLAIN, 18));
@@ -235,6 +248,7 @@ public class TelaLogin extends JFrame {
 		
 		try {
 			MaskFormatter tfRgFormatter = new MaskFormatter("#.###.###");
+			tfRgFormatter.setPlaceholderCharacter('_');
 			tfRg = new JFormattedTextField(tfRgFormatter);
 			tfRg.setForeground(corTexto);
 			tfRg.setFont(new Font("Roboto", Font.PLAIN, 18));
@@ -260,6 +274,7 @@ public class TelaLogin extends JFrame {
 		
 		try {
 			MaskFormatter tfTelefoneFormatter = new MaskFormatter("(##) ####-####");
+			tfTelefoneFormatter.setPlaceholderCharacter('_');
 			tfTelefone = new JFormattedTextField(tfTelefoneFormatter);
 			tfTelefone.setForeground(corTexto);
 			tfTelefone.setFont(new Font("Roboto", Font.PLAIN, 18));
@@ -285,6 +300,7 @@ public class TelaLogin extends JFrame {
 		
 		try {
 			MaskFormatter tfCelularFormatter = new MaskFormatter("(##) #####-####");
+			tfCelularFormatter.setPlaceholderCharacter('_');
 			tfCelular = new JFormattedTextField(tfCelularFormatter);
 			tfCelular.setForeground(corTexto);
 			tfCelular.setFont(new Font("Roboto", Font.PLAIN, 18));
@@ -358,7 +374,7 @@ public class TelaLogin extends JFrame {
 		panelCampos.setLayout(null);
 		
 		JButton btnCadastrar = new JButton("Cadastrar");
-		btnCadastrar.setBounds(166, 473, 215, 54);
+		btnCadastrar.setBounds(160, 453, 215, 54);
 		panelCampos.add(btnCadastrar);
 		btnCadastrar.setBackground(corGeral);
 		btnCadastrar.setBorder(null);
@@ -390,10 +406,76 @@ public class TelaLogin extends JFrame {
 		btnCadastrar.setFont(new Font("Roboto", Font.PLAIN, 18));
 		btnCadastrar.setForeground(corTexto);
 		
-		JTextPane txtpnDassad = new JTextPane();
-		txtpnDassad.setText("dassad");
-		txtpnDassad.setBounds(40, 505, 60, 66);
-		panelCampos.add(txtpnDassad);
+		
+		JLabel imgXNome = new JLabel(new ImageIcon(imagemX));
+		imgXNome.setBackground(new Color(255, 255, 255));
+		
+		JLabel imgXCpf = new JLabel(new ImageIcon(imagemX));
+		imgXCpf.setBackground(new Color(255, 255, 255));
+		
+		JLabel imgXRg = new JLabel(new ImageIcon(imagemX));
+		imgXRg.setBackground(new Color(255, 255, 255));
+		
+		JLabel imgXTelefone = new JLabel(new ImageIcon(imagemX));
+		imgXTelefone.setBackground(new Color(255, 255, 255));
+		
+		JLabel imgXCelular = new JLabel(new ImageIcon(imagemX));
+		imgXCelular.setBackground(new Color(255, 255, 255));
+		
+		JLabel imgXSenha = new JLabel(new ImageIcon(imagemX));
+		imgXSenha.setBackground(new Color(255, 255, 255));
+		
+		JLabel imgXRepetir = new JLabel(new ImageIcon(imagemX));
+		imgXRepetir.setBackground(new Color(255, 255, 255));
+		
+		JPanel panelImgNome = new JPanel();
+		panelImgNome.setVisible(false);
+		panelImgNome.setBackground(new Color(255, 255, 255));
+		panelImgNome.setBounds(34, 59, 32, 32);
+		panelCampos.add(panelImgNome); 
+		panelImgNome.add(imgXNome);
+		
+		JPanel panelImgCpf = new JPanel();
+		panelImgCpf.setVisible(false);
+		panelImgCpf.setBackground(new Color(255, 255, 255));
+		panelImgCpf.setBounds(34, 114, 32, 32);
+		panelCampos.add(panelImgCpf); 
+		panelImgCpf.add(imgXCpf);
+		
+		JPanel panelImgRg = new JPanel();
+		panelImgRg.setVisible(false);
+		panelImgRg.setBackground(new Color(255, 255, 255));
+		panelImgRg.setBounds(34, 169, 32, 32);
+		panelCampos.add(panelImgRg); 
+		panelImgRg.add(imgXRg);
+		
+		JPanel panelImgTelefone = new JPanel();
+		panelImgTelefone.setVisible(false);
+		panelImgTelefone.setBackground(new Color(255, 255, 255));
+		panelImgTelefone.setBounds(34, 224, 32, 32);
+		panelCampos.add(panelImgTelefone); 
+		panelImgTelefone.add(imgXTelefone);
+		
+		JPanel panelImgCelular = new JPanel();
+		panelImgCelular.setVisible(false);
+		panelImgCelular.setBackground(new Color(255, 255, 255));
+		panelImgCelular.setBounds(34, 279, 32, 32);
+		panelCampos.add(panelImgCelular); 
+		panelImgCelular.add(imgXCelular);
+		
+		JPanel panelImgSenha = new JPanel();
+		panelImgSenha.setVisible(false);
+		panelImgSenha.setBackground(new Color(255, 255, 255));
+		panelImgSenha.setBounds(34, 334, 32, 32);
+		panelCampos.add(panelImgSenha); 
+		panelImgSenha.add(imgXSenha);
+		
+		JPanel panelImgRepetir = new JPanel();
+		panelImgRepetir.setVisible(false);
+		panelImgRepetir.setBackground(new Color(255, 255, 255));
+		panelImgRepetir.setBounds(34, 389, 32, 32);
+		panelCampos.add(panelImgRepetir); 
+		panelImgRepetir.add(imgXRepetir);
 		
 		JPanel panelEsquerda = new JPanel();
 		panelEsquerda.setBackground(corGeral);
@@ -498,13 +580,14 @@ public class TelaLogin extends JFrame {
 				String senhaUsuario = String.valueOf(infoUsuario.get(1));
 				
 				if(senha.equals(senhaUsuario)) {
-					// Usuário logou com sucesso
+					System.out.println("Logouuuuuuuuuuuuu");
 				}
 			}
 		});
 		btnEntrar.setFont(new Font("Roboto", Font.PLAIN, 22));
 		btnEntrar.setBounds(417, 482, 187, 64);
 		panelLogin.add(btnEntrar);
+		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{tfNome, tfCpf, tfRg, tfTelefone, tfCelular, pfSenha, pfRepetir, btnCadastrar, tfNomeLogin, pfSenhaLogin, lblLogin, btnEntrar}));
 		
 		
 		
