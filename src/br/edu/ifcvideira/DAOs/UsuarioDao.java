@@ -89,7 +89,7 @@ public class UsuarioDao {
 	public List<Object> buscarUsuario(String nome) throws SQLException, Exception{
 		List<Object> info = new ArrayList<>();
 		try {
-			String sql = "SELECT id, senha FROM usuario WHERE nome=?";
+			String sql = "SELECT id, senha, tipo FROM usuario WHERE nome=?";
 			//java.sql.Statement state = Conexao.conectar().createStatement();
 			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
 			sqlPrep.setString(1, nome);
@@ -99,6 +99,7 @@ public class UsuarioDao {
 			{
 				info.add(rs.getInt(1));
 				info.add(rs.getString(2));
+				info.add(rs.getString(3));
 			}
 			sqlPrep.close();
 			

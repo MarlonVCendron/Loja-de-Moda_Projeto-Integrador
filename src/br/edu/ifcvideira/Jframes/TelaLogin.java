@@ -29,6 +29,8 @@ import java.util.List;
 import javax.swing.JPasswordField;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -44,6 +46,8 @@ import java.awt.event.MouseAdapter;
 import javax.swing.JTextPane;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 import java.awt.Component;
+
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 
 
@@ -57,7 +61,14 @@ public class TelaLogin extends JFrame {
 	private JTextField tfNome;
 	private JPasswordField pfSenha;
 	private JPasswordField pfRepetir;
-
+	
+	private JPanel panelImgNome;
+	private JPanel panelImgCpf;
+	private JPanel panelImgRg;
+	private JPanel panelImgTelefone;
+	private JPanel panelImgSenha;
+	private JPanel panelImgRepetir;
+	
 	private Usuario us = new Usuario();
 	private UsuarioDao daoUs = new UsuarioDao();
 	private JTextField tfNomeLogin;
@@ -65,12 +76,19 @@ public class TelaLogin extends JFrame {
 	
 	Color corTexto = new Color(75, 80, 85);
 	Color corGeral = new Color(118, 184, 184);
+	Color corSecundaria = corMaisClara(corGeral, 0.2f);
 	Color corSeparador = new Color(176, 176, 176);
+	Color corVermelho = new Color (230, 20, 20);
+	
 	Point posMouseInicial;
 	
 	ImageIcon imageIconX = new ImageIcon(TelaLogin.class.getResource("/br/edu/ifcvideira/img/xerro.png"));
 	Image imagemX = imageIconX.getImage().getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH);
 	
+	ImageIcon imageIconEngrenagem = new ImageIcon(TelaLogin.class.getResource("/br/edu/ifcvideira/img/engrenagem.png"));
+	Image imagemEngrenagem = imageIconEngrenagem.getImage().getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH);
+	
+	Configuracoes confView = new Configuracoes();
 	
 	/**
 	 * Launch the application.
@@ -80,6 +98,7 @@ public class TelaLogin extends JFrame {
 			public void run() {
 				try {
 					TelaLogin frame = new TelaLogin();
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -94,16 +113,17 @@ public class TelaLogin extends JFrame {
 	public TelaLogin() {
 		setName("TelaInicial");
 		Dimension tela = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-		int largura = 800;
-		int altura = 700;
+		int largura = 982;
+		int altura = 652;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds((tela.width / 2) - (largura / 2), (tela.height / 2) - (altura / 2), 982, 652);
+		setBounds((tela.width / 2) - (largura / 2), (tela.height / 2) - (altura / 2), largura, altura);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		setUndecorated(true);
 		contentPane.setLayout(null);
 		setResizable(false);
+		getRootPane().setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, corGeral));
 		
 		
 		//Variáveis que cuidam para que os campos sejam preenchidos adequadamente
@@ -205,10 +225,13 @@ public class TelaLogin extends JFrame {
 				if(tfNome.getText().length() < 1) {
 					camposCorretos[0] = false;
 				}
-				spNome.setBackground(corSeparador);
 				
-				if(!camposCorretos[0]) {
-					spNome.setBackground(new Color(2));
+				if(camposCorretos[0]) {
+					spNome.setBackground(corSeparador);
+					panelImgNome.setVisible(false);
+				}else {
+					spNome.setBackground(corVermelho);
+					panelImgNome.setVisible(true);
 				}
 			}
 			@Override
@@ -233,9 +256,17 @@ public class TelaLogin extends JFrame {
 			@Override
 			public void focusLost(FocusEvent arg0) {
 				String numerosCpf = tfCpf.getText();
-				numerosCpf = numerosCpf.replaceAll("[^\\w]", "");
+				numerosCpf = numerosCpf.replaceAll("[^\\d]", "");
 				camposCorretos[1] = (numerosCpf.length() < 11) ? false : true;
 				spCpf.setBackground(corSeparador);
+				
+				if(camposCorretos[1]) {
+					spCpf.setBackground(corSeparador);
+					panelImgCpf.setVisible(false);
+				}else {
+					spCpf.setBackground(corVermelho);
+					panelImgCpf.setVisible(true);
+				}
 			}
 			@Override
 			public void focusGained(FocusEvent arg0) {
@@ -259,9 +290,17 @@ public class TelaLogin extends JFrame {
 			@Override
 			public void focusLost(FocusEvent e) {
 				String numerosRg = tfRg.getText();
-				numerosRg = numerosRg.replaceAll("[^\\w]", "");
+				numerosRg = numerosRg.replaceAll("[^\\d]", "");
 				camposCorretos[2] = (numerosRg.length() < 7) ? false : true;
 				spRg.setBackground(corSeparador);
+				
+				if(camposCorretos[2]) {
+					spRg.setBackground(corSeparador);
+					panelImgRg.setVisible(false);
+				}else {
+					spRg.setBackground(corVermelho);
+					panelImgRg.setVisible(true);
+				}
 			}
 			@Override
 			public void focusGained(FocusEvent arg0) {
@@ -271,6 +310,7 @@ public class TelaLogin extends JFrame {
 		tfRg.setColumns(10);
 		tfRg.setBounds(713, 215, 215, 32);
 		panelCadastro.add(tfRg);
+		
 		
 		try {
 			MaskFormatter tfTelefoneFormatter = new MaskFormatter("(##) ####-####");
@@ -285,9 +325,17 @@ public class TelaLogin extends JFrame {
 			@Override
 			public void focusLost(FocusEvent e) {
 				String numerosTelefone = tfTelefone.getText();
-				numerosTelefone = numerosTelefone.replaceAll("[^\\w]", "");
+				numerosTelefone = numerosTelefone.replaceAll("[^\\d]", "");
 				camposCorretos[3] = (numerosTelefone.length() < 10) ? false : true;
 				spTelefone.setBackground(corSeparador);
+				
+				if(camposCorretos[3]) {
+					spTelefone.setBackground(corSeparador);
+					panelImgTelefone.setVisible(false);
+				}else {
+					spTelefone.setBackground(corVermelho);
+					panelImgTelefone.setVisible(true);
+				}
 			}
 			@Override
 			public void focusGained(FocusEvent arg0) {
@@ -311,11 +359,11 @@ public class TelaLogin extends JFrame {
 			@Override
 			public void focusLost(FocusEvent e) {
 				String numerosCelular = tfCelular.getText();
-				numerosCelular = numerosCelular.replaceAll("[^\\w]", "");
-				camposCorretos[4] = (numerosCelular.length() < 11) ? false : true;
-				if(numerosCelular.length() == 0) {
-					camposCorretos[4] = true;
+				numerosCelular = numerosCelular.replaceAll("[^\\d]", "");
+				if(numerosCelular.length() < 11) {
+					tfCelular.setText("");
 				}
+				camposCorretos[4] = true;
 				spCelular.setBackground(corSeparador);
 			}
 			@Override
@@ -335,8 +383,16 @@ public class TelaLogin extends JFrame {
 		pfSenha.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
-				camposCorretos[5] = (pfSenha.getPassword().length < 8) ? false : true;
+				camposCorretos[5] = (pfSenha.getPassword().length < 8 || pfSenha.getPassword().length > 25) ? false : true;
 				spSenha.setBackground(corSeparador);
+				
+				if(camposCorretos[5]) {
+					spSenha.setBackground(corSeparador);
+					panelImgSenha.setVisible(false);
+				}else {
+					spSenha.setBackground(corVermelho);
+					panelImgSenha.setVisible(true);
+				}
 			}
 			@Override
 			public void focusGained(FocusEvent arg0) {
@@ -357,6 +413,14 @@ public class TelaLogin extends JFrame {
 			public void focusLost(FocusEvent e) {
 				camposCorretos[6] = (pfRepetir.getText().equals(pfSenha.getText())) ? true : false;
 				spRepetir.setBackground(corSeparador);
+				
+				if(camposCorretos[6]) {
+					spRepetir.setBackground(corSeparador);
+					panelImgRepetir.setVisible(false);
+				}else {
+					spRepetir.setBackground(corVermelho);
+					panelImgRepetir.setVisible(true);
+				}
 			}
 			@Override
 			public void focusGained(FocusEvent arg0) {
@@ -368,13 +432,24 @@ public class TelaLogin extends JFrame {
 		pfRepetir.setColumns(10);
 		
 		JPanel panelCampos = new JPanel();
-		panelCampos.setBounds(477, 41, 506, 612);
+		panelCampos.setOpaque(false);
+		panelCampos.setBounds(477, 33, 506, 620);
 		panelCampos.setBackground(panelCadastro.getBackground());
 		panelCadastro.add(panelCampos);
 		panelCampos.setLayout(null);
 		
 		JButton btnCadastrar = new JButton("Cadastrar");
-		btnCadastrar.setBounds(160, 453, 215, 54);
+		btnCadastrar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnCadastrar.setBackground(corSecundaria);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnCadastrar.setBackground(corGeral);
+			}
+		});
+		btnCadastrar.setBounds(163, 462, 215, 54);
 		panelCampos.add(btnCadastrar);
 		btnCadastrar.setBackground(corGeral);
 		btnCadastrar.setBorder(null);
@@ -397,9 +472,58 @@ public class TelaLogin extends JFrame {
 					
 					try {
 						daoUs.CadastrarUsuario(us);
+						/*
+						 * Tela de login
+						 */
 					}catch(Exception e) { }
 				}else {
-					System.out.println("Erro");
+					if(!camposCorretos[0]) {
+						spNome.setBackground(corVermelho);
+						panelImgNome.setVisible(true);
+					}else {
+						spNome.setBackground(corSeparador);
+						panelImgNome.setVisible(false);
+					}
+					
+					if(!camposCorretos[1]) {
+						spCpf.setBackground(corVermelho);
+						panelImgCpf.setVisible(true);
+					}else {
+						spCpf.setBackground(corSeparador);
+						panelImgCpf.setVisible(false);
+					}
+					
+					if(!camposCorretos[2]) {
+						spRg.setBackground(corVermelho);
+						panelImgRg.setVisible(true);
+					}else {
+						spRg.setBackground(corSeparador);
+						panelImgRg.setVisible(false);
+					}
+					
+					if(!camposCorretos[3]) {
+						spTelefone.setBackground(corVermelho);
+						panelImgTelefone.setVisible(true);
+					}else {
+						spTelefone.setBackground(corSeparador);
+						panelImgTelefone.setVisible(false);
+					}
+					
+					if(!camposCorretos[5]) {
+						spSenha.setBackground(corVermelho);
+						panelImgSenha.setVisible(true);
+					}else {
+						spSenha.setBackground(corSeparador);
+						panelImgSenha.setVisible(false);
+					}
+					
+					if(!camposCorretos[6]) {
+						spRepetir.setBackground(corVermelho);
+						panelImgRepetir.setVisible(true);
+					}else {
+						spRepetir.setBackground(corSeparador);
+						panelImgRepetir.setVisible(false);
+					}
 				}
 			}
 		});
@@ -408,72 +532,71 @@ public class TelaLogin extends JFrame {
 		
 		
 		JLabel imgXNome = new JLabel(new ImageIcon(imagemX));
+		imgXNome.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		imgXNome.setBackground(new Color(255, 255, 255));
+		imgXNome.setToolTipText("O nome é obrigatório e não pode conter símbolos");
 		
 		JLabel imgXCpf = new JLabel(new ImageIcon(imagemX));
 		imgXCpf.setBackground(new Color(255, 255, 255));
+		imgXCpf.setToolTipText("O CPF é obrigatório");
 		
 		JLabel imgXRg = new JLabel(new ImageIcon(imagemX));
 		imgXRg.setBackground(new Color(255, 255, 255));
+		imgXRg.setToolTipText("O RG é obrigatório");
 		
 		JLabel imgXTelefone = new JLabel(new ImageIcon(imagemX));
 		imgXTelefone.setBackground(new Color(255, 255, 255));
-		
-		JLabel imgXCelular = new JLabel(new ImageIcon(imagemX));
-		imgXCelular.setBackground(new Color(255, 255, 255));
+		imgXTelefone.setToolTipText("O Telefone é obrigatório");
 		
 		JLabel imgXSenha = new JLabel(new ImageIcon(imagemX));
 		imgXSenha.setBackground(new Color(255, 255, 255));
+		imgXSenha.setToolTipText("A senha deve conter entre 8 e 25 caracteres");
 		
 		JLabel imgXRepetir = new JLabel(new ImageIcon(imagemX));
 		imgXRepetir.setBackground(new Color(255, 255, 255));
+		imgXRepetir.setToolTipText("Repita a senha corretamente");
 		
-		JPanel panelImgNome = new JPanel();
+		panelImgNome = new JPanel();
+		panelImgNome.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		panelImgNome.setOpaque(false);
 		panelImgNome.setVisible(false);
 		panelImgNome.setBackground(new Color(255, 255, 255));
-		panelImgNome.setBounds(34, 59, 32, 32);
+		panelImgNome.setBounds(37, 68, 32, 32);
 		panelCampos.add(panelImgNome); 
 		panelImgNome.add(imgXNome);
 		
-		JPanel panelImgCpf = new JPanel();
+		panelImgCpf = new JPanel();
 		panelImgCpf.setVisible(false);
 		panelImgCpf.setBackground(new Color(255, 255, 255));
-		panelImgCpf.setBounds(34, 114, 32, 32);
+		panelImgCpf.setBounds(37, 123, 32, 32);
 		panelCampos.add(panelImgCpf); 
 		panelImgCpf.add(imgXCpf);
 		
-		JPanel panelImgRg = new JPanel();
+		panelImgRg = new JPanel();
 		panelImgRg.setVisible(false);
 		panelImgRg.setBackground(new Color(255, 255, 255));
-		panelImgRg.setBounds(34, 169, 32, 32);
+		panelImgRg.setBounds(37, 178, 32, 32);
 		panelCampos.add(panelImgRg); 
 		panelImgRg.add(imgXRg);
 		
-		JPanel panelImgTelefone = new JPanel();
+		panelImgTelefone = new JPanel();
 		panelImgTelefone.setVisible(false);
 		panelImgTelefone.setBackground(new Color(255, 255, 255));
-		panelImgTelefone.setBounds(34, 224, 32, 32);
+		panelImgTelefone.setBounds(37, 233, 32, 32);
 		panelCampos.add(panelImgTelefone); 
 		panelImgTelefone.add(imgXTelefone);
 		
-		JPanel panelImgCelular = new JPanel();
-		panelImgCelular.setVisible(false);
-		panelImgCelular.setBackground(new Color(255, 255, 255));
-		panelImgCelular.setBounds(34, 279, 32, 32);
-		panelCampos.add(panelImgCelular); 
-		panelImgCelular.add(imgXCelular);
-		
-		JPanel panelImgSenha = new JPanel();
+		panelImgSenha = new JPanel();
 		panelImgSenha.setVisible(false);
 		panelImgSenha.setBackground(new Color(255, 255, 255));
-		panelImgSenha.setBounds(34, 334, 32, 32);
+		panelImgSenha.setBounds(37, 343, 32, 32);
 		panelCampos.add(panelImgSenha); 
 		panelImgSenha.add(imgXSenha);
 		
-		JPanel panelImgRepetir = new JPanel();
+		panelImgRepetir = new JPanel();
 		panelImgRepetir.setVisible(false);
 		panelImgRepetir.setBackground(new Color(255, 255, 255));
-		panelImgRepetir.setBounds(34, 389, 32, 32);
+		panelImgRepetir.setBounds(37, 398, 32, 32);
 		panelCampos.add(panelImgRepetir); 
 		panelImgRepetir.add(imgXRepetir);
 		
@@ -481,6 +604,24 @@ public class TelaLogin extends JFrame {
 		panelEsquerda.setBackground(corGeral);
 		panelEsquerda.setBounds(0, 0, 476, 653);
 		panelCadastro.add(panelEsquerda);
+		panelEsquerda.setLayout(null);
+		
+		JPanel panelConfig = new JPanel();
+		panelConfig.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				confView.setVisible(true);
+			}
+		});
+		panelConfig.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		panelConfig.setBounds(432, 600, 40, 40);
+		panelConfig.setBackground(corGeral);
+		panelEsquerda.add(panelConfig);
+		
+		JLabel imgConfig = new JLabel("");
+		imgConfig.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		imgConfig.setIcon(new ImageIcon(imagemEngrenagem));
+		panelConfig.add(imgConfig);
 		
 		JPanel panelSuperior = new JPanel();
 		panelSuperior.addMouseListener(new MouseAdapter() {
@@ -500,28 +641,48 @@ public class TelaLogin extends JFrame {
 				setLocation(posMouseAtual.x - posMouseInicial.x, posMouseAtual.y - posMouseInicial.y);
 			}
 		});
-		panelSuperior.setBounds(0, 0, 983, 42);
+		panelSuperior.setBounds(0, 0, 983, 32);
 		panelSuperior.setBackground(new Color(255, 255, 255));
 		panelCadastro.add(panelSuperior);
 		panelSuperior.setLayout(null);
 		
 		JButton btnX = new JButton("X");
+		btnX.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnX.setBackground(corSecundaria);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnX.setBackground(corGeral);
+			}
+		});
 		btnX.setBackground(corGeral);
-		btnX.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnX.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		btnX.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				System.exit(0);
 			}
 		});
-		btnX.setBounds(941, 0, 42, 42);
+		btnX.setBounds(941, 0, 42, 30);
 		btnX.setMaximumSize(new Dimension(80, 50));
 		btnX.setFont(new Font("Roboto", Font.PLAIN, 13));
 		btnX.setBorder(null);
 		panelSuperior.add(btnX);
 		
 		JButton button = new JButton("-");
+		button.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				button.setBackground(corSecundaria);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				button.setBackground(corGeral);
+			}
+		});
 		button.setBackground(corGeral);
-		button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		button.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setState(JFrame.ICONIFIED);
@@ -530,7 +691,7 @@ public class TelaLogin extends JFrame {
 		button.setMaximumSize(new Dimension(80, 50));
 		button.setFont(new Font("Roboto", Font.PLAIN, 15));
 		button.setBorder(null);
-		button.setBounds(887, 0, 42, 42);
+		button.setBounds(897, 0, 42, 30);
 		panelSuperior.add(button);
 		
 		JPanel panelLogin = new JPanel();
@@ -566,6 +727,7 @@ public class TelaLogin extends JFrame {
 		lblLogin.setBounds(332, 13, 349, 51);
 		panelLogin.add(lblLogin);
 		
+		
 		JButton btnEntrar = new JButton("Entrar");
 		btnEntrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -578,15 +740,27 @@ public class TelaLogin extends JFrame {
 				
 				int idUsuario = Integer.parseInt(String.valueOf(infoUsuario.get(0)));
 				String senhaUsuario = String.valueOf(infoUsuario.get(1));
+				int tipoUsuario = Integer.parseInt(String.valueOf(infoUsuario.get(2)));
 				
 				if(senha.equals(senhaUsuario)) {
-					System.out.println("Logouuuuuuuuuuuuu");
+					System.out.println("Senha: " + senhaUsuario);
+					System.out.println("Id: " + idUsuario);
+					System.out.println("Tipo: " + tipoUsuario);
+					
+					if(tipoUsuario == 0) {
+						//Jframe do caixa
+					}else if(tipoUsuario == 1) {
+						//Jframe do controlador de estoque
+					}else if(tipoUsuario == 2) {
+						//Jframe do gerente
+					}
 				}
 			}
 		});
 		btnEntrar.setFont(new Font("Roboto", Font.PLAIN, 22));
 		btnEntrar.setBounds(417, 482, 187, 64);
 		panelLogin.add(btnEntrar);
+		contentPane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{tfNome, tfCpf, tfRg, tfTelefone, tfCelular, pfSenha, pfRepetir, btnCadastrar, tfNomeLogin, pfSenhaLogin, btnEntrar}));
 		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{tfNome, tfCpf, tfRg, tfTelefone, tfCelular, pfSenha, pfRepetir, btnCadastrar, tfNomeLogin, pfSenhaLogin, lblLogin, btnEntrar}));
 		
 		
@@ -607,4 +781,12 @@ public class TelaLogin extends JFrame {
 		}
 		return x;
 	}
+	
+	public static Color corMaisClara(Color color, float quantia)
+	  {
+	    int r = (int) ((color.getRed() * (1 - quantia) / 255 + quantia) * 255);
+	    int g = (int) ((color.getGreen() * (1 - quantia) / 255 + quantia) * 255);
+	    int b = (int) ((color.getBlue() * (1 - quantia) / 255 + quantia) * 255);
+	    return new Color(r, g, b);
+	  }
 }
