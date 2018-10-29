@@ -32,11 +32,15 @@ import javax.swing.JOptionPane;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 import java.awt.Component;
 
+import br.edu.ifcvideira.utils.Cor;
+import br.edu.ifcvideira.utils.Preferencias;;
+
 public class Configuracoes extends JFrame {
 
 	private JPanel contentPane;
 	
 	Color corGeral = new Color(118, 184, 184);
+	Color corSecundaria = Cor.corMaisClara(corGeral, 0.2f);
 	
 	Point posMouseInicial;
 	
@@ -62,6 +66,7 @@ public class Configuracoes extends JFrame {
 	 * Create the frame.
 	 */
 	public Configuracoes() {
+		
 		setName("Configurações");
 		Dimension tela = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		int largura = 250;
@@ -102,8 +107,17 @@ public class Configuracoes extends JFrame {
 
 		
 		JButton btnX = new JButton("X");
+		btnX.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnX.setBackground(corSecundaria);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnX.setBackground(corGeral);
+			}
+		});
 		btnX.setBackground(corGeral);
-		btnX.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnX.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				setVisible(false);
@@ -116,8 +130,17 @@ public class Configuracoes extends JFrame {
 		panelSuperior.add(btnX);
 		
 		JButton button = new JButton("-");
+		button.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				button.setBackground(corSecundaria);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				button.setBackground(corGeral);
+			}
+		});
 		button.setBackground(corGeral);
-		button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setState(JFrame.ICONIFIED);
@@ -136,6 +159,16 @@ public class Configuracoes extends JFrame {
 		panelConfigs.setLayout(null);
 		
 		JButton btnEscolherLogo = new JButton("Escolher logo");
+		btnEscolherLogo.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnEscolherLogo.setBackground(corSecundaria);
+			}
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				btnEscolherLogo.setBackground(corGeral);
+			}
+		});
 		btnEscolherLogo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser fcImagem = new JFileChooser();
@@ -149,6 +182,7 @@ public class Configuracoes extends JFrame {
 				
 				if(op == JFileChooser.APPROVE_OPTION) {
 					File arquivoImg = fcImagem.getSelectedFile();
+					Preferencias.setImagem(arquivoImg.getPath());
 				}
 			}
 		});
@@ -161,9 +195,20 @@ public class Configuracoes extends JFrame {
 		panelConfigs.add(btnEscolherLogo);
 		
 		JButton btnEscolherCor = new JButton("Escolher cor");
+		btnEscolherCor.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnEscolherCor.setBackground(corSecundaria);
+			}
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				btnEscolherCor.setBackground(corGeral);
+			}
+		});
 		btnEscolherCor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//Cor
+				JColorChooser ccCor = new JColorChooser();
+				ccCor.showDialog(panelConfigs, "aaaaa", new Color(241,114,25));
 			}
 		});
 		btnEscolherCor.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));

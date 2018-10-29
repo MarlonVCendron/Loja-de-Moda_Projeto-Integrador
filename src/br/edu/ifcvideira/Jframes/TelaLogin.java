@@ -36,7 +36,7 @@ import java.awt.event.ActionEvent;
 
 import br.edu.ifcvideira.Classes.*;
 import br.edu.ifcvideira.DAOs.*;
-import br.edu.ifcvideira.utils.Senha;
+import br.edu.ifcvideira.utils.*;
 import javax.swing.SwingConstants;
 import java.awt.Cursor;
 import javax.swing.JSeparator;
@@ -76,7 +76,7 @@ public class TelaLogin extends JFrame {
 	
 	Color corTexto = new Color(75, 80, 85);
 	Color corGeral = new Color(118, 184, 184);
-	Color corSecundaria = corMaisClara(corGeral, 0.2f);
+	Color corSecundaria = Cor.corMaisClara(corGeral, 0.2f);
 	Color corSeparador = new Color(176, 176, 176);
 	Color corVermelho = new Color (230, 20, 20);
 	
@@ -110,7 +110,7 @@ public class TelaLogin extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public TelaLogin() {
+	public TelaLogin() {		
 		setName("TelaInicial");
 		Dimension tela = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		int largura = 982;
@@ -604,17 +604,17 @@ public class TelaLogin extends JFrame {
 		panelEsquerda.setBackground(corGeral);
 		panelEsquerda.setBounds(0, 0, 476, 653);
 		panelCadastro.add(panelEsquerda);
-		panelEsquerda.setLayout(null);
 		
 		JPanel panelConfig = new JPanel();
+		panelConfig.setBounds(432, 600, 40, 40);
 		panelConfig.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				confView.setVisible(true);
 			}
 		});
+		panelEsquerda.setLayout(null);
 		panelConfig.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		panelConfig.setBounds(432, 600, 40, 40);
 		panelConfig.setBackground(corGeral);
 		panelEsquerda.add(panelConfig);
 		
@@ -622,6 +622,15 @@ public class TelaLogin extends JFrame {
 		imgConfig.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		imgConfig.setIcon(new ImageIcon(imagemEngrenagem));
 		panelConfig.add(imgConfig);
+		
+		JPanel panelLogo = new JPanel();
+		panelLogo.setOpaque(false);
+		panelLogo.setBounds(88, 168, 300, 300);
+		panelEsquerda.add(panelLogo);
+		
+		JLabel lblLogo = new JLabel("");
+		//lblLogo.setIcon(new ImageIcon(TelaLogin.class.getResource("/br/edu/ifcvideira/img/maxsteel.png")));
+		panelLogo.add(lblLogo);
 		
 		JPanel panelSuperior = new JPanel();
 		panelSuperior.addMouseListener(new MouseAdapter() {
@@ -781,12 +790,4 @@ public class TelaLogin extends JFrame {
 		}
 		return x;
 	}
-	
-	public static Color corMaisClara(Color color, float quantia)
-	  {
-	    int r = (int) ((color.getRed() * (1 - quantia) / 255 + quantia) * 255);
-	    int g = (int) ((color.getGreen() * (1 - quantia) / 255 + quantia) * 255);
-	    int b = (int) ((color.getBlue() * (1 - quantia) / 255 + quantia) * 255);
-	    return new Color(r, g, b);
-	  }
 }
