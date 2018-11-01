@@ -38,6 +38,8 @@ import br.edu.ifcvideira.Classes.*;
 import br.edu.ifcvideira.DAOs.*;
 import br.edu.ifcvideira.utils.*;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+
 import java.awt.Cursor;
 import javax.swing.JSeparator;
 import java.awt.event.MouseMotionAdapter;
@@ -69,14 +71,15 @@ public class TelaLogin extends JFrame {
 	private JPanel panelImgSenha;
 	private JPanel panelImgRepetir;
 	
+	public static JLabel lblLogo;
+	
 	private Usuario us = new Usuario();
 	private UsuarioDao daoUs = new UsuarioDao();
-	private JTextField tfNomeLogin;
-	private JPasswordField pfSenhaLogin;
 	
 	Color corTexto = new Color(75, 80, 85);
-	Color corGeral = new Color(118, 184, 184);
+	Color corGeral = new Color(Preferencias.getR(), Preferencias.getG(), Preferencias.getB());
 	Color corSecundaria = Cor.corMaisClara(corGeral, 0.2f);
+	Color corTerciaria = Cor.corMaisClara(corGeral, 0.4f);
 	Color corSeparador = new Color(176, 176, 176);
 	Color corVermelho = new Color (230, 20, 20);
 	
@@ -89,6 +92,7 @@ public class TelaLogin extends JFrame {
 	Image imagemEngrenagem = imageIconEngrenagem.getImage().getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH);
 	
 	Configuracoes confView = new Configuracoes();
+	private JTextField tfNomeLogin;
 	
 	/**
 	 * Launch the application.
@@ -129,87 +133,209 @@ public class TelaLogin extends JFrame {
 		//Variáveis que cuidam para que os campos sejam preenchidos adequadamente
 		boolean[] camposCorretos = {false, false, false, false, false, false, false};
 		
+		JPanel panelEsquerda = new JPanel();
+		panelEsquerda.setBounds(0, 0, 476, 653);
+		contentPane.add(panelEsquerda);
+		panelEsquerda.setBackground(corGeral);
+		
+		
+		JPanel panelConfig = new JPanel();
+		panelConfig.setBounds(432, 600, 40, 40);
+		panelConfig.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				confView.setVisible(true);
+			}
+		});
+		panelEsquerda.setLayout(null);
+		panelConfig.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		panelConfig.setBackground(corGeral);
+		panelEsquerda.add(panelConfig);
+		
+		JLabel imgConfig = new JLabel("");
+		imgConfig.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		imgConfig.setIcon(new ImageIcon(imagemEngrenagem));
+		panelConfig.add(imgConfig);
+		
+		JPanel panelLogo = new JPanel();
+		panelLogo.setOpaque(false);
+		panelLogo.setBounds(88, 168, 300, 300);
+		panelEsquerda.add(panelLogo);
+		
+		lblLogo = new JLabel("");
+		ImageIcon imageIconLogo = new ImageIcon(Preferencias.getImagem());
+		Image imagemLogo = imageIconLogo.getImage().getScaledInstance(300, 300,  Image.SCALE_SMOOTH);
+		lblLogo.setIcon(new ImageIcon(imagemLogo));
+		panelLogo.add(lblLogo);
+		
+		JPanel panelSuperior = new JPanel();
+		panelSuperior.setBounds(0, 0, 983, 32);
+		contentPane.add(panelSuperior);
+		panelSuperior.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				posMouseInicial = e.getPoint();
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				posMouseInicial = null;
+			}
+		});
+		panelSuperior.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent arg0) {
+				Point posMouseAtual = arg0.getLocationOnScreen();
+				setLocation(posMouseAtual.x - posMouseInicial.x, posMouseAtual.y - posMouseInicial.y);
+			}
+		});
+		panelSuperior.setBackground(new Color(255, 255, 255));
+		panelSuperior.setLayout(null);
+		
+		JButton btnX = new JButton("X");
+		btnX.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnX.setBackground(corSecundaria);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnX.setBackground(corGeral);
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				btnX.setBackground(corTerciaria);
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				btnX.setBackground(corGeral);
+			}
+		});
+		btnX.setBackground(corGeral);
+		btnX.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		btnX.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.exit(0);
+			}
+		});
+		btnX.setBounds(940, 0, 42, 30);
+		btnX.setMaximumSize(new Dimension(80, 50));
+		btnX.setFont(new Font("Roboto", Font.PLAIN, 13));
+		btnX.setBorder(null);
+		panelSuperior.add(btnX);
+		
+		JButton btnMinimizar = new JButton("-");
+		btnMinimizar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnMinimizar.setBackground(corSecundaria);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnMinimizar.setBackground(corGeral);
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				btnMinimizar.setBackground(corTerciaria);
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				btnMinimizar.setBackground(corGeral);
+			}
+		});
+		btnMinimizar.setBackground(corGeral);
+		btnMinimizar.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		btnMinimizar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setState(JFrame.ICONIFIED);
+			}
+		});
+		btnMinimizar.setMaximumSize(new Dimension(80, 50));
+		btnMinimizar.setFont(new Font("Roboto", Font.PLAIN, 15));
+		btnMinimizar.setBorder(null);
+		btnMinimizar.setBounds(897, 0, 42, 30);
+		panelSuperior.add(btnMinimizar);
+		
 		JPanel panelCadastro = new JPanel();
 		panelCadastro.setBackground(new Color(255, 255, 255));
-		panelCadastro.setBounds(0, 0, 982, 653);
+		panelCadastro.setBounds(477, 32, 512, 621);
 		contentPane.add(panelCadastro);
 		panelCadastro.setLayout(null);
 		
 		JLabel lblNome = new JLabel("Nome");
 		lblNome.setFont(new Font("Roboto", Font.PLAIN, 20));
 		lblNome.setForeground(corTexto);
-		lblNome.setBounds(551, 93, 119, 42);
+		lblNome.setBounds(74, 60, 119, 42);
 		panelCadastro.add(lblNome);
 		
 		JLabel lblCpf = new JLabel("CPF");
 		lblCpf.setForeground(corTexto);
 		lblCpf.setFont(new Font("Roboto", Font.PLAIN, 20));
-		lblCpf.setBounds(551, 148, 119, 42);
+		lblCpf.setBounds(74, 115, 119, 42);
 		panelCadastro.add(lblCpf);
 		
 		JLabel lblRg = new JLabel("RG");
 		lblRg.setForeground(corTexto);
 		lblRg.setFont(new Font("Roboto", Font.PLAIN, 20));
-		lblRg.setBounds(551, 203, 119, 42);
+		lblRg.setBounds(74, 170, 119, 42);
 		panelCadastro.add(lblRg);
 		
 		JLabel lblTelefone = new JLabel("Telefone");
 		lblTelefone.setForeground(corTexto);
 		lblTelefone.setFont(new Font("Roboto", Font.PLAIN, 20));
-		lblTelefone.setBounds(551, 258, 119, 42);
+		lblTelefone.setBounds(74, 225, 119, 42);
 		panelCadastro.add(lblTelefone);
 		
 		JLabel lblCelular = new JLabel("Celular");
 		lblCelular.setForeground(corTexto);
 		lblCelular.setFont(new Font("Roboto", Font.PLAIN, 20));
-		lblCelular.setBounds(551, 313, 163, 42);
+		lblCelular.setBounds(74, 280, 163, 42);
 		panelCadastro.add(lblCelular);
 		
 		JLabel lblSenha = new JLabel("Senha");
 		lblSenha.setForeground(corTexto);
 		lblSenha.setFont(new Font("Roboto", Font.PLAIN, 20));
-		lblSenha.setBounds(551, 368, 119, 42);
+		lblSenha.setBounds(74, 335, 119, 42);
 		panelCadastro.add(lblSenha);
 		
 		JLabel lblRepitaASenha = new JLabel("Repita a senha");
 		lblRepitaASenha.setForeground(corTexto);
 		lblRepitaASenha.setFont(new Font("Roboto", Font.PLAIN, 20));
-		lblRepitaASenha.setBounds(551, 423, 163, 42);
+		lblRepitaASenha.setBounds(74, 390, 163, 42);
 		panelCadastro.add(lblRepitaASenha);
 		
 		JSeparator spNome = new JSeparator();
 		spNome.setBackground(corSeparador);
-		spNome.setBounds(713, 137, 215, 2);
+		spNome.setBounds(236, 104, 215, 2);
 		panelCadastro.add(spNome);
 		
 		JSeparator spCpf = new JSeparator();
 		spCpf.setBackground(corSeparador);
-		spCpf.setBounds(713, 192, 215, 2);
+		spCpf.setBounds(236, 159, 215, 2);
 		panelCadastro.add(spCpf);
 		
 		JSeparator spRg = new JSeparator();
 		spRg.setBackground(corSeparador);
-		spRg.setBounds(713, 247, 215, 2);
+		spRg.setBounds(236, 214, 215, 2);
 		panelCadastro.add(spRg);
 		
 		JSeparator spTelefone = new JSeparator();
 		spTelefone.setBackground(corSeparador);
-		spTelefone.setBounds(713, 302, 215, 2);
+		spTelefone.setBounds(236, 269, 215, 2);
 		panelCadastro.add(spTelefone);
 		
 		JSeparator spCelular = new JSeparator();
 		spCelular.setBackground(corSeparador);
-		spCelular.setBounds(713, 357, 215, 2);
+		spCelular.setBounds(236, 324, 215, 2);
 		panelCadastro.add(spCelular);
 		
 		JSeparator spSenha = new JSeparator();
 		spSenha.setBackground(corSeparador);
-		spSenha.setBounds(713, 412, 215, 2);
+		spSenha.setBounds(236, 379, 215, 2);
 		panelCadastro.add(spSenha);
 		
 		JSeparator spRepetir = new JSeparator();
 		spRepetir.setBackground(corSeparador);
-		spRepetir.setBounds(713, 467, 215, 2);
+		spRepetir.setBounds(236, 434, 215, 2);
 		panelCadastro.add(spRepetir);
 		
 		tfNome = new JTextField();
@@ -240,7 +366,7 @@ public class TelaLogin extends JFrame {
 			}
 		});
 		tfNome.setColumns(10);
-		tfNome.setBounds(713, 105, 215, 32);
+		tfNome.setBounds(236, 72, 215, 32);
 		panelCadastro.add(tfNome);
 		
 		try {
@@ -274,7 +400,7 @@ public class TelaLogin extends JFrame {
 			}
 		});
 		tfCpf.setColumns(10);
-		tfCpf.setBounds(713, 160, 215, 32);
+		tfCpf.setBounds(236, 127, 215, 32);
 		panelCadastro.add(tfCpf);
 		
 		try {
@@ -308,7 +434,7 @@ public class TelaLogin extends JFrame {
 			}
 		});
 		tfRg.setColumns(10);
-		tfRg.setBounds(713, 215, 215, 32);
+		tfRg.setBounds(236, 182, 215, 32);
 		panelCadastro.add(tfRg);
 		
 		
@@ -343,7 +469,7 @@ public class TelaLogin extends JFrame {
 			}
 		});
 		tfTelefone.setColumns(10);
-		tfTelefone.setBounds(713, 270, 215, 32);
+		tfTelefone.setBounds(236, 237, 215, 32);
 		panelCadastro.add(tfTelefone);
 		
 		try {
@@ -372,7 +498,7 @@ public class TelaLogin extends JFrame {
 			}
 		});
 		tfCelular.setColumns(10);
-		tfCelular.setBounds(713, 325, 215, 32);
+		tfCelular.setBounds(236, 292, 215, 32);
 		panelCadastro.add(tfCelular);
 		
 		pfSenha = new JPasswordField();
@@ -400,7 +526,7 @@ public class TelaLogin extends JFrame {
 			}
 		});
 		pfSenha.setColumns(10);
-		pfSenha.setBounds(713, 380, 215, 32);
+		pfSenha.setBounds(236, 347, 215, 32);
 		panelCadastro.add(pfSenha);
 		
 		pfRepetir = new JPasswordField();
@@ -427,13 +553,13 @@ public class TelaLogin extends JFrame {
 				spRepetir.setBackground(corGeral);
 			}
 		});
-		pfRepetir.setBounds(713, 435, 215, 32);
+		pfRepetir.setBounds(236, 402, 215, 32);
 		panelCadastro.add(pfRepetir);
 		pfRepetir.setColumns(10);
 		
 		JPanel panelCampos = new JPanel();
 		panelCampos.setOpaque(false);
-		panelCampos.setBounds(477, 33, 506, 620);
+		panelCampos.setBounds(0, 0, 506, 620);
 		panelCampos.setBackground(panelCadastro.getBackground());
 		panelCadastro.add(panelCampos);
 		panelCampos.setLayout(null);
@@ -446,6 +572,14 @@ public class TelaLogin extends JFrame {
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
+				btnCadastrar.setBackground(corGeral);
+			}
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				btnCadastrar.setBackground(corTerciaria);
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
 				btnCadastrar.setBackground(corGeral);
 			}
 		});
@@ -464,10 +598,10 @@ public class TelaLogin extends JFrame {
 					us.setTipo(2);
 					us.setDataCadastro(dataDeHoje);
 					us.setNome(tfNome.getText());
-					us.setCpf(tfCpf.getText().replaceAll("[^\\w]", ""));
-					us.setRg(tfRg.getText().replaceAll("[^\\w]", ""));
-					us.setTelefone(tfTelefone.getText().replaceAll("[^\\w]", ""));
-					us.setCelular(tfCelular.getText().replaceAll("[^\\w]", ""));
+					us.setCpf(tfCpf.getText());
+					us.setRg(tfRg.getText());
+					us.setTelefone(tfTelefone.getText());
+					us.setCelular(tfCelular.getText());
 					us.setSenha(Senha.encriptarSenha(pfSenha.getText()));
 					
 					try {
@@ -532,7 +666,7 @@ public class TelaLogin extends JFrame {
 		
 		
 		JLabel imgXNome = new JLabel(new ImageIcon(imagemX));
-		imgXNome.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		imgXNome.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		imgXNome.setBackground(new Color(255, 255, 255));
 		imgXNome.setToolTipText("O nome é obrigatório e não pode conter símbolos");
 		
@@ -600,147 +734,29 @@ public class TelaLogin extends JFrame {
 		panelCampos.add(panelImgRepetir); 
 		panelImgRepetir.add(imgXRepetir);
 		
-		JPanel panelEsquerda = new JPanel();
-		panelEsquerda.setBackground(corGeral);
-		panelEsquerda.setBounds(0, 0, 476, 653);
-		panelCadastro.add(panelEsquerda);
-		
-		JPanel panelConfig = new JPanel();
-		panelConfig.setBounds(432, 600, 40, 40);
-		panelConfig.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				confView.setVisible(true);
-			}
-		});
-		panelEsquerda.setLayout(null);
-		panelConfig.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		panelConfig.setBackground(corGeral);
-		panelEsquerda.add(panelConfig);
-		
-		JLabel imgConfig = new JLabel("");
-		imgConfig.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		imgConfig.setIcon(new ImageIcon(imagemEngrenagem));
-		panelConfig.add(imgConfig);
-		
-		JPanel panelLogo = new JPanel();
-		panelLogo.setOpaque(false);
-		panelLogo.setBounds(88, 168, 300, 300);
-		panelEsquerda.add(panelLogo);
-		
-		JLabel lblLogo = new JLabel("");
-		//lblLogo.setIcon(new ImageIcon(TelaLogin.class.getResource("/br/edu/ifcvideira/img/maxsteel.png")));
-		panelLogo.add(lblLogo);
-		
-		JPanel panelSuperior = new JPanel();
-		panelSuperior.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				posMouseInicial = e.getPoint();
-			}
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				posMouseInicial = null;
-			}
-		});
-		panelSuperior.addMouseMotionListener(new MouseMotionAdapter() {
-			@Override
-			public void mouseDragged(MouseEvent arg0) {
-				Point posMouseAtual = arg0.getLocationOnScreen();
-				setLocation(posMouseAtual.x - posMouseInicial.x, posMouseAtual.y - posMouseInicial.y);
-			}
-		});
-		panelSuperior.setBounds(0, 0, 983, 32);
-		panelSuperior.setBackground(new Color(255, 255, 255));
-		panelCadastro.add(panelSuperior);
-		panelSuperior.setLayout(null);
-		
-		JButton btnX = new JButton("X");
-		btnX.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				btnX.setBackground(corSecundaria);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnX.setBackground(corGeral);
-			}
-		});
-		btnX.setBackground(corGeral);
-		btnX.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-		btnX.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				System.exit(0);
-			}
-		});
-		btnX.setBounds(941, 0, 42, 30);
-		btnX.setMaximumSize(new Dimension(80, 50));
-		btnX.setFont(new Font("Roboto", Font.PLAIN, 13));
-		btnX.setBorder(null);
-		panelSuperior.add(btnX);
-		
-		JButton button = new JButton("-");
-		button.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				button.setBackground(corSecundaria);
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				button.setBackground(corGeral);
-			}
-		});
-		button.setBackground(corGeral);
-		button.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				setState(JFrame.ICONIFIED);
-			}
-		});
-		button.setMaximumSize(new Dimension(80, 50));
-		button.setFont(new Font("Roboto", Font.PLAIN, 15));
-		button.setBorder(null);
-		button.setBounds(897, 0, 42, 30);
-		panelSuperior.add(button);
 		
 		JPanel panelLogin = new JPanel();
 		panelLogin.setBackground(new Color(255, 255, 255));
-		panelLogin.setBounds(0, 0, 982, 653);
+		panelLogin.setBounds(471, 32, 512, 621);
 		contentPane.add(panelLogin);
 		panelLogin.setLayout(null);
 		
-		tfNomeLogin = new JTextField();
-		tfNomeLogin.setBounds(332, 197, 349, 64);
-		panelLogin.add(tfNomeLogin);
-		tfNomeLogin.setColumns(10);
-		
 		JLabel lblNomeLogin = new JLabel("Nome");
-		lblNomeLogin.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNomeLogin.setHorizontalAlignment(SwingConstants.LEFT);
 		lblNomeLogin.setFont(new Font("Roboto", Font.PLAIN, 22));
-		lblNomeLogin.setBounds(332, 145, 349, 51);
+		lblNomeLogin.setBounds(87, 123, 85, 51);
 		panelLogin.add(lblNomeLogin);
 		
 		JLabel lblSenhaLogin = new JLabel("Senha");
-		lblSenhaLogin.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSenhaLogin.setHorizontalAlignment(SwingConstants.LEFT);
 		lblSenhaLogin.setFont(new Font("Roboto", Font.PLAIN, 22));
-		lblSenhaLogin.setBounds(332, 300, 349, 51);
+		lblSenhaLogin.setBounds(88, 284, 100, 51);
 		panelLogin.add(lblSenhaLogin);
-		
-		pfSenhaLogin = new JPasswordField();
-		pfSenhaLogin.setBounds(332, 351, 349, 75);
-		panelLogin.add(pfSenhaLogin);
-		
-		JLabel lblLogin = new JLabel("Login");
-		lblLogin.setHorizontalAlignment(SwingConstants.CENTER);
-		lblLogin.setFont(new Font("Roboto", Font.PLAIN, 30));
-		lblLogin.setBounds(332, 13, 349, 51);
-		panelLogin.add(lblLogin);
-		
 		
 		JButton btnEntrar = new JButton("Entrar");
 		btnEntrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String nome = tfNomeLogin.getText();
+				/*String nome = tfNomeLogin.getText();
 				String senha = Senha.encriptarSenha(pfSenhaLogin.getText());
 				List<Object> infoUsuario = new ArrayList<>();
 				try {
@@ -763,25 +779,45 @@ public class TelaLogin extends JFrame {
 					}else if(tipoUsuario == 2) {
 						//Jframe do gerente
 					}
-				}
+				}*/
 			}
 		});
 		btnEntrar.setFont(new Font("Roboto", Font.PLAIN, 22));
-		btnEntrar.setBounds(417, 482, 187, 64);
+		btnEntrar.setBounds(188, 472, 187, 64);
 		panelLogin.add(btnEntrar);
-		contentPane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{tfNome, tfCpf, tfRg, tfTelefone, tfCelular, pfSenha, pfRepetir, btnCadastrar, tfNomeLogin, pfSenhaLogin, btnEntrar}));
-		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{tfNome, tfCpf, tfRg, tfTelefone, tfCelular, pfSenha, pfRepetir, btnCadastrar, tfNomeLogin, pfSenhaLogin, lblLogin, btnEntrar}));
+		
+		tfNomeLogin = new JTextField();
+		tfNomeLogin.setForeground(new Color(75, 80, 85));
+		tfNomeLogin.setFont(new Font("Roboto", Font.PLAIN, 18));
+		tfNomeLogin.setColumns(10);
+		tfNomeLogin.setBorder(null);
+		tfNomeLogin.setBackground(Color.WHITE);
+		tfNomeLogin.setBounds(87, 171, 331, 57);
+		panelLogin.add(tfNomeLogin);
+		
+		JSeparator spNomeLogin = new JSeparator();
+		spNomeLogin.setBackground(new Color(176, 176, 176));
+		spNomeLogin.setBounds(87, 240, 331, 2);
+		panelLogin.add(spNomeLogin);
+		contentPane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{tfNome, tfCpf, tfRg, tfTelefone, tfCelular, pfSenha, pfRepetir, btnCadastrar, btnEntrar}));
+		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{tfNome, tfCpf, tfRg, tfTelefone, tfCelular, pfSenha, pfRepetir, btnCadastrar, btnEntrar}));
 		
 		
 		
 		try {
 			if(daoUs.RetornarProximoCodigoUsuario() > 1) {
-				setContentPane(panelLogin);
+				//setContentPane(panelLogin);
+				panelCadastro.setVisible(false);
+				panelLogin.setVisible(true);
 			}else {
-				setContentPane(panelCadastro);
+				//setContentPane(panelCadastro);
+				panelCadastro.setVisible(true);
+				panelLogin.setVisible(false);
 			}
 		}catch(Exception e) { }
 	}
+	
+	
 	
 	boolean camposEstaoCorretos(boolean[] camposCorretos) {
 		boolean x = true;

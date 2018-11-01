@@ -19,7 +19,7 @@ public class Preferencias {
 	}
 
 	public static int getR() {
-		return preferencias.getInt("R", 0);
+		return preferencias.getInt("R", 118);
 	}
 	
 	public static void setG(int g) {
@@ -27,7 +27,7 @@ public class Preferencias {
 	}
 
 	public static int getG() {
-		return preferencias.getInt("G", 0);
+		return preferencias.getInt("G", 184);
 	}
 	
 	public static void setB(int b) {
@@ -35,6 +35,6 @@ public class Preferencias {
 	}
 
 	public static int getB() {
-		return preferencias.getInt("B", 0);
+		return preferencias.getInt("B", 184);
 	}
 }

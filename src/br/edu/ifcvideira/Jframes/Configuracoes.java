@@ -5,16 +5,21 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.io.File;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
@@ -33,13 +38,15 @@ import org.eclipse.wb.swing.FocusTraversalOnArray;
 import java.awt.Component;
 
 import br.edu.ifcvideira.utils.Cor;
-import br.edu.ifcvideira.utils.Preferencias;;
+import br.edu.ifcvideira.utils.Preferencias;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;;
 
 public class Configuracoes extends JFrame {
 
 	private JPanel contentPane;
 	
-	Color corGeral = new Color(118, 184, 184);
+	Color corGeral = new Color(Preferencias.getR(), Preferencias.getG(), Preferencias.getB());
 	Color corSecundaria = Cor.corMaisClara(corGeral, 0.2f);
 	
 	Point posMouseInicial;
@@ -66,6 +73,11 @@ public class Configuracoes extends JFrame {
 	 * Create the frame.
 	 */
 	public Configuracoes() {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+			}
+		});
 		
 		setName("Configurações");
 		Dimension tela = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
@@ -123,7 +135,7 @@ public class Configuracoes extends JFrame {
 				setVisible(false);
 			}
 		});
-		btnX.setBounds(208, 0, 42, 30);
+		btnX.setBounds(207, 0, 42, 30);
 		btnX.setMaximumSize(new Dimension(80, 50));
 		btnX.setFont(new Font("Roboto", Font.PLAIN, 13));
 		btnX.setBorder(null);
@@ -183,6 +195,9 @@ public class Configuracoes extends JFrame {
 				if(op == JFileChooser.APPROVE_OPTION) {
 					File arquivoImg = fcImagem.getSelectedFile();
 					Preferencias.setImagem(arquivoImg.getPath());
+					ImageIcon imageIconLogo = new ImageIcon(Preferencias.getImagem());
+					Image imagemLogo = imageIconLogo.getImage().getScaledInstance(300, 300,  java.awt.Image.SCALE_SMOOTH);
+					TelaLogin.lblLogo.setIcon(new ImageIcon(imagemLogo));
 				}
 			}
 		});
@@ -190,7 +205,7 @@ public class Configuracoes extends JFrame {
 		btnEscolherLogo.setMaximumSize(new Dimension(80, 50));
 		btnEscolherLogo.setFont(new Font("Roboto", Font.PLAIN, 15));
 		btnEscolherLogo.setBorder(null);
-		btnEscolherLogo.setBackground(new Color(118, 184, 184));
+		btnEscolherLogo.setBackground(corGeral);
 		btnEscolherLogo.setBounds(49, 56, 161, 42);
 		panelConfigs.add(btnEscolherLogo);
 		
@@ -208,14 +223,26 @@ public class Configuracoes extends JFrame {
 		btnEscolherCor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JColorChooser ccCor = new JColorChooser();
-				ccCor.showDialog(panelConfigs, "aaaaa", new Color(241,114,25));
+				Color corEscolhida = ccCor.showDialog(panelConfigs, "Escolha a cor", new Color(241,114,25));
+				
+				Preferencias.setR(corEscolhida.getRed());
+				Preferencias.setG(corEscolhida.getGreen());
+				Preferencias.setB(corEscolhida.getBlue());
+				Window[] janelas = Window.getWindows();
+
+				for(Window j : janelas) {
+					j.dispose();
+				}
+				
+				new TelaLogin().setVisible(true);
+				
 			}
 		});
 		btnEscolherCor.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnEscolherCor.setMaximumSize(new Dimension(80, 50));
 		btnEscolherCor.setFont(new Font("Roboto", Font.PLAIN, 15));
 		btnEscolherCor.setBorder(null);
-		btnEscolherCor.setBackground(new Color(118, 184, 184));
+		btnEscolherCor.setBackground(corGeral);
 		btnEscolherCor.setBounds(49, 185, 161, 42);
 		panelConfigs.add(btnEscolherCor);
 		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{btnEscolherLogo, btnEscolherCor}));
