@@ -93,6 +93,7 @@ public class TelaLogin extends JFrame {
 	
 	Configuracoes confView = new Configuracoes();
 	private JTextField tfNomeLogin;
+	private JPasswordField pfSenhaLogin;
 	
 	/**
 	 * Launch the application.
@@ -606,9 +607,10 @@ public class TelaLogin extends JFrame {
 					
 					try {
 						daoUs.CadastrarUsuario(us);
-						/*
-						 * Tela de login
-						 */
+						fecharJanelas();
+						TelaGerente telaGerente = new TelaGerente();
+						
+						telaGerente.setVisible(true);
 					}catch(Exception e) { }
 				}else {
 					if(!camposCorretos[0]) {
@@ -747,60 +749,147 @@ public class TelaLogin extends JFrame {
 		lblNomeLogin.setBounds(87, 123, 85, 51);
 		panelLogin.add(lblNomeLogin);
 		
-		JLabel lblSenhaLogin = new JLabel("Senha");
-		lblSenhaLogin.setHorizontalAlignment(SwingConstants.LEFT);
-		lblSenhaLogin.setFont(new Font("Roboto", Font.PLAIN, 22));
-		lblSenhaLogin.setBounds(88, 284, 100, 51);
-		panelLogin.add(lblSenhaLogin);
+		JSeparator spSenhaLogin = new JSeparator();
+		spSenhaLogin.setBackground(corSeparador);
+		spSenhaLogin.setBounds(87, 389, 331, 2);
+		panelLogin.add(spSenhaLogin);
 		
-		JButton btnEntrar = new JButton("Entrar");
-		btnEntrar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				/*String nome = tfNomeLogin.getText();
-				String senha = Senha.encriptarSenha(pfSenhaLogin.getText());
-				List<Object> infoUsuario = new ArrayList<>();
-				try {
-					infoUsuario = daoUs.buscarUsuario(nome);
-				}catch(Exception e) { }
-				
-				int idUsuario = Integer.parseInt(String.valueOf(infoUsuario.get(0)));
-				String senhaUsuario = String.valueOf(infoUsuario.get(1));
-				int tipoUsuario = Integer.parseInt(String.valueOf(infoUsuario.get(2)));
-				
-				if(senha.equals(senhaUsuario)) {
-					System.out.println("Senha: " + senhaUsuario);
-					System.out.println("Id: " + idUsuario);
-					System.out.println("Tipo: " + tipoUsuario);
-					
-					if(tipoUsuario == 0) {
-						//Jframe do caixa
-					}else if(tipoUsuario == 1) {
-						//Jframe do controlador de estoque
-					}else if(tipoUsuario == 2) {
-						//Jframe do gerente
-					}
-				}*/
-			}
-		});
-		btnEntrar.setFont(new Font("Roboto", Font.PLAIN, 22));
-		btnEntrar.setBounds(188, 472, 187, 64);
-		panelLogin.add(btnEntrar);
+		JSeparator spNomeLogin = new JSeparator();
+		spNomeLogin.setBackground(corSeparador);
+		spNomeLogin.setBounds(87, 230, 331, 2);
+		panelLogin.add(spNomeLogin);
 		
 		tfNomeLogin = new JTextField();
+		tfNomeLogin.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				spNomeLogin.setBackground(corGeral);
+			}
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				spNomeLogin.setBackground(corSeparador);
+			}
+		});		
 		tfNomeLogin.setForeground(new Color(75, 80, 85));
-		tfNomeLogin.setFont(new Font("Roboto", Font.PLAIN, 18));
+		tfNomeLogin.setFont(new Font("Roboto", Font.PLAIN, 22));
 		tfNomeLogin.setColumns(10);
 		tfNomeLogin.setBorder(null);
 		tfNomeLogin.setBackground(Color.WHITE);
 		tfNomeLogin.setBounds(87, 171, 331, 57);
 		panelLogin.add(tfNomeLogin);
 		
-		JSeparator spNomeLogin = new JSeparator();
-		spNomeLogin.setBackground(new Color(176, 176, 176));
-		spNomeLogin.setBounds(87, 240, 331, 2);
-		panelLogin.add(spNomeLogin);
-		contentPane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{tfNome, tfCpf, tfRg, tfTelefone, tfCelular, pfSenha, pfRepetir, btnCadastrar, btnEntrar}));
-		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{tfNome, tfCpf, tfRg, tfTelefone, tfCelular, pfSenha, pfRepetir, btnCadastrar, btnEntrar}));
+		JLabel lblSenhaLogin = new JLabel("Senha");
+		lblSenhaLogin.setHorizontalAlignment(SwingConstants.LEFT);
+		lblSenhaLogin.setFont(new Font("Roboto", Font.PLAIN, 22));
+		lblSenhaLogin.setBounds(88, 284, 100, 51);
+		panelLogin.add(lblSenhaLogin);
+		
+		pfSenhaLogin = new JPasswordField();
+		pfSenhaLogin.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				spSenhaLogin.setBackground(corGeral);
+			}
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				spSenhaLogin.setBackground(corSeparador);
+			}
+		});	
+		pfSenhaLogin.setBorder(null);
+		pfSenhaLogin.setForeground(new Color(75, 80, 85));
+		pfSenhaLogin.setFont(new Font("Roboto", Font.PLAIN, 22));
+		pfSenhaLogin.setBounds(87, 330, 331, 57);
+		panelLogin.add(pfSenhaLogin);
+		
+		JLabel lblErroNome = new JLabel("Nome inexistente");
+		lblErroNome.setVisible(false);
+		lblErroNome.setForeground(corVermelho);
+		lblErroNome.setFont(new Font("Roboto", Font.PLAIN, 15));
+		lblErroNome.setBounds(87, 116, 331, 16);
+		panelLogin.add(lblErroNome);
+		
+		JLabel lblErroSenha = new JLabel("Senha incorreta");
+		lblErroSenha.setVisible(false);
+		lblErroSenha.setForeground(corVermelho);
+		lblErroSenha.setFont(new Font("Roboto", Font.PLAIN, 15));
+		lblErroSenha.setBounds(87, 284, 331, 16);
+		
+		JButton btnEntrar = new JButton("Entrar");
+		btnEntrar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnEntrar.setBackground(corSecundaria);
+			}
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				btnEntrar.setBackground(corGeral);
+			}
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				btnEntrar.setBackground(corTerciaria);
+			}
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				btnEntrar.setBackground(corGeral);
+			}
+		});
+		btnEntrar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnEntrar.setBorder(null);
+		btnEntrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String nome = tfNomeLogin.getText();
+				String senha = Senha.encriptarSenha(pfSenhaLogin.getText());
+				List<Object> infoUsuario = new ArrayList<>();
+				try {
+					infoUsuario = daoUs.buscarUsuario(nome);
+					if(!infoUsuario.isEmpty()) {
+						lblErroNome.setVisible(false);
+						spNomeLogin.setBackground(corSeparador);
+						
+						int idUsuario = Integer.parseInt(String.valueOf(infoUsuario.get(0)));
+						String senhaUsuario = String.valueOf(infoUsuario.get(1));
+						int tipoUsuario = Integer.parseInt(String.valueOf(infoUsuario.get(2)));
+						
+						if(senha.equals(senhaUsuario)) {	
+							lblErroSenha.setVisible(false);
+							spSenhaLogin.setBackground(corSeparador);
+							
+							if(tipoUsuario == 0) {
+								fecharJanelas();
+								TelaCaixa telaCaixa = new TelaCaixa();
+								
+								telaCaixa.setVisible(true);
+							}else if(tipoUsuario == 1) {
+								fecharJanelas();
+								TelaEstoque telaEstoque = new TelaEstoque();
+								
+								telaEstoque.setVisible(true);
+							}else if(tipoUsuario == 2) {
+								fecharJanelas();
+								TelaGerente telaGerente = new TelaGerente();
+								
+								telaGerente.setVisible(true);
+							}
+						}else {
+							lblErroSenha.setVisible(true);
+							spSenhaLogin.setBackground(corVermelho);
+						}
+					}else {
+						lblErroNome.setVisible(true);
+						spNomeLogin.setBackground(corVermelho);
+					}
+				}catch(Exception e) { }
+			}
+		});
+		
+		
+		panelLogin.add(lblErroSenha);
+		btnEntrar.setFont(new Font("Roboto", Font.PLAIN, 22));
+		btnEntrar.setBounds(139, 471, 242, 57);
+		btnEntrar.setBackground(corGeral);
+		panelLogin.add(btnEntrar);
+		contentPane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{tfNome, tfCpf, tfRg, tfTelefone, tfCelular, pfSenha, pfRepetir, btnCadastrar, tfNomeLogin, pfSenhaLogin, btnEntrar}));
+		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{tfNome, tfCpf, tfRg, tfTelefone, tfCelular, pfSenha, pfRepetir, btnCadastrar, tfNomeLogin, pfSenhaLogin, btnEntrar}));
 		
 		
 		
@@ -817,7 +906,12 @@ public class TelaLogin extends JFrame {
 		}catch(Exception e) { }
 	}
 	
-	
+	void fecharJanelas() {
+		Window[] janelas = Window.getWindows();
+		for(Window j : janelas) {
+			j.dispose();
+		}
+	}
 	
 	boolean camposEstaoCorretos(boolean[] camposCorretos) {
 		boolean x = true;
