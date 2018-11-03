@@ -50,6 +50,7 @@ public class FornecedorDao{
 			sqlPrep.setString(8, fo.getEstado());
 			sqlPrep.setInt(9, fo.getId());
 			sqlPrep.execute();
+			
 		}catch(Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
