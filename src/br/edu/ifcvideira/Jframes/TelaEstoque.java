@@ -108,6 +108,9 @@ public class TelaEstoque extends JFrame {
 	JPanel panelImgCidade = new JPanel();
 	JPanel panelImgBairro = new JPanel();
 	JPanel panelImgRua = new JPanel();
+	boolean[] camposCorretos = {false,false, false, false, false, false, false};
+	JButton btCadastrar = new JButton("Cadastrar");
+
 
 	ImageIcon imageIconX = new ImageIcon(TelaLogin.class.getResource("/br/edu/ifcvideira/img/xerro.png"));
 	Image imagemX = imageIconX.getImage().getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH);
@@ -153,7 +156,6 @@ public class TelaEstoque extends JFrame {
 		
 		
 		//Variáveis que cuidam para que os campos sejam preenchidos adequadamente
-		boolean[] camposCorretos = {false, false, false, false, false, false};
 		painelFornecedor.setLayout(null);
 		
 				
@@ -300,11 +302,12 @@ public class TelaEstoque extends JFrame {
 		painelFornecedor.add(btnProdutos);
 		
 		JComboBox cbEstado = new JComboBox();
+		cbEstado.setModel(new DefaultComboBoxModel(new String[] {"AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"}));
+
 		cbEstado.setBounds(863, 158, 55, 20);
 		cbEstado.setBackground(Color.WHITE);
 		cbEstado.setForeground(new Color(0, 0, 0));
 		cbEstado.setFont(new Font("Roboto", Font.PLAIN, 18));
-		cbEstado.setModel(new DefaultComboBoxModel(new String[] {"AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"}));
 		painelFornecedor.add(cbEstado);
 		
 		
@@ -330,6 +333,7 @@ public class TelaEstoque extends JFrame {
 				tabelaFornecedor.addMouseListener(new MouseAdapter() {
 					public void mousePressed(MouseEvent arg0) {
 						setCamposFromTabela();
+						cbEstado.setSelectedItem(String.valueOf(tabelaFornecedor.getValueAt(tabelaFornecedor.getSelectedRow(), 8)));
 					}
 				});
 				scrollPane.setViewportView(tabelaFornecedor);
@@ -451,7 +455,6 @@ public class TelaEstoque extends JFrame {
 		}
 		tfId.setEditable(false);
 		tfId.setColumns(10);
-		JButton btCadastrar = new JButton("Cadastrar");
 		btCadastrar.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -481,28 +484,31 @@ public class TelaEstoque extends JFrame {
 		btCadastrar.setBounds(87, 363, 215, 54);
 		btCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (camposEstaoCorretos(camposCorretos)) {
-					
-					
 					try {
-						forn.setNome(tfNome.getText());
-						forn.setCnpj(tfCNPJ.getText());
-						forn.setTelefone(tfTelefone.getText());
-						forn.setEmail(tfEmail.getText());
-						forn.setRua(tfRua.getText());
-						forn.setCidade(tfCidade.getText());
-						forn.setBairro(tfBairro.getText());
-						forn.setEstado(cbEstado.getSelectedItem().toString());
-						forn.setId(fornDao.RetornarProximoidFornecedor());
-						
-						fornDao.CadastrarFornecedor(forn);
-						
-					} catch (Exception e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage());
-					}
-				}else {
+						if (Integer.parseInt(tfId.getText())==fornDao.RetornarProximoidFornecedor()) {
+							if (camposEstaoCorretos(camposCorretos)) {
+
+								forn.setNome(tfNome.getText());
+								forn.setCnpj(tfCNPJ.getText());
+								forn.setTelefone(tfTelefone.getText());
+								forn.setEmail(tfEmail.getText());
+								forn.setRua(tfRua.getText());
+								forn.setCidade(tfCidade.getText());
+								forn.setBairro(tfBairro.getText());
+								forn.setEstado(cbEstado.getSelectedItem().toString());
+								forn.setId(fornDao.RetornarProximoidFornecedor());
+								
+								fornDao.CadastrarFornecedor(forn);
+							}else {
+								JOptionPane.showMessageDialog(null, "Erro, um ou mais campos não foram preenchidos corretamente");
+							}
+						}else {
+							JOptionPane.showMessageDialog(null,"Este ID já esta cadastrado!!\nResetando... ");
+							limpar();
+						}
+					} catch (Exception e1) {}
 					
-				}
+				
 				atualizarTabela();
 				limpar();
 			}
@@ -519,6 +525,7 @@ public class TelaEstoque extends JFrame {
 		JButton btnEditar = new JButton("Editar");
 		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				atualizarCampos();
 			if (camposEstaoCorretos(camposCorretos)) {
 					
 					forn.setNome(tfNome.getText());
@@ -533,11 +540,8 @@ public class TelaEstoque extends JFrame {
 					
 					try {
 						fornDao.AlterarFornecedor(forn);
-					} catch (Exception e) {
-						
-					
-				}
-				
+					} catch (Exception e) {}
+				atualizarTabela();
 				
 			} 
 			}
@@ -1054,6 +1058,8 @@ public class TelaEstoque extends JFrame {
 		//tela Inicia Maximizada
 		Rectangle area = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
 		setMaximizedBounds(area);
+		GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode();
+
 		setExtendedState(MAXIMIZED_BOTH);
 		setUndecorated(true);
 	
@@ -1094,7 +1100,6 @@ public class TelaEstoque extends JFrame {
 			tfRua.setText(null);
 			tfBairro.setText(null);
 			tfEmail.setText(null);
-			
 
 			try {
 				tfId.setText(String.valueOf(fornDao.RetornarProximoidFornecedor()));
@@ -1129,8 +1134,8 @@ public class TelaEstoque extends JFrame {
 			tfRua.setText(String.valueOf(tabelaFornecedor.getValueAt(tabelaFornecedor.getSelectedRow(), 5)));
 			tfBairro.setText(String.valueOf(tabelaFornecedor.getValueAt(tabelaFornecedor.getSelectedRow(), 6)));
 			tfCidade.setText(String.valueOf(tabelaFornecedor.getValueAt(tabelaFornecedor.getSelectedRow(), 7)));
-			//cbEstado.set;
-			deixarCerto();
+			atualizarCampos();
+			
 			
 		}
 		
@@ -1141,5 +1146,120 @@ public class TelaEstoque extends JFrame {
 			}
 			return x;
 		}
+		
+		public void atualizarCampos() {
+			camposCorretos[0] = (tfNome.getText().matches("[\\p{L}\\s]+")) ? true : false;
+			
+			if(tfNome.getText().length() < 1) {
+				camposCorretos[0] = false;
+			}
+			
+			if(camposCorretos[0]) {
+				spNome.setBackground(corSeparador);
+				panelImgNome.setVisible(false);
+				
+			}else {
+				spNome.setBackground(corVermelho);
+				panelImgNome.setVisible(true);
+			}
+	
+			
+			camposCorretos[1] = (tfEmail.getText().matches("^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$")) ? true : false;
+			
+			if(tfEmail.getText().length() < 1) {
+				camposCorretos[1] = false;
+			}
+			
+			if(camposCorretos[1]) {
+				spEmail.setBackground(corSeparador);
+				panelImgEmail.setVisible(false);
+				
+			}else {
+				spEmail.setBackground(corVermelho);
+				panelImgEmail.setVisible(true);
+			}
+			
+			
+			
+			String numerosCNPJ = tfCNPJ.getText();
+			numerosCNPJ = numerosCNPJ.replaceAll("[^\\d]", "");
+			camposCorretos[2] = (numerosCNPJ.length() < 11) ? false : true;
+			spCNPJ.setBackground(corSeparador);
+			
+			if(camposCorretos[2]) {
+				spCNPJ.setBackground(corSeparador);
+				panelImgCNPJ.setVisible(false);
+			
+			}else {
+				spCNPJ.setBackground(corVermelho);
+				panelImgCNPJ.setVisible(true);
+			}
+			
+			
+			String numerosTelefone = tfTelefone.getText();
+			numerosTelefone = numerosTelefone.replaceAll("[^\\d]", "");
+			camposCorretos[3] = (numerosTelefone.length() < 10) ? false : true;
+			spTelefone.setBackground(corSeparador);
+			
+			if(camposCorretos[3]) {
+				spTelefone.setBackground(corSeparador);
+				panelImgTelefone.setVisible(false);
+				
+			}else {
+				spTelefone.setBackground(corVermelho);
+				panelImgTelefone.setVisible(true);
+
+			}
+			
+			
+			camposCorretos[4] = (tfCidade.getText().matches("[\\p{L}\\s]+")) ? true : false;
+			
+			if(tfCidade.getText().length() < 1) {
+				camposCorretos[4] = false;
+			}
+			
+			if(camposCorretos[4]) {
+				spCidade.setBackground(corSeparador);
+				panelImgCidade.setVisible(false);
+			}else {
+				spCidade.setBackground(corVermelho);
+				panelImgCidade.setVisible(true);
+			}
+		
+			
+			
+			
+			camposCorretos[5] = (tfBairro.getText().matches("[\\p{L}\\s]+")) ? true : false;
+			
+			if(tfBairro.getText().length() < 1) {
+				camposCorretos[5] = false;
+			
+			}
+			
+			if(camposCorretos[5]) {
+				spBairro.setBackground(corSeparador);
+				panelImgBairro.setVisible(false);
+			}else {
+				spBairro.setBackground(corVermelho);
+				panelImgBairro.setVisible(true);
+				
+			}
+			
+			camposCorretos[6] = (tfRua.getText().matches("[\\p{L}\\s]+")) ? true : false;
+			
+			if(tfRua.getText().length() < 1) {
+				camposCorretos[6] = false;
+			}
+			
+			if(camposCorretos[6]) {
+				spRua.setBackground(corSeparador);
+				panelImgRua.setVisible(false);
+				
+			}else {
+				spRua.setBackground(corVermelho);
+				panelImgRua.setVisible(true);
+			}
+		}
+		
 }
 
