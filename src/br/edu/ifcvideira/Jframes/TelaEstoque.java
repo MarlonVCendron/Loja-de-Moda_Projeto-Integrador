@@ -520,7 +520,6 @@ public class TelaEstoque extends JFrame {
 		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			if (camposEstaoCorretos(camposCorretos)) {
-				if (table.getSelectedRow()!=-1) {
 					
 					forn.setNome(tfNome.getText());
 					forn.setCnpj(tfCNPJ.getText());
@@ -536,7 +535,7 @@ public class TelaEstoque extends JFrame {
 						fornDao.AlterarFornecedor(forn);
 					} catch (Exception e) {
 						
-					}
+					
 				}
 				
 				
