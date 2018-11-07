@@ -11,5 +11,6 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="swingx-1.6.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

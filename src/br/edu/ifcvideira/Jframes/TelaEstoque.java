@@ -153,9 +153,6 @@ public class TelaEstoque extends JFrame {
 		painelFornecedor.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(painelFornecedor);
 		
-		
-		
-		//Variáveis que cuidam para que os campos sejam preenchidos adequadamente
 		painelFornecedor.setLayout(null);
 		
 				
