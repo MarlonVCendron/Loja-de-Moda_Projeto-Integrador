@@ -116,7 +116,7 @@ public class TelaLogin extends JFrame {
 	 * Create the frame.
 	 */
 	public TelaLogin() {		
-		setName("TelaInicial");
+		setName("Tela Inicial");
 		Dimension tela = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		int largura = 982;
 		int altura = 652;
