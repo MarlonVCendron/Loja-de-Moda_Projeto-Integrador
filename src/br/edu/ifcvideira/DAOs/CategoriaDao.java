@@ -13,12 +13,13 @@ import br.edu.ifcvideira.utils.Conexao;
 
 public class CategoriaDao{
 	
-	public void CadastrarCategoria(Categoria fo) throws SQLException, Exception{
+	public void CadastrarCategoria(Categoria cat) throws SQLException, Exception{
 		try{
-			String sql = "INSERT INTO categorias (descricao, desconto) VALUES (?,?)";
+			String sql = "INSERT INTO categorias (descricao, desconto, nome) VALUES (?,?,?)";
 			java.sql.PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
-			sqlPrep.setString(1, fo.getDescricao());
-			sqlPrep.setDouble(2, fo.getDesconto());
+			sqlPrep.setString(1, cat.getDescricao());
+			sqlPrep.setDouble(2, cat.getDesconto());
+			sqlPrep.setString(3, cat.getNome());
 			sqlPrep.execute();
 			
 		} catch(SQLException e) {
@@ -29,24 +30,28 @@ public class CategoriaDao{
 		}
 	}
 
-	public void AlterarCategoria(Categoria fo) throws Exception {
+	public void AlterarCategoria(Categoria cat) throws Exception {
 		try{
-			String sql = "UPDATE categorias SET descricao=?, desconto=?, WHERE id=?";
+			String sql = "UPDATE categorias SET descricao=?, desconto=?, nome=?  WHERE id=?";
+			System.out.println("Chegou aqui");
+
 			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
-			sqlPrep.setString(1, fo.getDescricao());
-			sqlPrep.setDouble(2, fo.getDesconto());
-			sqlPrep.setInt(3, fo.getId());
+			sqlPrep.setString(1, cat.getDescricao());
+			sqlPrep.setDouble(2, cat.getDesconto());
+			sqlPrep.setString(3, cat.getNome());
+			sqlPrep.setInt(4, cat.getId());
 			sqlPrep.execute();
+
 		}catch(Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
 	}
 
-	public void deletarCategoria(Categoria fo) throws Exception{
+	public void deletarCategoria(Categoria cat) throws Exception{
 		try{
 			String sql = "DELETE FROM categorias WHERE id=? ";
 			PreparedStatement sqlPrep = (PreparedStatement) Conexao.conectar().prepareStatement(sql);
-			sqlPrep.setInt(1, fo.getId());
+			sqlPrep.setInt(1, cat.getId());
 			sqlPrep.execute();
 		} catch (SQLException e){
 			JOptionPane.showMessageDialog(null, e.getMessage());
@@ -62,7 +67,7 @@ public class CategoriaDao{
 			
 			while (rs.next())
 			{
-				Object[] linha = {rs.getString(1), rs.getString(2), rs.getString(3)};
+				Object[] linha = {rs.getString(1), rs.getString(2), rs.getString(3),rs.getString(4)};
 				Categoria.add(linha);
 			}
 			state.close();
