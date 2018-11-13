@@ -14,7 +14,7 @@ import br.edu.ifcvideira.utils.Conexao;
 public class ClienteDao {
 	public void CadastrarCliente(Cliente cl) throws SQLException, Exception{
 		try{
-			String sql = "INSERT INTO clientes(nome, cpf, rg, telefone, celular, data_cadastro, rua, bairro, cidade, estado) VALUES (?,?,?,?,?,?,?,?,?)";
+			String sql = "INSERT INTO clientes(nome, cpf, telefone, celular, data_cadastro, rua, bairro, cidade, estado) VALUES (?,?,?,?,?,?,?,?,?)";
 			java.sql.PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
 			sqlPrep.setString(1, cl.getNome());
 			sqlPrep.setString(2, cl.getCpf());

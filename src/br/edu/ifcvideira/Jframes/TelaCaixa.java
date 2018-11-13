@@ -166,6 +166,11 @@ public class TelaCaixa extends JFrame {
 	    contentPane.add(lblPesquisarClientes);
 	    
 	    JButton btnCadastrarCliente = new JButton("Cadastrar Cliente");
+	    btnCadastrarCliente.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent arg0) {
+	    		new TelaCadastroCliente().setVisible(true);
+	    	}
+	    });
 	    btnCadastrarCliente.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {

@@ -21,11 +21,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
@@ -54,6 +57,7 @@ public class TelaCadastroCliente extends JFrame {
 	private JPanel panelImgTelefone;
 	private JPanel panelImgRua;
 	private JPanel panelImgBairro;
+	private JPanel panelImgCidade;
 	
 	public static JLabel lblLogo;
 	
@@ -95,10 +99,10 @@ public class TelaCadastroCliente extends JFrame {
 	public TelaCadastroCliente() {
 		setName("Tela Cadastro Cliente");
 		Dimension tela = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-		int largura = 982;
-		int altura = 652;
+		int largura = 513;
+		int altura = 700;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds((tela.width / 2) - (largura / 2), (tela.height / 2) - (altura / 2), 513, 652);
+		setBounds((tela.width / 2) - (largura / 2), (tela.height / 2) - (altura / 2), largura, altura);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -109,7 +113,7 @@ public class TelaCadastroCliente extends JFrame {
 		
 		
 		//Variáveis que cuidam para que os campos sejam preenchidos adequadamente
-		boolean[] camposCorretos = {false, false, false, false, false, false, false};
+		boolean[] camposCorretos = {false, false, false, true, false, false, false};
 		
 		JPanel panelSuperior = new JPanel();
 		panelSuperior.setBounds(0, 0, 512, 32);
@@ -200,7 +204,7 @@ public class TelaCadastroCliente extends JFrame {
 		
 		JPanel panelCadastro = new JPanel();
 		panelCadastro.setBackground(new Color(255, 255, 255));
-		panelCadastro.setBounds(0, 32, 512, 621);
+		panelCadastro.setBounds(0, 32, 513, 700);
 		contentPane.add(panelCadastro);
 		panelCadastro.setLayout(null);
 		
@@ -229,16 +233,28 @@ public class TelaCadastroCliente extends JFrame {
 		panelCadastro.add(lblCelular);
 		
 		JLabel lblRua = new JLabel("Rua");
-		lblRua.setBounds(74, 335, 119, 42);
+		lblRua.setBounds(74, 340, 119, 42);
 		lblRua.setForeground(corTexto);
 		lblRua.setFont(new Font("Roboto", Font.PLAIN, 20));
 		panelCadastro.add(lblRua);
 		
 		JLabel lblBairro = new JLabel("Bairro");
-		lblBairro.setBounds(74, 390, 163, 42);
+		lblBairro.setBounds(74, 395, 163, 42);
 		lblBairro.setForeground(corTexto);
 		lblBairro.setFont(new Font("Roboto", Font.PLAIN, 20));
 		panelCadastro.add(lblBairro);
+		
+		JLabel lblCidade = new JLabel("Cidade");
+		lblCidade.setForeground(new Color(75, 85, 85));
+		lblCidade.setFont(new Font("Roboto", Font.PLAIN, 20));
+		lblCidade.setBounds(74, 450, 163, 42);
+		panelCadastro.add(lblCidade);
+		
+		JLabel lblEstado = new JLabel("Estado");
+		lblEstado.setForeground(new Color(75, 85, 85));
+		lblEstado.setFont(new Font("Roboto", Font.PLAIN, 20));
+		lblEstado.setBounds(74, 510, 163, 42);
+		panelCadastro.add(lblEstado);
 		
 		JSeparator spNome = new JSeparator();
 		spNome.setBounds(236, 104, 215, 2);
@@ -259,6 +275,21 @@ public class TelaCadastroCliente extends JFrame {
 		spCelular.setBounds(236, 269, 215, 2);
 		spCelular.setBackground(corSeparador);
 		panelCadastro.add(spCelular);
+		
+		JSeparator spRua = new JSeparator();
+		spRua.setBounds(236, 377, 215, 2);
+		spRua.setBackground(corSeparador);
+		panelCadastro.add(spRua);
+		
+		JSeparator spBairro = new JSeparator();
+		spBairro.setBounds(236, 432, 215, 2);
+		spBairro.setBackground(corSeparador);
+		panelCadastro.add(spBairro);
+		
+		JSeparator spCidade = new JSeparator();
+		spCidade.setBounds(236, 487, 215, 2);
+		spCidade.setBackground(corSeparador);
+		panelCadastro.add(spCidade);
 		
 		tfNome = new JTextField();
 		tfNome.setBounds(236, 72, 215, 32);
@@ -288,7 +319,6 @@ public class TelaCadastroCliente extends JFrame {
 				spNome.setBackground(corGeral);
 			}
 		});
-		tfNome.setColumns(10);
 		panelCadastro.add(tfNome);
 		
 		try {
@@ -322,7 +352,6 @@ public class TelaCadastroCliente extends JFrame {
 				spCpf.setBackground(corGeral);
 			}
 		});
-		tfCpf.setColumns(10);
 		panelCadastro.add(tfCpf);
 		
 		try {
@@ -346,10 +375,10 @@ public class TelaCadastroCliente extends JFrame {
 			public void focusLost(FocusEvent e) {
 				String numerosTelefone = tfTelefone.getText();
 				numerosTelefone = numerosTelefone.replaceAll("[^\\d]", "");
-				camposCorretos[3] = (numerosTelefone.length() < 10) ? false : true;
+				camposCorretos[2] = (numerosTelefone.length() < 10) ? false : true;
 				spTelefone.setBackground(corSeparador);
 				
-				if(camposCorretos[3]) {
+				if(camposCorretos[2]) {
 					spTelefone.setBackground(corSeparador);
 					panelImgTelefone.setVisible(false);
 				}else {
@@ -362,7 +391,6 @@ public class TelaCadastroCliente extends JFrame {
 				spTelefone.setBackground(corGeral);
 			}
 		});
-		tfTelefone.setColumns(10);
 		panelCadastro.add(tfTelefone);
 		
 		try {
@@ -383,7 +411,6 @@ public class TelaCadastroCliente extends JFrame {
 				if(numerosCelular.length() < 11) {
 					tfCelular.setText("");
 				}
-				camposCorretos[4] = true;
 				spCelular.setBackground(corSeparador);
 			}
 			@Override
@@ -391,8 +418,106 @@ public class TelaCadastroCliente extends JFrame {
 				spCelular.setBackground(corGeral);
 			}
 		});
-		tfCelular.setColumns(10);
 		panelCadastro.add(tfCelular);
+		
+		JTextField tfRua = new JTextField();
+		tfRua.setBounds(236, 345, 215, 32);
+		tfRua.setForeground(corTexto);
+		tfRua.setFont(new Font("Roboto", Font.PLAIN, 18));
+		tfRua.setBorder(null);
+		tfRua.setBackground(panelCadastro.getBackground());
+		tfRua.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				camposCorretos[4] = (tfRua.getText().matches("[\\p{L}\\s]+")) ? true : false;
+				
+				if(tfRua.getText().length() < 1) {
+					camposCorretos[4] = false;
+				}
+				
+				if(camposCorretos[4]) {
+					spRua.setBackground(corSeparador);
+					panelImgRua.setVisible(false);
+				}else {
+					spRua.setBackground(corVermelho);
+					panelImgRua.setVisible(true);
+				}
+			}
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				spNome.setBackground(corGeral);
+			}
+		});
+		panelCadastro.add(tfRua);
+		
+		JTextField tfBairro = new JTextField();
+		tfBairro.setBounds(236, 400, 215, 32);
+		tfBairro.setForeground(corTexto);
+		tfBairro.setFont(new Font("Roboto", Font.PLAIN, 18));
+		tfBairro.setBorder(null);
+		tfBairro.setBackground(panelCadastro.getBackground());
+		tfBairro.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				camposCorretos[5] = (tfBairro.getText().matches("[\\p{L}\\s]+")) ? true : false;
+				
+				if(tfBairro.getText().length() < 1) {
+					camposCorretos[5] = false;
+				}
+				
+				if(camposCorretos[5]) {
+					spBairro.setBackground(corSeparador);
+					panelImgBairro.setVisible(false);
+				}else {
+					spBairro.setBackground(corVermelho);
+					panelImgBairro.setVisible(true);
+				}
+			}
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				spNome.setBackground(corGeral);
+			}
+		});
+		panelCadastro.add(tfBairro);
+		
+		JTextField tfCidade = new JTextField();
+		tfCidade.setBounds(236, 455, 215, 32);
+		tfCidade.setForeground(corTexto);
+		tfCidade.setFont(new Font("Roboto", Font.PLAIN, 18));
+		tfCidade.setBorder(null);
+		tfCidade.setBackground(panelCadastro.getBackground());
+		tfCidade.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				camposCorretos[6] = (tfCidade.getText().matches("[\\p{L}\\s]+")) ? true : false;
+				
+				if(tfCidade.getText().length() < 1) {
+					camposCorretos[6] = false;
+				}
+				
+				if(camposCorretos[6]) {
+					spCidade.setBackground(corSeparador);
+					panelImgCidade.setVisible(false);
+				}else {
+					spCidade.setBackground(corVermelho);
+					panelImgCidade.setVisible(true);
+				}
+			}
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				spNome.setBackground(corGeral);
+			}
+		});
+		panelCadastro.add(tfCidade);
+		
+		JComboBox cbEstado = new JComboBox();
+		cbEstado.setModel(new DefaultComboBoxModel(new String[] {"AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"}));
+
+		cbEstado.setBounds(236, 510, 215, 32);
+		cbEstado.setBackground(Color.WHITE);
+		cbEstado.setForeground(corTexto);
+		cbEstado.setFont(new Font("Roboto", Font.PLAIN, 18));
+		panelCadastro.add(cbEstado);
 		
 		JPanel panelCampos = new JPanel();
 		panelCampos.setBounds(0, 0, 512, 620);
@@ -420,7 +545,7 @@ public class TelaCadastroCliente extends JFrame {
 				btnCadastrar.setBackground(corGeral);
 			}
 		});
-		btnCadastrar.setBounds(164, 535, 215, 54);
+		btnCadastrar.setBounds((largura / 2) - (215 / 2), 570, 215, 54);
 		panelCampos.add(btnCadastrar);
 		btnCadastrar.setBackground(corGeral);
 		btnCadastrar.setBorder(null);
@@ -435,12 +560,29 @@ public class TelaCadastroCliente extends JFrame {
 					cl.setTelefone(tfTelefone.getText());
 					cl.setCelular(tfCelular.getText());
 					cl.setDataCadastro(dataDeHoje);
-
+					cl.setBairro(tfBairro.getText());
+					cl.setRua(tfRua.getText());
+					cl.setCidade(tfCidade.getText());
+					cl.setEstado(cbEstado.getSelectedItem().toString());
+					
+//					System.out.println(cl.getBairro());
+//					System.out.println(cl.getId());
+//					System.out.println(cl.getNome());
+//					System.out.println(cl.getNome());
+//					System.out.println(cl.getCpf());
+//					System.out.println(cl.getTelefone());
+//					System.out.println(cl.getRua());
+//					System.out.println(cl.getCidade());
+//					System.out.println(cl.getEstado());
+//					System.out.println(cl.getDataCadastro());
+					
 					
 					try {
 						daoCl.CadastrarCliente(cl);
 						dispose();
-					}catch(Exception e) { }
+					}catch(Exception e) {
+						JOptionPane.showMessageDialog(null, "Erro ao cadastrar", "Erro", JOptionPane.ERROR_MESSAGE);
+					}
 				}else {
 					if(!camposCorretos[0]) {
 						spNome.setBackground(corVermelho);
@@ -459,14 +601,6 @@ public class TelaCadastroCliente extends JFrame {
 					}
 					
 					if(!camposCorretos[2]) {
-						spRg.setBackground(corVermelho);
-						panelImgRg.setVisible(true);
-					}else {
-						spRg.setBackground(corSeparador);
-						panelImgRg.setVisible(false);
-					}
-					
-					if(!camposCorretos[3]) {
 						spTelefone.setBackground(corVermelho);
 						panelImgTelefone.setVisible(true);
 					}else {
@@ -474,7 +608,7 @@ public class TelaCadastroCliente extends JFrame {
 						panelImgTelefone.setVisible(false);
 					}
 					
-					if(!camposCorretos[5]) {
+					if(!camposCorretos[4]) {
 						spRua.setBackground(corVermelho);
 						panelImgRua.setVisible(true);
 					}else {
@@ -482,12 +616,20 @@ public class TelaCadastroCliente extends JFrame {
 						panelImgRua.setVisible(false);
 					}
 					
-					if(!camposCorretos[6]) {
+					if(!camposCorretos[5]) {
 						spBairro.setBackground(corVermelho);
 						panelImgBairro.setVisible(true);
 					}else {
 						spBairro.setBackground(corSeparador);
 						panelImgBairro.setVisible(false);
+					}
+					
+					if(!camposCorretos[6]) {
+						spCidade.setBackground(corVermelho);
+						panelImgCidade.setVisible(true);
+					}else {
+						spCidade.setBackground(corSeparador);
+						panelImgCidade.setVisible(false);
 					}
 				}
 			}
@@ -511,11 +653,15 @@ public class TelaCadastroCliente extends JFrame {
 		
 		JLabel imgXRua = new JLabel(new ImageIcon(imagemX));
 		imgXRua.setBackground(new Color(255, 255, 255));
-		imgXRua.setToolTipText("A senha deve conter entre 8 e 25 caracteres");
+		imgXRua.setToolTipText("A rua é obrigatória");
 		
 		JLabel imgXBairro = new JLabel(new ImageIcon(imagemX));
 		imgXBairro.setBackground(new Color(255, 255, 255));
-		imgXBairro.setToolTipText("Repita a senha corretamente");
+		imgXBairro.setToolTipText("O bairro é obrigatório");
+		
+		JLabel imgXCidade = new JLabel(new ImageIcon(imagemX));
+		imgXCidade.setBackground(new Color(255, 255, 255));
+		imgXCidade.setToolTipText("A cidade é obrigatória");
 		
 		panelImgNome = new JPanel();
 		panelImgNome.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -554,9 +700,17 @@ public class TelaCadastroCliente extends JFrame {
 		panelCampos.add(panelImgBairro); 
 		panelImgBairro.add(imgXBairro);
 		
+		panelImgCidade = new JPanel();
+		panelImgCidade.setVisible(false);
+		panelImgCidade.setBackground(new Color(255, 255, 255));
+		panelImgCidade.setBounds(37, 453, 32, 32);
+		panelCampos.add(panelImgCidade); 
+		panelImgCidade.add(imgXCidade);
+		
 		JSeparator spCampos = new JSeparator();
 		spCampos.setBounds(54, 311, 417, 2);
 		panelCampos.add(spCampos);
+		
 	}
 
 	
