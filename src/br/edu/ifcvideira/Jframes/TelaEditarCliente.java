@@ -43,7 +43,7 @@ import br.edu.ifcvideira.Classes.Cliente;
 import br.edu.ifcvideira.DAOs.ClienteDao;
 import br.edu.ifcvideira.utils.Cor;
 import br.edu.ifcvideira.utils.Preferencias;
-public class TelaCadastroCliente extends JFrame {
+public class TelaEditarCliente extends JFrame {
 
 	private JPanel contentPane;
 	
@@ -96,8 +96,8 @@ public class TelaCadastroCliente extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public TelaCadastroCliente() {
-		setName("Tela Cadastro Cliente");
+	public TelaEditarCliente(Cliente cliente) {
+		setName("Tela Editar Cliente");
 		Dimension tela = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		int largura = 513;
 		int altura = 700;
@@ -292,6 +292,7 @@ public class TelaCadastroCliente extends JFrame {
 		panelCadastro.add(spCidade);
 		
 		tfNome = new JTextField();
+		tfNome.setText(cliente.getNome());
 		tfNome.setBounds(236, 72, 215, 32);
 		tfNome.setForeground(corTexto);
 		tfNome.setFont(new Font("Roboto", Font.PLAIN, 18));
@@ -325,6 +326,7 @@ public class TelaCadastroCliente extends JFrame {
 			MaskFormatter tfCpfFormatter = new MaskFormatter("###.###.###-##");
 			tfCpfFormatter.setPlaceholderCharacter('_');
 			tfCpf = new JFormattedTextField(tfCpfFormatter);
+			tfCpf.setText(cliente.getCpf());
 			tfCpf.setBounds(236, 127, 215, 32);
 			tfCpf.setForeground(corTexto);
 			tfCpf.setFont(new Font("Roboto", Font.PLAIN, 18));
@@ -364,6 +366,7 @@ public class TelaCadastroCliente extends JFrame {
 			MaskFormatter tfTelefoneFormatter = new MaskFormatter("(##) ####-####");
 			tfTelefoneFormatter.setPlaceholderCharacter('_');
 			tfTelefone = new JFormattedTextField(tfTelefoneFormatter);
+			tfTelefone.setText(cliente.getTelefone());
 			tfTelefone.setBounds(236, 182, 215, 32);
 			tfTelefone.setForeground(corTexto);
 			tfTelefone.setFont(new Font("Roboto", Font.PLAIN, 18));
@@ -397,6 +400,7 @@ public class TelaCadastroCliente extends JFrame {
 			MaskFormatter tfCelularFormatter = new MaskFormatter("(##) #####-####");
 			tfCelularFormatter.setPlaceholderCharacter('_');
 			tfCelular = new JFormattedTextField(tfCelularFormatter);
+			tfCelular.setText(cliente.getCelular());
 			tfCelular.setBounds(236, 237, 215, 32);
 			tfCelular.setForeground(corTexto);
 			tfCelular.setFont(new Font("Roboto", Font.PLAIN, 18));
@@ -421,6 +425,7 @@ public class TelaCadastroCliente extends JFrame {
 		panelCadastro.add(tfCelular);
 		
 		JTextField tfRua = new JTextField();
+		tfRua.setText(cliente.getRua());
 		tfRua.setBounds(236, 345, 215, 32);
 		tfRua.setForeground(corTexto);
 		tfRua.setFont(new Font("Roboto", Font.PLAIN, 18));
@@ -451,6 +456,7 @@ public class TelaCadastroCliente extends JFrame {
 		panelCadastro.add(tfRua);
 		
 		JTextField tfBairro = new JTextField();
+		tfBairro.setText(cliente.getBairro());
 		tfBairro.setBounds(236, 400, 215, 32);
 		tfBairro.setForeground(corTexto);
 		tfBairro.setFont(new Font("Roboto", Font.PLAIN, 18));
@@ -482,6 +488,7 @@ public class TelaCadastroCliente extends JFrame {
 		
 		JTextField tfCidade = new JTextField();
 		tfCidade.setBounds(236, 455, 215, 32);
+		tfCidade.setText(cliente.getCidade());
 		tfCidade.setForeground(corTexto);
 		tfCidade.setFont(new Font("Roboto", Font.PLAIN, 18));
 		tfCidade.setBorder(null);
@@ -512,7 +519,7 @@ public class TelaCadastroCliente extends JFrame {
 		
 		JComboBox cbEstado = new JComboBox();
 		cbEstado.setModel(new DefaultComboBoxModel(new String[] {"AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"}));
-
+		cbEstado.setSelectedItem(cliente.getEstado());
 		cbEstado.setBounds(236, 510, 215, 32);
 		cbEstado.setBackground(Color.WHITE);
 		cbEstado.setForeground(corTexto);
@@ -520,65 +527,51 @@ public class TelaCadastroCliente extends JFrame {
 		panelCadastro.add(cbEstado);
 		
 		JPanel panelCampos = new JPanel();
-		panelCampos.setBounds(0, 0, 512, 620);
+		panelCampos.setBounds(0, 0, 512, 668);
 		panelCampos.setOpaque(false);
 		panelCampos.setBackground(panelCadastro.getBackground());
 		panelCadastro.add(panelCampos);
 		panelCampos.setLayout(null);
 		
-		JButton btnCadastrar = new JButton("Cadastrar");
-		btnCadastrar.addMouseListener(new MouseAdapter() {
+		JButton btnEditar = new JButton("Editar");
+		btnEditar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				btnCadastrar.setBackground(corSecundaria);
+				btnEditar.setBackground(corSecundaria);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				btnCadastrar.setBackground(corGeral);
+				btnEditar.setBackground(corGeral);
 			}
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				btnCadastrar.setBackground(corTerciaria);
+				btnEditar.setBackground(corTerciaria);
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				btnCadastrar.setBackground(corGeral);
+				btnEditar.setBackground(corGeral);
 			}
 		});
-		btnCadastrar.setBounds((largura / 2) - (215 / 2), 570, 215, 54);
-		panelCampos.add(btnCadastrar);
-		btnCadastrar.setBackground(corGeral);
-		btnCadastrar.setBorder(null);
-		btnCadastrar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnCadastrar.addActionListener(new ActionListener() {
+		btnEditar.setBounds((largura / 2) - (215 / 2), 570, 215, 54);
+		panelCampos.add(btnEditar);
+		btnEditar.setBackground(corGeral);
+		btnEditar.setBorder(null);
+		btnEditar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(camposEstaoCorretos(camposCorretos)) {
-					Timestamp dataDeHoje = new Timestamp(System.currentTimeMillis());
-					
 					cl.setNome(tfNome.getText());
 					cl.setCpf(tfCpf.getText());
 					cl.setTelefone(tfTelefone.getText());
 					cl.setCelular(tfCelular.getText());
-					cl.setDataCadastro(dataDeHoje);
+					//cl.setDataCadastro();
 					cl.setBairro(tfBairro.getText());
 					cl.setRua(tfRua.getText());
 					cl.setCidade(tfCidade.getText());
-					cl.setEstado(cbEstado.getSelectedItem().toString());
-					
-//					System.out.println(cl.getBairro());
-//					System.out.println(cl.getId());
-//					System.out.println(cl.getNome());
-//					System.out.println(cl.getNome());
-//					System.out.println(cl.getCpf());
-//					System.out.println(cl.getTelefone());
-//					System.out.println(cl.getRua());
-//					System.out.println(cl.getCidade());
-//					System.out.println(cl.getEstado());
-//					System.out.println(cl.getDataCadastro());
-					
+					cl.setEstado(cbEstado.getSelectedItem().toString());					
 					
 					try {
-						daoCl.CadastrarCliente(cl);
+						daoCl.AlterarCliente(cl);
 						dispose();
 					}catch(Exception e) {
 						JOptionPane.showMessageDialog(null, "Erro ao cadastrar", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -634,8 +627,8 @@ public class TelaCadastroCliente extends JFrame {
 				}
 			}
 		});
-		btnCadastrar.setFont(new Font("Roboto", Font.PLAIN, 18));
-		btnCadastrar.setForeground(corTexto);
+		btnEditar.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btnEditar.setForeground(corTexto);
 		
 		
 		JLabel imgXNome = new JLabel(new ImageIcon(imagemX));

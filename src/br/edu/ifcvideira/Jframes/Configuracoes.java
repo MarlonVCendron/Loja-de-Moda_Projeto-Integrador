@@ -51,7 +51,6 @@ public class Configuracoes extends JFrame {
 	
 	Point posMouseInicial;
 	
-
 	/**
 	 * Launch the application.
 	 */
@@ -234,7 +233,8 @@ public class Configuracoes extends JFrame {
 					j.dispose();
 				}
 				
-				new TelaLogin().setVisible(true);
+				TelaLogin telaLogin = new TelaLogin();				
+				telaLogin.setVisible(true);
 				
 			}
 		});

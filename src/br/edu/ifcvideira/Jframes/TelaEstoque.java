@@ -209,7 +209,6 @@ public class TelaEstoque extends JFrame {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1386, 886);
-<<<<<<< HEAD
 		painelPrincipal = new JPanel();
 		painelPrincipal.setBackground(Color.WHITE);
 		painelPrincipal.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -1145,14 +1144,7 @@ public class TelaEstoque extends JFrame {
 							});
 							painelCategoria.add(tfDescricaoCat);
 							
-							
-=======
-		painelFornecedor = new JPanel();
-		painelFornecedor.setBackground(Color.WHITE);
-		painelFornecedor.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(painelFornecedor);
-		
->>>>>>> 7fd443ed37f79ab4b3bf63d8127ad89bf7c3d8f7
+
 		painelFornecedor.setLayout(null);
 		painelFornecedor.setBorder(new EmptyBorder(5, 5, 5, 5));
 		painelFornecedor.setBackground(Color.WHITE);

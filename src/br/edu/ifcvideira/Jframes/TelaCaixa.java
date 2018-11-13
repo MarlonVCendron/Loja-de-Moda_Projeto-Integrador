@@ -14,6 +14,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -26,7 +29,10 @@ import javax.swing.*;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import java.awt.*;
 
+import br.edu.ifcvideira.Classes.Cliente;
+import br.edu.ifcvideira.DAOs.ClienteDao;
 import br.edu.ifcvideira.utils.Cor;
+import br.edu.ifcvideira.utils.Preferencias;
 
 import javax.swing.JLabel;
 import java.awt.event.ItemListener;
@@ -41,11 +47,17 @@ public class TelaCaixa extends JFrame {
 	private JPanel contentPane;
 	
 	Color corTexto = new Color(75, 80, 85);
-	Color corGeral = new Color(118, 184, 184);
+	Color corGeral = new Color(Preferencias.getR(), Preferencias.getG(), Preferencias.getB());
 	Color corSecundaria = Cor.corMaisClara(corGeral, 0.2f);
 	Color corTerciaria = Cor.corMaisClara(corGeral, 0.4f);
 	Color corSeparador = new Color(176, 176, 176);
 	Color corVermelho = new Color (230, 20, 20);
+	
+	ClienteDao clDao = new ClienteDao();
+	TelaCadastroCliente telaCadastroCliente = new TelaCadastroCliente();
+	TelaEditarCliente telaEditarCliente;
+	
+	JComboBox cbPesquisaCliente = new JComboBox<>(new Object[] {""});
 
 	/**
 	 * Launch the application.
@@ -168,7 +180,7 @@ public class TelaCaixa extends JFrame {
 	    JButton btnCadastrarCliente = new JButton("Cadastrar Cliente");
 	    btnCadastrarCliente.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent arg0) {
-	    		new TelaCadastroCliente().setVisible(true);
+	    		telaCadastroCliente.setVisible(true);
 	    	}
 	    });
 	    btnCadastrarCliente.addMouseListener(new MouseAdapter() {
@@ -239,6 +251,36 @@ public class TelaCaixa extends JFrame {
 	    contentPane.add(btnInformacoes);
 	    
 	    JButton btnAlterar = new JButton("Alterar");
+	    btnAlterar.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent arg0) {
+	    		String nomeCliente = cbPesquisaCliente.getSelectedItem().toString();
+	    		List<Object> dadosCliente = new ArrayList<>();
+	    		
+	    		try {
+	    			dadosCliente = clDao.buscarCliente(nomeCliente);
+	    			
+	    			Cliente cliente = new Cliente();
+	    			
+		    		cliente.setId((int) dadosCliente.get(0));
+		    		cliente.setNome(dadosCliente.get(1).toString());
+		    		cliente.setCpf(dadosCliente.get(2).toString());
+		    		cliente.setTelefone(dadosCliente.get(3).toString());
+		    		cliente.setCelular(dadosCliente.get(4).toString());
+		    		cliente.setDataCadastro((Timestamp) dadosCliente.get(5));
+		    		cliente.setRua(dadosCliente.get(6).toString());
+		    		cliente.setBairro(dadosCliente.get(7).toString());
+		    		cliente.setCidade(dadosCliente.get(8).toString());
+		    		cliente.setEstado(dadosCliente.get(9).toString());
+		    		
+		    		telaEditarCliente = new TelaEditarCliente(cliente);
+		    		telaEditarCliente.setVisible(true);
+	    		}catch(Exception e) {
+	    			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro ao alterar", JOptionPane.ERROR_MESSAGE);
+	    		}
+	    		
+	    		
+	    	}
+	    });
 	    btnAlterar.setEnabled(false);
 	    btnAlterar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 	    btnAlterar.addMouseListener(new MouseAdapter() {
@@ -310,12 +352,20 @@ public class TelaCaixa extends JFrame {
 	    btnCompras.setBounds(410, 159, 162, 45);
 	    contentPane.add(btnCompras);
 	    
-	    JComboBox cbPesquisaCliente = new JComboBox(new Object[]{"", "aaaaaa", "bbbbbbbb"});
+	    cbPesquisaCliente = new JComboBox(new Object[]{""});
 	    cbPesquisaCliente.addPopupMenuListener(new PopupMenuListener() {
 	    	public void popupMenuCanceled(PopupMenuEvent arg0) {
 	    	}
 	    	public void popupMenuWillBecomeInvisible(PopupMenuEvent arg0) {
-	    		if(cbPesquisaCliente.getSelectedItem() != null) {
+	    		if(cbPesquisaCliente.getSelectedItem().equals("")) {
+	    			btnAlterar.setEnabled(false);
+					btnCompras.setEnabled(false);
+					btnInformacoes.setEnabled(false);
+					
+					btnAlterar.setBackground(new Color(200, 200, 200));
+					btnCompras.setBackground(new Color(200, 200, 200));
+					btnInformacoes.setBackground(new Color(200, 200, 200));
+				}else {
 					btnAlterar.setEnabled(true);
 					btnCompras.setEnabled(true);
 					btnInformacoes.setEnabled(true);
@@ -323,17 +373,19 @@ public class TelaCaixa extends JFrame {
 					btnAlterar.setBackground(corGeral);
 					btnCompras.setBackground(corGeral);
 					btnInformacoes.setBackground(corGeral);
-				}else {
-					btnAlterar.setEnabled(false);
-					btnCompras.setEnabled(false);
-					btnInformacoes.setEnabled(false);
-					
-					btnAlterar.setBackground(new Color(200, 200, 200));
-					btnCompras.setBackground(new Color(200, 200, 200));
-					btnInformacoes.setBackground(new Color(200, 200, 200));
 				}
 	    	}
 	    	public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
+	    		List<Object> nomes = new ArrayList<>();	    		
+	    		try {
+	    			nomes = clDao.buscarNomes();
+	    			cbPesquisaCliente.removeAllItems();
+	    			cbPesquisaCliente.addItem("");
+	    			for(Object n : nomes) {
+	    				cbPesquisaCliente.addItem(n);
+	    			}
+	    			
+	    		}catch(Exception e) { }
 	    	}
 	    });
 		cbPesquisaCliente.setFont(new Font("Roboto", Font.PLAIN, 18));

@@ -86,6 +86,49 @@ public class ClienteDao {
 		return Cliente;
 	}
 	
+	public List<Object> buscarNomes() throws SQLException, Exception{
+		List<Object> info = new ArrayList<>();
+		try {
+			String sql = "SELECT nome FROM clientes";
+			//java.sql.Statement state = Conexao.conectar().createStatement();
+			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
+			ResultSet rs = sqlPrep.executeQuery();
+			
+			while (rs.next())
+			{
+				info.add(rs.getString(1));
+			}
+			sqlPrep.close();
+			
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
+		return info;
+	}
+	
+	public List<Object> buscarCliente(String nome) throws SQLException, Exception{
+		List<Object> info = new ArrayList<>();
+		try {
+			String sql = "SELECT * FROM clientes WHERE nome=?";
+			//java.sql.Statement state = Conexao.conectar().createStatement();
+			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
+			sqlPrep.setString(1, nome);
+			ResultSet rs = sqlPrep.executeQuery();
+			
+			while (rs.next())
+			{
+				Object[] linha = {rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getTimestamp(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10)};
+				
+				info.add(linha);
+			}
+			sqlPrep.close();
+			
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
+		return info;
+	}
+	
 	public int RetornarProximoCodigoCliente() throws Exception {
 		try{
 			String sql ="SELECT MAX(id)+1 AS id FROM cliente ";
