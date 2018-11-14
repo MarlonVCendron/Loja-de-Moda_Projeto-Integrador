@@ -55,11 +55,11 @@ public class ClienteDao {
 		}
 	}
 
-	public void deletarCliente(Cliente cl) throws Exception{
+	public void deletarCliente(int id) throws Exception{
 		try{
 			String sql = "DELETE FROM clientes WHERE id=? ";
 			PreparedStatement sqlPrep = (PreparedStatement) Conexao.conectar().prepareStatement(sql);
-			sqlPrep.setInt(1, cl.getId());
+			sqlPrep.setInt(1, id);
 			sqlPrep.execute();
 		} catch (SQLException e){
 			JOptionPane.showMessageDialog(null, e.getMessage());
@@ -106,8 +106,8 @@ public class ClienteDao {
 		return info;
 	}
 	
-	public List<Object> buscarCliente(String nome) throws SQLException, Exception{
-		List<Object> info = new ArrayList<>();
+	public Object[] buscarCliente(String nome) throws SQLException, Exception{
+		Object[] info = new Object[10];
 		try {
 			String sql = "SELECT * FROM clientes WHERE nome=?";
 			//java.sql.Statement state = Conexao.conectar().createStatement();
@@ -118,8 +118,7 @@ public class ClienteDao {
 			while (rs.next())
 			{
 				Object[] linha = {rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getTimestamp(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10)};
-				
-				info.add(linha);
+				info = linha;
 			}
 			sqlPrep.close();
 			

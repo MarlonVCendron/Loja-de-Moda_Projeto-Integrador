@@ -101,7 +101,7 @@ public class TelaCadastroCliente extends JFrame {
 		Dimension tela = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		int largura = 513;
 		int altura = 700;
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds((tela.width / 2) - (largura / 2), (tela.height / 2) - (altura / 2), largura, altura);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -161,7 +161,7 @@ public class TelaCadastroCliente extends JFrame {
 		btnX.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		btnX.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.exit(0);
+				dispose();
 			}
 		});
 		btnX.setBounds(470, 0, 42, 30);

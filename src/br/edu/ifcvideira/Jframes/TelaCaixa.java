@@ -16,6 +16,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -53,11 +54,11 @@ public class TelaCaixa extends JFrame {
 	Color corSeparador = new Color(176, 176, 176);
 	Color corVermelho = new Color (230, 20, 20);
 	
-	ClienteDao clDao = new ClienteDao();
+	public static ClienteDao clDao = new ClienteDao();
 	TelaCadastroCliente telaCadastroCliente = new TelaCadastroCliente();
 	TelaEditarCliente telaEditarCliente;
 	
-	JComboBox cbPesquisaCliente = new JComboBox<>(new Object[] {""});
+	public static JComboBox cbPesquisaCliente = new JComboBox<>(new Object[] {""});
 
 	/**
 	 * Launch the application.
@@ -241,6 +242,31 @@ public class TelaCaixa extends JFrame {
 		});
 	    btnInformacoes.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent arg0) {
+	    		String nomeCliente = cbPesquisaCliente.getSelectedItem().toString();
+	    		 
+	    		
+	    		try {
+	    			Object[] dadosCliente = clDao.buscarCliente(nomeCliente);
+	    			
+	    			Cliente cliente = new Cliente();
+	    			
+		    		cliente.setId((int) dadosCliente[0]);
+		    		cliente.setNome(dadosCliente[1].toString());
+		    		cliente.setCpf(dadosCliente[2].toString());
+		    		cliente.setTelefone(dadosCliente[3].toString());
+		    		cliente.setCelular(dadosCliente[4].toString());
+		    		cliente.setDataCadastro((Timestamp) dadosCliente[5]);
+		    		cliente.setRua(dadosCliente[6].toString());
+		    		cliente.setBairro(dadosCliente[7].toString());
+		    		cliente.setCidade(dadosCliente[8].toString());
+		    		cliente.setEstado(dadosCliente[9].toString());
+		    		
+		    		TelaInfoCliente telaInfoCliente = new TelaInfoCliente(cliente);
+		    		telaInfoCliente.setVisible(true);
+	    		}catch(Exception e) {
+	    			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro ao visualizar informações", JOptionPane.ERROR_MESSAGE);
+	    		}
+	    		
 	    	}
 	    });
 	    btnInformacoes.setForeground(corTexto);
@@ -250,27 +276,27 @@ public class TelaCaixa extends JFrame {
 	    btnInformacoes.setBounds(45, 159, 162, 45);
 	    contentPane.add(btnInformacoes);
 	    
-	    JButton btnAlterar = new JButton("Alterar");
-	    btnAlterar.addActionListener(new ActionListener() {
+	    JButton btnEditar = new JButton("Editar");
+	    btnEditar.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent arg0) {
 	    		String nomeCliente = cbPesquisaCliente.getSelectedItem().toString();
-	    		List<Object> dadosCliente = new ArrayList<>();
+	    		 
 	    		
 	    		try {
-	    			dadosCliente = clDao.buscarCliente(nomeCliente);
+	    			Object[] dadosCliente = clDao.buscarCliente(nomeCliente);
 	    			
 	    			Cliente cliente = new Cliente();
 	    			
-		    		cliente.setId((int) dadosCliente.get(0));
-		    		cliente.setNome(dadosCliente.get(1).toString());
-		    		cliente.setCpf(dadosCliente.get(2).toString());
-		    		cliente.setTelefone(dadosCliente.get(3).toString());
-		    		cliente.setCelular(dadosCliente.get(4).toString());
-		    		cliente.setDataCadastro((Timestamp) dadosCliente.get(5));
-		    		cliente.setRua(dadosCliente.get(6).toString());
-		    		cliente.setBairro(dadosCliente.get(7).toString());
-		    		cliente.setCidade(dadosCliente.get(8).toString());
-		    		cliente.setEstado(dadosCliente.get(9).toString());
+		    		cliente.setId((int) dadosCliente[0]);
+		    		cliente.setNome(dadosCliente[1].toString());
+		    		cliente.setCpf(dadosCliente[2].toString());
+		    		cliente.setTelefone(dadosCliente[3].toString());
+		    		cliente.setCelular(dadosCliente[4].toString());
+		    		cliente.setDataCadastro((Timestamp) dadosCliente[5]);
+		    		cliente.setRua(dadosCliente[6].toString());
+		    		cliente.setBairro(dadosCliente[7].toString());
+		    		cliente.setCidade(dadosCliente[8].toString());
+		    		cliente.setEstado(dadosCliente[9].toString());
 		    		
 		    		telaEditarCliente = new TelaEditarCliente(cliente);
 		    		telaEditarCliente.setVisible(true);
@@ -281,40 +307,40 @@ public class TelaCaixa extends JFrame {
 	    		
 	    	}
 	    });
-	    btnAlterar.setEnabled(false);
-	    btnAlterar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-	    btnAlterar.addMouseListener(new MouseAdapter() {
+	    btnEditar.setEnabled(false);
+	    btnEditar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+	    btnEditar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				if(btnInformacoes.isEnabled()) {
-					btnAlterar.setBackground(corSecundaria);
+				if(btnEditar.isEnabled()) {
+					btnEditar.setBackground(corSecundaria);
 				}
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				if(btnAlterar.isEnabled()) {
-					btnAlterar.setBackground(corGeral);
+				if(btnEditar.isEnabled()) {
+					btnEditar.setBackground(corGeral);
 				}
 			}
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if(btnInformacoes.isEnabled()) {
-					btnAlterar.setBackground(corTerciaria);
+					btnEditar.setBackground(corTerciaria);
 				}
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				if(btnAlterar.isEnabled()) {
-					btnAlterar.setBackground(corGeral);
+				if(btnEditar.isEnabled()) {
+					btnEditar.setBackground(corGeral);
 				}
 			}
 		});
-	    btnAlterar.setForeground(corTexto);
-	    btnAlterar.setFont(new Font("Roboto", Font.PLAIN, 18));
-	    btnAlterar.setBorder(null);
-	    btnAlterar.setBackground(new Color(200, 200, 200));
-	    btnAlterar.setBounds(229, 159, 162, 45);
-	    contentPane.add(btnAlterar);
+	    btnEditar.setForeground(corTexto);
+	    btnEditar.setFont(new Font("Roboto", Font.PLAIN, 18));
+	    btnEditar.setBorder(null);
+	    btnEditar.setBackground(new Color(200, 200, 200));
+	    btnEditar.setBounds(229, 159, 162, 45);
+	    contentPane.add(btnEditar);
 	    
 	    JButton btnCompras = new JButton("Compras");
 	    btnCompras.setEnabled(false);
@@ -358,34 +384,25 @@ public class TelaCaixa extends JFrame {
 	    	}
 	    	public void popupMenuWillBecomeInvisible(PopupMenuEvent arg0) {
 	    		if(cbPesquisaCliente.getSelectedItem().equals("")) {
-	    			btnAlterar.setEnabled(false);
+	    			btnEditar.setEnabled(false);
 					btnCompras.setEnabled(false);
 					btnInformacoes.setEnabled(false);
 					
-					btnAlterar.setBackground(new Color(200, 200, 200));
+					btnEditar.setBackground(new Color(200, 200, 200));
 					btnCompras.setBackground(new Color(200, 200, 200));
 					btnInformacoes.setBackground(new Color(200, 200, 200));
 				}else {
-					btnAlterar.setEnabled(true);
+					btnEditar.setEnabled(true);
 					btnCompras.setEnabled(true);
 					btnInformacoes.setEnabled(true);
 					
-					btnAlterar.setBackground(corGeral);
+					btnEditar.setBackground(corGeral);
 					btnCompras.setBackground(corGeral);
 					btnInformacoes.setBackground(corGeral);
 				}
 	    	}
 	    	public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
-	    		List<Object> nomes = new ArrayList<>();	    		
-	    		try {
-	    			nomes = clDao.buscarNomes();
-	    			cbPesquisaCliente.removeAllItems();
-	    			cbPesquisaCliente.addItem("");
-	    			for(Object n : nomes) {
-	    				cbPesquisaCliente.addItem(n);
-	    			}
-	    			
-	    		}catch(Exception e) { }
+	    		atualizarCbPesquisa();
 	    	}
 	    });
 		cbPesquisaCliente.setFont(new Font("Roboto", Font.PLAIN, 18));
@@ -398,5 +415,27 @@ public class TelaCaixa extends JFrame {
 	    spCliente.setBackground(corSeparador);
 	    spCliente.setBounds(35, 217, 547, 2);
 	    contentPane.add(spCliente);
+	}
+	
+	public static void atualizarCbPesquisa() {
+		List<Object> nomes = new ArrayList<>();	    		
+		try {
+			nomes = clDao.buscarNomes();
+			
+			ArrayList<String> nomesTxt = new ArrayList<>();
+			for(Object n : nomes) {
+				nomesTxt.add(String.valueOf(n));
+			}
+			Collections.sort(nomesTxt);
+			
+			cbPesquisaCliente.removeAllItems();
+			cbPesquisaCliente.addItem("");
+			
+			for(Object n : nomesTxt) {
+				cbPesquisaCliente.addItem(n);
+			}
+			
+			cbPesquisaCliente.setSelectedIndex(1);
+		}catch(Exception e) { }
 	}
 }

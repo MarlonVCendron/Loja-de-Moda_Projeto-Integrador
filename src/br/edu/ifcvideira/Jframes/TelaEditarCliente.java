@@ -75,6 +75,7 @@ public class TelaEditarCliente extends JFrame {
 	
 	ImageIcon imageIconX = new ImageIcon(TelaLogin.class.getResource("/br/edu/ifcvideira/img/xerro.png"));
 	Image imagemX = imageIconX.getImage().getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH);
+	private JTextField tfData;
 
 
 	/**
@@ -101,7 +102,7 @@ public class TelaEditarCliente extends JFrame {
 		Dimension tela = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		int largura = 513;
 		int altura = 700;
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds((tela.width / 2) - (largura / 2), (tela.height / 2) - (altura / 2), largura, altura);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -113,7 +114,7 @@ public class TelaEditarCliente extends JFrame {
 		
 		
 		//Variáveis que cuidam para que os campos sejam preenchidos adequadamente
-		boolean[] camposCorretos = {false, false, false, true, false, false, false};
+		boolean[] camposCorretos = {true, true, true, true, true, true, true};
 		
 		JPanel panelSuperior = new JPanel();
 		panelSuperior.setBounds(0, 0, 512, 32);
@@ -161,7 +162,7 @@ public class TelaEditarCliente extends JFrame {
 		btnX.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		btnX.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.exit(0);
+				dispose();	
 			}
 		});
 		btnX.setBounds(470, 0, 42, 30);
@@ -517,6 +518,48 @@ public class TelaEditarCliente extends JFrame {
 		});
 		panelCadastro.add(tfCidade);
 		
+		tfData = new JTextField();
+		tfData.setText(cliente.getDataCadastro().toString());
+		tfData.setBounds(100, 13, 167, 29);
+		tfData.setEditable(false);
+		tfData.setForeground(corTexto);
+		tfData.setFont(new Font("Roboto", Font.PLAIN, 14));
+		tfData.setBorder(null);
+		tfData.setBackground(Color.WHITE);
+		panelCadastro.add(tfData);
+		
+		JSeparator spData = new JSeparator();
+		spData.setBounds(100, 42, 167, 2);
+		spData.setBackground(corSeparador);
+		panelCadastro.add(spData);
+		
+		JLabel lblData = new JLabel("Data");
+		lblData.setBounds(37, 10, 37, 42);
+		lblData.setForeground(new Color(75, 80, 85));
+		lblData.setFont(new Font("Roboto", Font.PLAIN, 15));
+		panelCadastro.add(lblData);
+		
+		JTextField tfId = new JTextField();
+		tfId.setText(String.valueOf(cliente.getId()));
+		tfId.setBounds(420, 13, 15, 29);
+		tfId.setEditable(false);
+		tfId.setForeground(corTexto);
+		tfId.setFont(new Font("Roboto", Font.PLAIN, 14));
+		tfId.setBorder(null);
+		tfId.setBackground(Color.WHITE);
+		panelCadastro.add(tfId);
+		
+		JSeparator spId = new JSeparator();
+		spId.setBounds(420, 42, 15, 2);
+		spId.setBackground(corSeparador);
+		panelCadastro.add(spId);
+		
+		JLabel lblId = new JLabel("Id");
+		lblId.setBounds(390, 10, 37, 42);
+		lblId.setForeground(new Color(75, 80, 85));
+		lblId.setFont(new Font("Roboto", Font.PLAIN, 15));
+		panelCadastro.add(lblId);
+		
 		JComboBox cbEstado = new JComboBox();
 		cbEstado.setModel(new DefaultComboBoxModel(new String[] {"AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"}));
 		cbEstado.setSelectedItem(cliente.getEstado());
@@ -552,7 +595,7 @@ public class TelaEditarCliente extends JFrame {
 				btnEditar.setBackground(corGeral);
 			}
 		});
-		btnEditar.setBounds((largura / 2) - (215 / 2), 570, 215, 54);
+		btnEditar.setBounds(37, 573, 215, 54);
 		panelCampos.add(btnEditar);
 		btnEditar.setBackground(corGeral);
 		btnEditar.setBorder(null);
@@ -560,11 +603,12 @@ public class TelaEditarCliente extends JFrame {
 		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(camposEstaoCorretos(camposCorretos)) {
+					cl.setId(Integer.parseInt(tfId.getText()));
 					cl.setNome(tfNome.getText());
 					cl.setCpf(tfCpf.getText());
 					cl.setTelefone(tfTelefone.getText());
 					cl.setCelular(tfCelular.getText());
-					//cl.setDataCadastro();
+					cl.setDataCadastro(Timestamp.valueOf(tfData.getText()));
 					cl.setBairro(tfBairro.getText());
 					cl.setRua(tfRua.getText());
 					cl.setCidade(tfCidade.getText());
@@ -572,6 +616,7 @@ public class TelaEditarCliente extends JFrame {
 					
 					try {
 						daoCl.AlterarCliente(cl);
+						TelaCaixa.atualizarCbPesquisa();
 						dispose();
 					}catch(Exception e) {
 						JOptionPane.showMessageDialog(null, "Erro ao cadastrar", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -660,6 +705,45 @@ public class TelaEditarCliente extends JFrame {
 		panelImgNome.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		panelImgNome.setOpaque(false);
 		panelImgNome.setVisible(false);
+		
+		JButton btnExcluir = new JButton("Excluir");
+		btnExcluir.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnExcluir.setBackground(corSecundaria);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnExcluir.setBackground(corGeral);
+			}
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				btnExcluir.setBackground(corTerciaria);
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				btnExcluir.setBackground(corGeral);
+			}
+		});
+		btnExcluir.setBounds(264, 573, 215, 54);
+		panelCampos.add(btnExcluir);
+		btnExcluir.setBackground(corGeral);
+		btnExcluir.setBorder(null);
+		btnExcluir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnExcluir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					daoCl.deletarCliente(Integer.parseInt(tfId.getText()));
+					TelaCaixa.atualizarCbPesquisa();
+					dispose();
+				}catch (Exception e){
+					JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+		btnExcluir.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btnExcluir.setForeground(corTexto);
+		
 		panelImgNome.setBackground(new Color(255, 255, 255));
 		panelImgNome.setBounds(37, 68, 32, 32);
 		panelCampos.add(panelImgNome); 
