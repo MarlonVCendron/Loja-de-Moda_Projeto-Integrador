@@ -7,8 +7,9 @@ public class Produto {
 	private String tamanho;
 	private int idCategoria;
 	private int idFornecedor;
+	private String codigoBarras;
 	private int status;
-	
+	private int quantidade;
 	
 	
 	public int getId() {
@@ -23,10 +24,10 @@ public class Produto {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public double getValor_unitario() {
+	public double getValorUnitario() {
 		return valorUnitario;
 	}
-	public void setValor_unitario(double valor_unitario) {
+	public void setValorUnitario(double valor_unitario) {
 		this.valorUnitario = valor_unitario;
 	}
 	public String getTamanho() {
@@ -35,22 +36,34 @@ public class Produto {
 	public void setTamanho(String tamanho) {
 		this.tamanho = tamanho;
 	}
-	public int getId_categoria() {
+	public int getIdCategoria() {
 		return idCategoria;
 	}
-	public void setId_categoria(int id_categoria) {
+	public void setIdCategoria(int id_categoria) {
 		this.idCategoria = id_categoria;
 	}
-	public int getId_fornecedor() {
+	public int getIdFornecedor() {
 		return idFornecedor;
 	}
-	public void setId_fornecedor(int id_fornecedor) {
+	public void setIdFornecedor(int id_fornecedor) {
 		this.idFornecedor = id_fornecedor;
+	}
+	public String getCodigoBarras() {
+		return codigoBarras;
+	}
+	public void setCodigoBarras(String codigoBarras) {
+		this.codigoBarras = codigoBarras;
 	}
 	public int getStatus() {
 		return status;
 	}
 	public void setStatus(int status) {
 		this.status = status;
+	}
+	public int getQuantidade() {
+		return quantidade;
+	}
+	public void setQuantidade(int quantidade) {
+		this.quantidade = quantidade;
 	}
 }

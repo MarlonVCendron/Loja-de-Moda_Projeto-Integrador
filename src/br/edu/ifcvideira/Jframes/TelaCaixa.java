@@ -14,16 +14,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.beans.EventHandler;
 import java.sql.Timestamp;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import javax.swing.*;
@@ -31,17 +28,28 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import java.awt.*;
 
 import br.edu.ifcvideira.Classes.Cliente;
+import br.edu.ifcvideira.Classes.Produto;
+import br.edu.ifcvideira.Classes.ProdutoVenda;
+import br.edu.ifcvideira.Classes.Venda;
 import br.edu.ifcvideira.DAOs.ClienteDao;
+import br.edu.ifcvideira.DAOs.ProdutoDao;
+import br.edu.ifcvideira.DAOs.ProdutoVendaDao;
+import br.edu.ifcvideira.DAOs.VendaDao;
+import br.edu.ifcvideira.utils.BlocoProdutoVenda;
 import br.edu.ifcvideira.utils.Cor;
 import br.edu.ifcvideira.utils.Preferencias;
 
-import javax.swing.JLabel;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusAdapter;
 import javax.swing.event.PopupMenuListener;
+import javax.swing.text.NumberFormatter;
 import javax.swing.event.PopupMenuEvent;
+import java.awt.event.ContainerAdapter;
+import java.awt.event.ContainerEvent;
 
 public class TelaCaixa extends JFrame {
 
@@ -55,11 +63,19 @@ public class TelaCaixa extends JFrame {
 	Color corVermelho = new Color (230, 20, 20);
 	
 	public static ClienteDao clDao = new ClienteDao();
+	ProdutoDao prDao = new ProdutoDao();
+	Venda ve = new Venda();
+	VendaDao veDao = new VendaDao();
+	ProdutoVendaDao pvDao = new ProdutoVendaDao();
+	
 	TelaCadastroCliente telaCadastroCliente = new TelaCadastroCliente();
 	TelaEditarCliente telaEditarCliente;
 	
 	public static JComboBox cbPesquisaCliente = new JComboBox<>(new Object[] {""});
 
+	JPanel panelPrincipal;
+	int tamanhoScrollProdutosVenda = 0;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -88,7 +104,6 @@ public class TelaCaixa extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setBackground(Color.WHITE);
-		contentPane.setLayout(null);
 		setContentPane(contentPane);
 		setUndecorated(true);
 		getRootPane().setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, corGeral));
@@ -97,6 +112,7 @@ public class TelaCaixa extends JFrame {
 		GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode();
 
 		setExtendedState(MAXIMIZED_BOTH);
+		contentPane.setLayout(null);
 		
 		
 		//PAINEL SUPERIOR
@@ -174,11 +190,12 @@ public class TelaCaixa extends JFrame {
 		
 	    
 	    JLabel lblPesquisarClientes = new JLabel("Pesquisar Clientes");
-	    lblPesquisarClientes.setFont(new Font("Roboto", Font.PLAIN, 18));
 	    lblPesquisarClientes.setBounds(45, 57, 173, 32);
+	    lblPesquisarClientes.setFont(new Font("Roboto", Font.PLAIN, 18));
 	    contentPane.add(lblPesquisarClientes);
 	    
 	    JButton btnCadastrarCliente = new JButton("Cadastrar Cliente");
+	    btnCadastrarCliente.setBounds(410, 90, 162, 45);
 	    btnCadastrarCliente.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent arg0) {
 	    		telaCadastroCliente.setVisible(true);
@@ -208,10 +225,10 @@ public class TelaCaixa extends JFrame {
 		btnCadastrarCliente.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnCadastrarCliente.setFont(new Font("Roboto", Font.PLAIN, 18));
 		btnCadastrarCliente.setForeground(corTexto);
-	    btnCadastrarCliente.setBounds(410, 90, 162, 45);
 	    contentPane.add(btnCadastrarCliente);
 	    
 	    JButton btnInformacoes = new JButton("Informa\u00E7\u00F5es");
+	    btnInformacoes.setBounds(45, 159, 162, 45);
 	    btnInformacoes.setEnabled(false);
 	    btnInformacoes.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 	    btnInformacoes.addMouseListener(new MouseAdapter() {
@@ -273,10 +290,10 @@ public class TelaCaixa extends JFrame {
 	    btnInformacoes.setFont(new Font("Roboto", Font.PLAIN, 18));
 	    btnInformacoes.setBorder(null);
 	    btnInformacoes.setBackground(new Color(200, 200, 200));
-	    btnInformacoes.setBounds(45, 159, 162, 45);
 	    contentPane.add(btnInformacoes);
 	    
 	    JButton btnEditar = new JButton("Editar");
+	    btnEditar.setBounds(229, 159, 162, 45);
 	    btnEditar.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent arg0) {
 	    		String nomeCliente = cbPesquisaCliente.getSelectedItem().toString();
@@ -339,10 +356,10 @@ public class TelaCaixa extends JFrame {
 	    btnEditar.setFont(new Font("Roboto", Font.PLAIN, 18));
 	    btnEditar.setBorder(null);
 	    btnEditar.setBackground(new Color(200, 200, 200));
-	    btnEditar.setBounds(229, 159, 162, 45);
 	    contentPane.add(btnEditar);
 	    
 	    JButton btnCompras = new JButton("Compras");
+	    btnCompras.setBounds(410, 159, 162, 45);
 	    btnCompras.setEnabled(false);
 	    btnCompras.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 	    btnCompras.addMouseListener(new MouseAdapter() {
@@ -375,10 +392,10 @@ public class TelaCaixa extends JFrame {
 	    btnCompras.setFont(new Font("Roboto", Font.PLAIN, 18));
 	    btnCompras.setBorder(null);
 	    btnCompras.setBackground(new Color(200, 200, 200));
-	    btnCompras.setBounds(410, 159, 162, 45);
 	    contentPane.add(btnCompras);
 	    
 	    cbPesquisaCliente = new JComboBox(new Object[]{""});
+	    cbPesquisaCliente.setBounds(45, 90, 346, 50);
 	    cbPesquisaCliente.addPopupMenuListener(new PopupMenuListener() {
 	    	public void popupMenuCanceled(PopupMenuEvent arg0) {
 	    	}
@@ -408,13 +425,191 @@ public class TelaCaixa extends JFrame {
 		cbPesquisaCliente.setFont(new Font("Roboto", Font.PLAIN, 18));
 		cbPesquisaCliente.setForeground(corTexto);
 	    AutoCompleteDecorator.decorate(cbPesquisaCliente);
-	    cbPesquisaCliente.setBounds(45,90,346,45);
 	    contentPane.add(cbPesquisaCliente);
 	    
 	    JSeparator spCliente = new JSeparator();
-	    spCliente.setBackground(corSeparador);
 	    spCliente.setBounds(35, 217, 547, 2);
+	    spCliente.setBackground(corSeparador);
 	    contentPane.add(spCliente);
+
+		JSeparator spCodigoBarras = new JSeparator();
+		spCodigoBarras.setBounds(45, 982, 700, 2);
+	    spCodigoBarras.setBackground(corSeparador);
+	    contentPane.add(spCodigoBarras);
+	    
+	    JTextField tfCodigoBarras = new JTextField();
+	    tfCodigoBarras.setBounds(45, 900, 700, 82);
+	    tfCodigoBarras.addFocusListener(new FocusAdapter() {
+	    	@Override
+	    	public void focusGained(FocusEvent arg0) {
+	    		spCodigoBarras.setBackground(corGeral);
+	    	}
+	    	@Override
+	    	public void focusLost(FocusEvent arg0) {
+	    		spCodigoBarras.setBackground(corSeparador);
+	    	}
+	    });
+	    tfCodigoBarras.addKeyListener(new KeyAdapter (){
+	        public void keyTyped(KeyEvent e) {
+	          char c = e.getKeyChar();
+	          if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
+	            e.consume();
+	          }
+	        }
+	      });
+		tfCodigoBarras.setForeground(corTexto);
+		tfCodigoBarras.setFont(new Font("Roboto", Font.PLAIN, 40));
+		tfCodigoBarras.setBorder(null);
+		tfCodigoBarras.setBackground(contentPane.getBackground());
+		contentPane.add(tfCodigoBarras);
+	    
+	    JLabel lblCodigoDeBarras = new JLabel("C\u00F3digo de barras do produto");
+	    lblCodigoDeBarras.setBounds(45, 865, 436, 45);
+	    lblCodigoDeBarras.setFont(new Font("Roboto", Font.PLAIN, 20));
+	    lblCodigoDeBarras.setForeground(corTexto);
+	    contentPane.add(lblCodigoDeBarras);
+	    
+	    
+	    JSeparator spQuantidade = new JSeparator();
+	    spQuantidade.setBounds(780, 982, 100, 2);
+	    spQuantidade.setBackground(corSeparador);
+	    contentPane.add(spQuantidade);
+	    
+	    JTextField tfQuantidade = new JTextField();
+	    tfQuantidade.setBounds(780, 900, 100, 82);
+	    tfQuantidade.addFocusListener(new FocusAdapter() {
+	    	@Override
+	    	public void focusGained(FocusEvent arg0) {
+	    		spQuantidade.setBackground(corGeral);
+	    	}
+	    	@Override
+	    	public void focusLost(FocusEvent arg0) {
+	    		spQuantidade.setBackground(corSeparador);
+	    	}
+	    });
+	    tfQuantidade.addKeyListener(new KeyAdapter (){
+	        public void keyTyped(KeyEvent e) {
+	          char c = e.getKeyChar();
+	          if (!((c >= '0') && (c <= '9') || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE))) {
+	            e.consume();
+	          }
+	        }
+	      });
+		tfQuantidade.setText("1");
+		tfQuantidade.setForeground(corTexto);
+		tfQuantidade.setFont(new Font("Roboto", Font.PLAIN, 40));
+		tfQuantidade.setBorder(null);
+		tfQuantidade.setBackground(contentPane.getBackground());
+		contentPane.add(tfQuantidade);
+	    
+	    JLabel lblQuantidade = new JLabel("Quantidade");
+	    lblQuantidade.setBounds(780, 865, 436, 45);
+	    lblQuantidade.setFont(new Font("Roboto", Font.PLAIN, 20));
+	    lblQuantidade.setForeground(corTexto);
+	    contentPane.add(lblQuantidade);
+	    
+	    JScrollPane scrollProdutosVenda = new JScrollPane();
+	    scrollProdutosVenda.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+	    scrollProdutosVenda.getVerticalScrollBar().setUnitIncrement(10);
+	    
+
+	    
+	    scrollProdutosVenda.setBounds(45, 752, 1098, 100);
+	    contentPane.add(scrollProdutosVenda);
+	    
+	   
+	    
+	    panelPrincipal = new JPanel();
+	    panelPrincipal.addContainerListener(new ContainerAdapter() {
+	    	@Override
+	    	public void componentAdded(ContainerEvent arg0) {
+	    		tamanhoScrollProdutosVenda = 0;
+	    		for(int i = 0; i < panelPrincipal.countComponents(); i++) {
+	    	    	if(tamanhoScrollProdutosVenda < 500) {
+	    	    		tamanhoScrollProdutosVenda += 100;
+	    	    	}
+	    		}
+	    		scrollProdutosVenda.setBounds(45, 850 - tamanhoScrollProdutosVenda, 1098, tamanhoScrollProdutosVenda);
+	    	}
+	    });
+	    panelPrincipal.setLayout(new BoxLayout(panelPrincipal, BoxLayout.Y_AXIS));
+	    scrollProdutosVenda.setViewportView(panelPrincipal);
+	    scrollProdutosVenda.setBounds(45, 850 - tamanhoScrollProdutosVenda, 1098, tamanhoScrollProdutosVenda);
+	    
+	    JButton btnAdicionarProduto = new JButton("Adicionar Produto");
+	    btnAdicionarProduto.setBounds(950, 915, 195, 68);
+	    btnAdicionarProduto.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent arg0) {
+	    		String codigoBarras = tfCodigoBarras.getText();
+	    		String quantidade = tfQuantidade.getText();
+	    		Produto produto = new Produto();
+	    		
+	    		try {
+	    			/*Object[] dadosProduto = prDao.buscarProduto(codigoBarras);
+	    			
+	    			produto.setId((int) dadosProduto[0]);
+	    			produto.setNome(String.valueOf(dadosProduto[1]));
+	    			produto.setValorUnitario((double) dadosProduto[2]);
+	    			produto.setTamanho(String.valueOf(dadosProduto[3]));
+	    			produto.setIdCategoria((int) dadosProduto[4]);
+	    			produto.setIdFornecedor((int) dadosProduto[5]);
+	    			produto.setCodigoBarras(String.valueOf(dadosProduto[6]));
+	    			produto.setStatus((int) dadosProduto[7]);
+	    			produto.setQuantidade((int) dadosProduto[8]);
+	    			
+	    			ProdutoVenda pv = new ProdutoVenda();
+	    			pv.setIdProduto(produto.getId());
+	    			pv.setIdVenda(veDao.RetornarProximoCodigoVenda());
+	    			pv.setValorUnitario(produto.getValorUnitario());
+	    			pv.setQuantidade(Integer.parseInt(tfQuantidade.getText()));
+	    			
+	    			pvDao.CadastrarProdutoVenda(pv);*/
+	    			
+	    			 //BlocoProdutoVenda bloco = new BlocoProdutoVenda(produto.getNome(), pv.getQuantidade(), pv.getValorUnitario() * pv.getQuantidade());
+	    			BlocoProdutoVenda bloco = new BlocoProdutoVenda("Batatinha frita", 4, 10.5); 
+	    			panelPrincipal.add(bloco);
+	    			panelPrincipal.revalidate();
+	    			panelPrincipal.repaint();
+	    		}catch(Exception e) {
+	    			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+	    		}
+	    		
+	    		/*BlocoProdutoVenda bloco = new BlocoProdutoVenda();
+	    		panelPrincipal.add(bloco);
+	    		
+	    		panelPrincipal.revalidate();
+	    		panelPrincipal.repaint();*/
+	    		
+	    		
+	    		//adicionarProdutoVenda(produtoVenda);
+	    	}
+	    });
+	    btnAdicionarProduto.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+	    btnAdicionarProduto.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnAdicionarProduto.setBackground(corSecundaria);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnAdicionarProduto.setBackground(corGeral);
+			}
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				btnAdicionarProduto.setBackground(corTerciaria);
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				btnAdicionarProduto.setBackground(corGeral);
+			}
+		});
+	    btnAdicionarProduto.setForeground(corTexto);
+	    btnAdicionarProduto.setFont(new Font("Roboto", Font.PLAIN, 20));
+	    btnAdicionarProduto.setBorder(null);
+	    btnAdicionarProduto.setBackground(corGeral);
+	    contentPane.add(btnAdicionarProduto);
+	    
+	    
 	}
 	
 	public static void atualizarCbPesquisa() {
@@ -437,5 +632,9 @@ public class TelaCaixa extends JFrame {
 			
 			cbPesquisaCliente.setSelectedIndex(1);
 		}catch(Exception e) { }
+	}
+	
+	void adicionarProdutoVenda(ProdutoVenda produtoVenda) {
+		//adiciona
 	}
 }
