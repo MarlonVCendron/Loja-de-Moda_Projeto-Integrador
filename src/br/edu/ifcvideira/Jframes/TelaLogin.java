@@ -856,7 +856,7 @@ public class TelaLogin extends JFrame {
 							
 							if(tipoUsuario == 0) {
 								fecharJanelas();
-								TelaCaixa telaCaixa = new TelaCaixa();
+								TelaCaixa telaCaixa = new TelaCaixa(idUsuario);
 								
 								telaCaixa.setVisible(true);
 							}else if(tipoUsuario == 1) {

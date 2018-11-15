@@ -60,7 +60,7 @@ public class TelaInfoCliente extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TelaCadastroCliente frame = new TelaCadastroCliente();
+					TelaInfoCliente frame = new TelaInfoCliente(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

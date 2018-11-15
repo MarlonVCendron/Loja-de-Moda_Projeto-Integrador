@@ -14,12 +14,14 @@ import br.edu.ifcvideira.utils.Conexao;
 public class VendaDao {
 	public void CadastrarVenda(Venda ve) throws SQLException, Exception{
 		try{
-			String sql = "INSERT INTO venda (id_usuario, id_cliente, data, desconto) VALUES (?,?,?,?)";
+			String sql = "INSERT INTO vendas (id_usuario, id_cliente, data, desconto, status, status_pagamento) VALUES (?,?,?,?,?,?)";
 			java.sql.PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
 			sqlPrep.setInt(1, ve.getIdUsuario());
 			sqlPrep.setInt(2, ve.getIdCliente());
 			sqlPrep.setTimestamp(3, ve.getData());
 			sqlPrep.setDouble(4, ve.getDesconto());
+			sqlPrep.setInt(5, ve.getStatus());
+			sqlPrep.setInt(6, ve.getStatusPagamento());
 			sqlPrep.execute();
 			
 		} catch(SQLException e) {
@@ -32,13 +34,15 @@ public class VendaDao {
 
 	public void AlterarVenda(Venda ve) throws Exception {
 		try{
-			String sql = "UPDATE venda SET id_usuario=?, id_cliente=?, data=?, desconto=? WHERE id=?";
+			String sql = "UPDATE vendas SET id_usuario=?, id_cliente=?, data=?, desconto=?, status=?, status_pagamento=? WHERE id=?";
 			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
 			sqlPrep.setInt(1, ve.getIdUsuario());
 			sqlPrep.setInt(2, ve.getIdCliente());
 			sqlPrep.setTimestamp(3, ve.getData());
 			sqlPrep.setDouble(4, ve.getDesconto());
-			sqlPrep.setInt(5, ve.getId());
+			sqlPrep.setInt(5, ve.getStatus());
+			sqlPrep.setInt(6, ve.getStatusPagamento());
+			sqlPrep.setInt(7, ve.getId());
 			sqlPrep.execute();
 		}catch(Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
@@ -47,7 +51,7 @@ public class VendaDao {
 
 	public void deletarVenda(Venda ve) throws Exception{
 		try{
-			String sql = "DELETE FROM venda WHERE id=? ";
+			String sql = "DELETE FROM vendas WHERE id=? ";
 			PreparedStatement sqlPrep = (PreparedStatement) Conexao.conectar().prepareStatement(sql);
 			sqlPrep.setInt(1, ve.getId());
 			sqlPrep.execute();
@@ -65,7 +69,7 @@ public class VendaDao {
 			
 			while (rs.next())
 			{
-				Object[] linha = {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4)};
+				Object[] linha = {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6)};
 				Venda.add(linha);
 			}
 			state.close();
@@ -78,7 +82,7 @@ public class VendaDao {
 	
 	public int RetornarProximoCodigoVenda() throws Exception {
 		try{
-			String sql ="SELECT MAX(id)+1 AS id FROM venda ";
+			String sql ="SELECT MAX(id)+1 AS id FROM vendas ";
 			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
 			ResultSet rs = sqlPrep.executeQuery();
 			if (rs.next()){

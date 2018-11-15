@@ -76,6 +76,27 @@ public class ProdutoVendaDao {
 		return produtos_venda;
 	}
 	
+	public List<Object> buscarProdutosVenda(int idVenda) throws SQLException, Exception{
+		List<Object> produtos_venda = new ArrayList<>();
+		try {
+			String sql = "SELECT * FROM produtos_venda WHERE id_venda=?";
+			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
+			sqlPrep.setInt(1, idVenda);
+			ResultSet rs = sqlPrep.executeQuery();
+			
+			while (rs.next())
+			{
+				Object[] linha = {rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getDouble(4), rs.getInt(5)};
+				produtos_venda.add(linha);
+			}
+			sqlPrep.close();
+			
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
+		return produtos_venda;
+	}
+	
 	public int RetornarProximoCodigoProdutoVenda() throws Exception {
 		try{
 			String sql ="SELECT MAX(id)+1 AS id FROM produtos_venda ";

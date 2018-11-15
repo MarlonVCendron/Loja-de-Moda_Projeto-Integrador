@@ -110,7 +110,6 @@ public class ClienteDao {
 		Object[] info = new Object[10];
 		try {
 			String sql = "SELECT * FROM clientes WHERE nome=?";
-			//java.sql.Statement state = Conexao.conectar().createStatement();
 			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
 			sqlPrep.setString(1, nome);
 			ResultSet rs = sqlPrep.executeQuery();

@@ -85,7 +85,7 @@ public class TelaEditarCliente extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TelaCadastroCliente frame = new TelaCadastroCliente();
+					TelaEditarCliente frame = new TelaEditarCliente(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

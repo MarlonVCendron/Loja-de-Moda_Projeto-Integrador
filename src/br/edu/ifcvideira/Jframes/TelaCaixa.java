@@ -55,7 +55,7 @@ public class TelaCaixa extends JFrame {
 
 	private JPanel contentPane;
 	
-	Color corTexto = new Color(75, 80, 85);
+	Color corTexto = new Color(25, 30, 35);
 	Color corGeral = new Color(Preferencias.getR(), Preferencias.getG(), Preferencias.getB());
 	Color corSecundaria = Cor.corMaisClara(corGeral, 0.2f);
 	Color corTerciaria = Cor.corMaisClara(corGeral, 0.4f);
@@ -72,7 +72,10 @@ public class TelaCaixa extends JFrame {
 	TelaEditarCliente telaEditarCliente;
 	
 	public static JComboBox cbPesquisaCliente = new JComboBox<>(new Object[] {""});
-
+	int idVendaAtual;
+	int idClienteAtual;
+	public static ArrayList<ProdutoVenda> produtosParaComprar = new ArrayList<>();
+	
 	JPanel panelPrincipal;
 	int tamanhoScrollProdutosVenda = 0;
 	
@@ -83,7 +86,7 @@ public class TelaCaixa extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TelaCaixa frame = new TelaCaixa();
+					TelaCaixa frame = new TelaCaixa(1);
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -96,7 +99,7 @@ public class TelaCaixa extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public TelaCaixa() {
+	public TelaCaixa(int idUsuario) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setName("Tela Caixa");
 		Dimension tela = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
@@ -113,6 +116,7 @@ public class TelaCaixa extends JFrame {
 
 		setExtendedState(MAXIMIZED_BOTH);
 		contentPane.setLayout(null);
+		
 		
 		
 		//PAINEL SUPERIOR
@@ -400,23 +404,26 @@ public class TelaCaixa extends JFrame {
 	    	public void popupMenuCanceled(PopupMenuEvent arg0) {
 	    	}
 	    	public void popupMenuWillBecomeInvisible(PopupMenuEvent arg0) {
-	    		if(cbPesquisaCliente.getSelectedItem().equals("")) {
-	    			btnEditar.setEnabled(false);
-					btnCompras.setEnabled(false);
-					btnInformacoes.setEnabled(false);
-					
-					btnEditar.setBackground(new Color(200, 200, 200));
-					btnCompras.setBackground(new Color(200, 200, 200));
-					btnInformacoes.setBackground(new Color(200, 200, 200));
-				}else {
-					btnEditar.setEnabled(true);
-					btnCompras.setEnabled(true);
-					btnInformacoes.setEnabled(true);
-					
-					btnEditar.setBackground(corGeral);
-					btnCompras.setBackground(corGeral);
-					btnInformacoes.setBackground(corGeral);
-				}
+	    		if(cbPesquisaCliente.getSelectedItem() != null) {
+		    		if(cbPesquisaCliente.getSelectedItem().equals("")) {
+		    			btnEditar.setEnabled(false);
+						btnCompras.setEnabled(false);
+						btnInformacoes.setEnabled(false);
+						
+						btnEditar.setBackground(new Color(200, 200, 200));
+						btnCompras.setBackground(new Color(200, 200, 200));
+						btnInformacoes.setBackground(new Color(200, 200, 200));
+					}else {
+						btnEditar.setEnabled(true);
+						btnCompras.setEnabled(true);
+						btnInformacoes.setEnabled(true);
+						
+						btnEditar.setBackground(corGeral);
+						btnCompras.setBackground(corGeral);
+						btnInformacoes.setBackground(corGeral);
+					}
+	    		}
+	    		
 	    	}
 	    	public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
 	    		atualizarCbPesquisa();
@@ -536,50 +543,140 @@ public class TelaCaixa extends JFrame {
 	    scrollProdutosVenda.setViewportView(panelPrincipal);
 	    scrollProdutosVenda.setBounds(45, 850 - tamanhoScrollProdutosVenda, 1098, tamanhoScrollProdutosVenda);
 	    
+	    JLabel lblCodigoInvalido = new JLabel("C\u00F3digo de barras inv\u00E1lido");
+	    lblCodigoInvalido.setVisible(false);
+	    lblCodigoInvalido.setFont(new Font("Roboto", Font.PLAIN, 14));
+	    lblCodigoInvalido.setForeground(corVermelho);
+	    lblCodigoInvalido.setBounds(45, 850, 321, 16);
+	    contentPane.add(lblCodigoInvalido);
+	    
+	    JLabel lblQuantidadeInvalida = new JLabel("Quantidade inv\u00E1lida");
+	    lblQuantidadeInvalida.setVisible(false);
+	    lblQuantidadeInvalida.setForeground(corVermelho);
+	    lblQuantidadeInvalida.setFont(new Font("Roboto", Font.PLAIN, 14));
+	    lblQuantidadeInvalida.setBounds(780, 850, 162, 16);
+	    contentPane.add(lblQuantidadeInvalida);
+	    
+	    JLabel lblClienteInvalido = new JLabel("Cliente não selecionado");
+	    lblClienteInvalido.setVisible(false);
+	    lblClienteInvalido.setForeground(corVermelho);
+	    lblClienteInvalido.setFont(new Font("Roboto", Font.PLAIN, 14));
+	    lblClienteInvalido.setBounds(45, 45, 162, 16);
+	    contentPane.add(lblClienteInvalido);
+	    
 	    JButton btnAdicionarProduto = new JButton("Adicionar Produto");
 	    btnAdicionarProduto.setBounds(950, 915, 195, 68);
 	    btnAdicionarProduto.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent arg0) {
 	    		String codigoBarras = tfCodigoBarras.getText();
-	    		String quantidade = tfQuantidade.getText();
-	    		Produto produto = new Produto();
+	    		int quantidade = Integer.parseInt(tfQuantidade.getText());
 	    		
-	    		try {
-	    			/*Object[] dadosProduto = prDao.buscarProduto(codigoBarras);
-	    			
-	    			produto.setId((int) dadosProduto[0]);
-	    			produto.setNome(String.valueOf(dadosProduto[1]));
-	    			produto.setValorUnitario((double) dadosProduto[2]);
-	    			produto.setTamanho(String.valueOf(dadosProduto[3]));
-	    			produto.setIdCategoria((int) dadosProduto[4]);
-	    			produto.setIdFornecedor((int) dadosProduto[5]);
-	    			produto.setCodigoBarras(String.valueOf(dadosProduto[6]));
-	    			produto.setStatus((int) dadosProduto[7]);
-	    			produto.setQuantidade((int) dadosProduto[8]);
-	    			
-	    			ProdutoVenda pv = new ProdutoVenda();
-	    			pv.setIdProduto(produto.getId());
-	    			pv.setIdVenda(veDao.RetornarProximoCodigoVenda());
-	    			pv.setValorUnitario(produto.getValorUnitario());
-	    			pv.setQuantidade(Integer.parseInt(tfQuantidade.getText()));
-	    			
-	    			pvDao.CadastrarProdutoVenda(pv);*/
-	    			
-	    			 //BlocoProdutoVenda bloco = new BlocoProdutoVenda(produto.getNome(), pv.getQuantidade(), pv.getValorUnitario() * pv.getQuantidade());
-	    			BlocoProdutoVenda bloco = new BlocoProdutoVenda("Batatinha frita", 4, 10.5); 
-	    			panelPrincipal.add(bloco);
-	    			panelPrincipal.revalidate();
-	    			panelPrincipal.repaint();
-	    		}catch(Exception e) {
-	    			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+	    		boolean codigoBarrasEstaCorreto = codigoBarras.length() < 100 && codigoBarras.length() > 1;
+	    		boolean quantidadeEstaCorreta = quantidade > 0;
+	    		
+	    		if(!codigoBarrasEstaCorreto) {
+	    			lblCodigoInvalido.setText("C\u00F3digo de barras inv\u00E1lido");
+	    			lblCodigoInvalido.setVisible(true);
+	    			spCodigoBarras.setBackground(corVermelho);
+	    		}else {
+	    			lblCodigoInvalido.setVisible(false);
+	    			spCodigoBarras.setBackground(corSeparador);
 	    		}
 	    		
-	    		/*BlocoProdutoVenda bloco = new BlocoProdutoVenda();
-	    		panelPrincipal.add(bloco);
+	    		if(!quantidadeEstaCorreta) {
+	    			lblQuantidadeInvalida.setVisible(true);
+	    			spQuantidade.setBackground(corVermelho);
+	    		}else {
+	    			lblQuantidadeInvalida.setVisible(false);
+	    			spQuantidade.setBackground(corSeparador);
+	    		}
 	    		
-	    		panelPrincipal.revalidate();
-	    		panelPrincipal.repaint();*/
 	    		
+	    		if(codigoBarrasEstaCorreto && quantidadeEstaCorreta) {
+	    			lblCodigoInvalido.setVisible(false);
+	    			lblClienteInvalido.setVisible(false);
+	    			Produto produto = new Produto();
+		    		try {
+		    			Object[] dadosProduto = prDao.buscarProduto(codigoBarras);
+	
+		    			boolean vazio = true;
+		    			for(Object o : dadosProduto) {
+		    				if(o != null) {
+		    					vazio = false;
+		    					break;
+		    				}
+		    			}
+		    			if(cbPesquisaCliente.getSelectedIndex() > 0) {
+		    				cbPesquisaCliente.setEnabled(false);
+		    				
+			    			if(!vazio) {
+			    				produto.setId((int) dadosProduto[0]);
+				    			produto.setNome(String.valueOf(dadosProduto[1]));
+				    			produto.setValorUnitario((double) dadosProduto[2]);
+				    			produto.setTamanho(String.valueOf(dadosProduto[3]));
+				    			produto.setIdCategoria((int) dadosProduto[4]);
+				    			produto.setIdFornecedor((int) dadosProduto[5]);
+				    			produto.setCodigoBarras(String.valueOf(dadosProduto[6]));
+				    			produto.setStatus((int) dadosProduto[7]);
+				    			produto.setQuantidade((int) dadosProduto[8]);
+				    			
+			    				if(produto.getStatus() == 1) {
+			    					if(produto.getQuantidade() >= quantidade) {
+			    						
+			    						if(produtosParaComprar.isEmpty()) {
+			    							Object[] dadosCliente = clDao.buscarCliente(String.valueOf(cbPesquisaCliente.getSelectedItem()));
+			    			    			
+			    							Timestamp dataDeHoje = new Timestamp(System.currentTimeMillis());
+			    							
+			    							idClienteAtual = (int) dadosCliente[0];
+			    							idVendaAtual = veDao.RetornarProximoCodigoVenda();
+			    							ve.setId(idVendaAtual);
+			    							ve.setIdUsuario(idUsuario);
+			    							ve.setIdCliente(idClienteAtual);
+			    							ve.setStatus(0);
+			    							ve.setDesconto(0);
+			    							ve.setData(dataDeHoje);
+			    							ve.setStatusPagamento(0);
+			    					
+			    							veDao.CadastrarVenda(ve);
+			    						}
+			    						
+			    		    			ProdutoVenda pv = new ProdutoVenda();
+			    		    			pv.setIdProduto(produto.getId());
+			    		    			pv.setIdVenda(ve.getId());
+			    		    			pv.setValorUnitario(produto.getValorUnitario());
+			    		    			pv.setQuantidade(Integer.parseInt(tfQuantidade.getText()));
+			    		    			
+			    		    			pvDao.CadastrarProdutoVenda(pv);
+			    		    			produtosParaComprar.add(pv);
+			    		    			
+			    		    			produto.setQuantidade(produto.getQuantidade() - quantidade);
+			    		    			prDao.AlterarProduto(produto);
+			    		    			
+			    		    			BlocoProdutoVenda bloco = new BlocoProdutoVenda(produto.getNome(), pv.getQuantidade(), pv.getValorUnitario() * pv.getQuantidade());
+			    		    			panelPrincipal.add(bloco);
+			    		    			panelPrincipal.revalidate();
+			    		    			panelPrincipal.repaint();
+			    					}else {
+			    						lblCodigoInvalido.setText("Produto não suficiente para esta quantia");
+					    				lblCodigoInvalido.setVisible(true);
+			    					}
+			    				}else {
+			    					lblCodigoInvalido.setText("Produto não disponível");
+				    				lblCodigoInvalido.setVisible(true);
+			    				}
+			    			}else {
+			    				lblCodigoInvalido.setText("Produto inexistente");
+			    				lblCodigoInvalido.setVisible(true);
+			    			}
+		    			}else {
+		    				lblClienteInvalido.setVisible(true);
+		    			}
+		    			
+		    		}catch(Exception e) {
+		    			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+		    		}
+	    		}
 	    		
 	    		//adicionarProdutoVenda(produtoVenda);
 	    	}
@@ -608,6 +705,87 @@ public class TelaCaixa extends JFrame {
 	    btnAdicionarProduto.setBorder(null);
 	    btnAdicionarProduto.setBackground(corGeral);
 	    contentPane.add(btnAdicionarProduto);
+	    
+	    JButton btnCancelarVenda = new JButton("Cancelar Venda");
+	    btnCancelarVenda.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent arg0) {
+	    		ve.setId(idVendaAtual);
+				ve.setIdUsuario(idUsuario);
+				ve.setIdCliente(idClienteAtual);
+				ve.setStatus(0);
+				ve.setDesconto(0);
+				ve.setData(ve.getData());
+				ve.setStatusPagamento(0);
+				
+				try {
+					//System.out.println();
+					//veDao.deletarVenda(ve);
+				}catch(Exception e) {
+					JOptionPane.showMessageDialog(null, "Erro ao cancelar", "Erro", JOptionPane.ERROR_MESSAGE);
+				}
+	    	}
+	    });
+	    btnCancelarVenda.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+	    btnCancelarVenda.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnCancelarVenda.setBackground(corSecundaria);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnCancelarVenda.setBackground(corGeral);
+			}
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				btnCancelarVenda.setBackground(corTerciaria);
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				btnCancelarVenda.setBackground(corGeral);
+			}
+		});
+	    btnCancelarVenda.setForeground(corTexto);
+	    btnCancelarVenda.setFont(new Font("Roboto", Font.PLAIN, 20));
+	    btnCancelarVenda.setBorder(null);
+	    btnCancelarVenda.setBackground(corGeral);
+	    btnCancelarVenda.setBounds(1461, 916, 195, 68);
+	    contentPane.add(btnCancelarVenda);
+	    
+	    JButton btnFinalizarVenda = new JButton("Finalizar Venda");
+	    btnFinalizarVenda.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+	    btnFinalizarVenda.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnFinalizarVenda.setBackground(corSecundaria);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnFinalizarVenda.setBackground(corGeral);
+			}
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				btnFinalizarVenda.setBackground(corTerciaria);
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				btnFinalizarVenda.setBackground(corGeral);
+			}
+		});
+	    btnFinalizarVenda.setForeground(corTexto);
+	    btnFinalizarVenda.setFont(new Font("Roboto", Font.PLAIN, 20));
+	    btnFinalizarVenda.setBorder(null);
+	    btnFinalizarVenda.setBackground(corGeral);
+	    btnFinalizarVenda.setBounds(1668, 916, 195, 68);
+	    contentPane.add(btnFinalizarVenda);
+	    
+	    
+	    JCheckBox cboxPrazo = new JCheckBox("Venda \u00E0 prazo");
+	    
+	    cboxPrazo.setBackground(Color.WHITE);
+	    cboxPrazo.setForeground(corTexto);
+	    cboxPrazo.setFont(new Font("Roboto", Font.PLAIN, 20));
+	    cboxPrazo.setBounds(1461, 865, 402, 45);
+	    contentPane.add(cboxPrazo);
 	    
 	    
 	}
