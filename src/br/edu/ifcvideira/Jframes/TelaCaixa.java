@@ -16,6 +16,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.beans.EventHandler;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,6 +51,7 @@ import javax.swing.text.NumberFormatter;
 import javax.swing.event.PopupMenuEvent;
 import java.awt.event.ContainerAdapter;
 import java.awt.event.ContainerEvent;
+import javax.swing.border.MatteBorder;
 
 public class TelaCaixa extends JFrame {
 
@@ -72,6 +74,7 @@ public class TelaCaixa extends JFrame {
 	TelaEditarCliente telaEditarCliente;
 	
 	public static JComboBox cbPesquisaCliente = new JComboBox<>(new Object[] {""});
+	JTextArea taNota;
 	int idVendaAtual;
 	int idClienteAtual;
 	public static ArrayList<ProdutoVenda> produtosParaComprar = new ArrayList<>();
@@ -116,8 +119,6 @@ public class TelaCaixa extends JFrame {
 
 		setExtendedState(MAXIMIZED_BOTH);
 		contentPane.setLayout(null);
-		
-		
 		
 		//PAINEL SUPERIOR
 		
@@ -563,6 +564,15 @@ public class TelaCaixa extends JFrame {
 	    lblClienteInvalido.setFont(new Font("Roboto", Font.PLAIN, 14));
 	    lblClienteInvalido.setBounds(45, 45, 162, 16);
 	    contentPane.add(lblClienteInvalido);
+
+	    taNota = new JTextArea();
+	    taNota.setEditable(false);
+	    taNota.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+	    taNota.setForeground(corTexto);
+	    taNota.setFont(new Font("Roboto", Font.PLAIN, 20));
+	    taNota.setBackground(Color.WHITE);
+	    taNota.setBounds(1461, 57, 402, 793);
+	    contentPane.add(taNota);
 	    
 	    JButton btnAdicionarProduto = new JButton("Adicionar Produto");
 	    btnAdicionarProduto.setBounds(950, 915, 195, 68);
@@ -622,11 +632,10 @@ public class TelaCaixa extends JFrame {
 				    			
 			    				if(produto.getStatus() == 1) {
 			    					if(produto.getQuantidade() >= quantidade) {
-			    						
+			    						Object[] dadosCliente = clDao.buscarCliente(String.valueOf(cbPesquisaCliente.getSelectedItem()));
+			    						Timestamp dataDeHoje = new Timestamp(System.currentTimeMillis());
 			    						if(produtosParaComprar.isEmpty()) {
-			    							Object[] dadosCliente = clDao.buscarCliente(String.valueOf(cbPesquisaCliente.getSelectedItem()));
-			    			    			
-			    							Timestamp dataDeHoje = new Timestamp(System.currentTimeMillis());
+			    							veDao.AtualizarID();
 			    							
 			    							idClienteAtual = (int) dadosCliente[0];
 			    							idVendaAtual = veDao.RetornarProximoCodigoVenda();
@@ -640,21 +649,48 @@ public class TelaCaixa extends JFrame {
 			    					
 			    							veDao.CadastrarVenda(ve);
 			    						}
-			    						
-			    		    			ProdutoVenda pv = new ProdutoVenda();
-			    		    			pv.setIdProduto(produto.getId());
-			    		    			pv.setIdVenda(ve.getId());
-			    		    			pv.setValorUnitario(produto.getValorUnitario());
-			    		    			pv.setQuantidade(Integer.parseInt(tfQuantidade.getText()));
 			    		    			
-			    		    			pvDao.CadastrarProdutoVenda(pv);
-			    		    			produtosParaComprar.add(pv);
+			    		    			boolean pvJaExistente = false;
 			    		    			
+			    		    			for(int i = 0; i < produtosParaComprar.size(); i++) {
+			    		    				int idProdutoJaComprado = produtosParaComprar.get(i).getIdProduto();
+			    		    				
+			    		    				if(produto.getId() == idProdutoJaComprado) {			    		    			
+					    		    			//int idProdutoVendaComprado = produtosParaComprar.get(i).getId();
+					    		    			int quantidadeAdicional = produtosParaComprar.get(i).getQuantidade() + quantidade;
+					    		    			//pvDao.AlterarQuantidadeProdutoVenda(idProdutoVendaComprado, quantidadeAdicional);
+					    		    			
+			    		    					produtosParaComprar.get(i).setQuantidade(quantidadeAdicional);
+			    		    					
+			    		    					int q = produtosParaComprar.get(i).getQuantidade();
+			    		    					double v = (double) q * produtosParaComprar.get(i).getValorUnitario();
+			    		    					((BlocoProdutoVenda) panelPrincipal.getComponent(i)).setQuantidade(q, v);
+			    		    					pvJaExistente = true;
+			    		    					break;
+			    		    				}
+			    		    			}
+			    		    			
+			    		    			if(!pvJaExistente) {
+			    		    				ProdutoVenda pv = new ProdutoVenda();
+			    		    				pv.setId(pvDao.RetornarProximoCodigoProdutoVenda());
+				    		    			pv.setIdProduto(produto.getId());
+				    		    			pv.setIdVenda(ve.getId());
+				    		    			pv.setValorUnitario(produto.getValorUnitario());
+				    		    			pv.setQuantidade(quantidade);
+			    		    				
+			    		    				//pvDao.CadastrarProdutoVenda(pv);
+			    		    				produtosParaComprar.add(pv);
+			    		    				
+			    		    				BlocoProdutoVenda bloco = new BlocoProdutoVenda(produto.getNome(), pv.getQuantidade(), pv.getValorUnitario() * pv.getQuantidade());
+				    		    			panelPrincipal.add(bloco);
+			    		    			}
 			    		    			produto.setQuantidade(produto.getQuantidade() - quantidade);
-			    		    			prDao.AlterarProduto(produto);
+			    		    			//prDao.AlterarProduto(produto);
 			    		    			
-			    		    			BlocoProdutoVenda bloco = new BlocoProdutoVenda(produto.getNome(), pv.getQuantidade(), pv.getValorUnitario() * pv.getQuantidade());
-			    		    			panelPrincipal.add(bloco);
+			    		    			
+			    		    			atualizarNotaFiscal(String.valueOf(dadosCliente[1]), dataDeHoje.toString());
+			    		    			
+			    		    			
 			    		    			panelPrincipal.revalidate();
 			    		    			panelPrincipal.repaint();
 			    					}else {
@@ -677,8 +713,6 @@ public class TelaCaixa extends JFrame {
 		    			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 		    		}
 	    		}
-	    		
-	    		//adicionarProdutoVenda(produtoVenda);
 	    	}
 	    });
 	    btnAdicionarProduto.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -706,6 +740,13 @@ public class TelaCaixa extends JFrame {
 	    btnAdicionarProduto.setBackground(corGeral);
 	    contentPane.add(btnAdicionarProduto);
 	    
+	    JCheckBox cboxPrazo = new JCheckBox("Venda \u00E0 prazo");
+	    cboxPrazo.setBackground(Color.WHITE);
+	    cboxPrazo.setForeground(corTexto);
+	    cboxPrazo.setFont(new Font("Roboto", Font.PLAIN, 20));
+	    cboxPrazo.setBounds(1461, 865, 402, 45);
+	    contentPane.add(cboxPrazo);
+	    
 	    JButton btnCancelarVenda = new JButton("Cancelar Venda");
 	    btnCancelarVenda.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent arg0) {
@@ -718,10 +759,39 @@ public class TelaCaixa extends JFrame {
 				ve.setStatusPagamento(0);
 				
 				try {
-					//System.out.println();
-					//veDao.deletarVenda(ve);
+					List<Object> dados = pvDao.buscarProdutosVenda(ve.getId());
+					
+					/*for(Object o : dados) {
+						Object[] dadosProdutoVenda = (Object[]) o;
+						ProdutoVenda pv = new ProdutoVenda();
+						
+						pv.setId((int) dadosProdutoVenda[0]); 
+						pv.setIdProduto((int) dadosProdutoVenda[1]);
+						pv.setIdVenda((int) dadosProdutoVenda[2]);
+						pv.setValorUnitario((double) dadosProdutoVenda[3]);
+						pv.setQuantidade((int) dadosProdutoVenda[4]);
+						
+						//System.out.println(pv.getQuantidade());
+						//System.out.println(pr.getQuantidade());
+						
+						pvDao.deletarProdutoVenda(pv);
+					}*/
+					
+					veDao.deletarVenda(ve);
+					veDao.AtualizarID();
+					
+					panelPrincipal.removeAll();
+					tamanhoScrollProdutosVenda = 0;
+					panelPrincipal.setSize(1098, tamanhoScrollProdutosVenda);
+					scrollProdutosVenda.setSize(1098, tamanhoScrollProdutosVenda);
+					cbPesquisaCliente.setEnabled(true);
+					produtosParaComprar.clear();
+					
+					revalidate();
+					repaint();
+					
 				}catch(Exception e) {
-					JOptionPane.showMessageDialog(null, "Erro ao cancelar", "Erro", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 				}
 	    	}
 	    });
@@ -752,6 +822,52 @@ public class TelaCaixa extends JFrame {
 	    contentPane.add(btnCancelarVenda);
 	    
 	    JButton btnFinalizarVenda = new JButton("Finalizar Venda");
+	    btnFinalizarVenda.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent arg0) {
+	    		ve.setId(idVendaAtual);
+				ve.setIdUsuario(idUsuario);
+				ve.setIdCliente(idClienteAtual);
+				ve.setStatus(1);
+				ve.setDesconto(0);
+				ve.setData(ve.getData());
+				if(cboxPrazo.isSelected()) {
+					
+					
+					//prazo
+					
+					
+				}else {	
+					ve.setStatusPagamento(1);
+					try {
+						for(int i = 0; i < produtosParaComprar.size(); i++) {
+							pvDao.CadastrarProdutoVenda(produtosParaComprar.get(i));
+							
+							Produto pr = new Produto();
+							Object[] dadosProduto = prDao.buscarProduto(produtosParaComprar.get(i).getIdProduto());
+							
+							pr.setId((int) dadosProduto[0]);
+							pr.setNome(String.valueOf(dadosProduto[1]));
+							pr.setValorUnitario((double) dadosProduto[2]);
+							pr.setTamanho(String.valueOf(dadosProduto[3]));
+							pr.setIdCategoria((int) dadosProduto[4]);
+							pr.setIdFornecedor((int) dadosProduto[5]);
+							pr.setCodigoBarras(String.valueOf(dadosProduto[6]));
+							pr.setStatus((int) dadosProduto[7]);
+							pr.setQuantidade((int) dadosProduto[8] + produtosParaComprar.get(i).getQuantidade());
+							
+							prDao.AlterarProduto(pr);
+							veDao.AlterarVenda(ve);
+						}
+						
+						taNota.print();
+						//imprimir nota
+		    		}catch (Exception e) {
+		    			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+		    		}
+
+				}
+	    	}
+	    });
 	    btnFinalizarVenda.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 	    btnFinalizarVenda.addMouseListener(new MouseAdapter() {
 			@Override
@@ -776,18 +892,10 @@ public class TelaCaixa extends JFrame {
 	    btnFinalizarVenda.setBorder(null);
 	    btnFinalizarVenda.setBackground(corGeral);
 	    btnFinalizarVenda.setBounds(1668, 916, 195, 68);
-	    contentPane.add(btnFinalizarVenda);
+	    contentPane.add(btnFinalizarVenda);   
+	  
 	    
-	    
-	    JCheckBox cboxPrazo = new JCheckBox("Venda \u00E0 prazo");
-	    
-	    cboxPrazo.setBackground(Color.WHITE);
-	    cboxPrazo.setForeground(corTexto);
-	    cboxPrazo.setFont(new Font("Roboto", Font.PLAIN, 20));
-	    cboxPrazo.setBounds(1461, 865, 402, 45);
-	    contentPane.add(cboxPrazo);
-	    
-	    
+	    atualizarNotaFiscal("Cliente", "");
 	}
 	
 	public static void atualizarCbPesquisa() {
@@ -814,5 +922,34 @@ public class TelaCaixa extends JFrame {
 	
 	void adicionarProdutoVenda(ProdutoVenda produtoVenda) {
 		//adiciona
+	}
+	
+	void atualizarNotaFiscal(String nomeCliente, String dataCompra) {
+		try {
+			NumberFormat nf = new DecimalFormat("#.##");
+			double totalAPagar = 0;
+			taNota.setText(                   "  ---------------------------------------------------------------\n");
+			taNota.setText(taNota.getText() + "\n");
+			taNota.setText(taNota.getText() + "                          LOJA DE MODA\n");
+			taNota.setText(taNota.getText() + "\n");
+			taNota.setText(taNota.getText() + "  ---------------------------------------------------------------\n");
+			taNota.setText(taNota.getText() + "  Venda número: " + veDao.RetornarProximoCodigoVenda() + "\n");
+			taNota.setText(taNota.getText() + "  Cliente: " + nomeCliente + "\n");
+			taNota.setText(taNota.getText() + "  " + dataCompra + "\n");
+			taNota.setText(taNota.getText() + "  ---------------------------------------------------------------\n");
+			taNota.setText(taNota.getText() + "\n");
+			taNota.setText(taNota.getText() + "  Código     Descrição   \n");
+			taNota.setText(taNota.getText() + "   -->    Qtd      Valor unit.     Valor total\n");
+			taNota.setText(taNota.getText() + "  ---------------------------------------------------------------\n");
+			for(ProdutoVenda x : produtosParaComprar) {
+				taNota.setText(taNota.getText() + "  " + x.getIdProduto() + "         " + prDao.NomeProduto(x.getIdProduto()) + "\n");
+				taNota.setText(taNota.getText() + "            " + x.getQuantidade() + "         R$" + nf.format(x.getValorUnitario()) + "         R$" + nf.format(x.getQuantidade() * x.getValorUnitario()) +"\n");
+				taNota.setText(taNota.getText() + "  ---------------------------------------------------------------\n");
+				totalAPagar += x.getQuantidade() * x.getValorUnitario();
+			}
+			taNota.setText(taNota.getText() + "  Total a pagar................... R$" + nf.format(totalAPagar) + "\n");
+		}catch(Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 }

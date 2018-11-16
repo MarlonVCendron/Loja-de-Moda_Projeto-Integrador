@@ -38,7 +38,19 @@ public class ProdutoVendaDao {
 			sqlPrep.setInt(2, pv.getIdVenda());
 			sqlPrep.setDouble(3, pv.getValorUnitario());
 			sqlPrep.setInt(4, pv.getQuantidade());
-			sqlPrep.setInt(10, pv.getId());
+			sqlPrep.setInt(5, pv.getId());
+			sqlPrep.execute();
+		}catch(Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
+	}
+	
+	public void AlterarQuantidadeProdutoVenda(int id, int quantidade) throws Exception {
+		try{
+			String sql = "UPDATE produtos_venda SET quantidade=? WHERE id=?";
+			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
+			sqlPrep.setInt(1, quantidade);
+			sqlPrep.setInt(2, id);
 			sqlPrep.execute();
 		}catch(Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());

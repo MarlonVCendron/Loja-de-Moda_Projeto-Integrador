@@ -48,6 +48,35 @@ public class VendaDao {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
 	}
+	
+/*	public void AlterarIdAtual(int id) throws Exception {
+		try{
+			String sql = "ALTER SEQUENCE vendas_id_seq RESTART WITH ?";
+			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
+			sqlPrep.setInt(1, id);
+			sqlPrep.execute();
+		}catch(Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
+	}*/
+	
+	public void AtualizarID() throws Exception {
+		try{
+			/*String sql = "ALTER SEQUENCE vendas_id_seq RESTART";
+			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
+			sqlPrep.execute();*/
+			
+			String sql = "SELECT setval('vendas_id_seq', (SELECT MAX(id) FROM vendas));";
+			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
+			sqlPrep.execute();
+			
+			/*sql = "UPDATE vendas SET id = DEFAULT;";
+			sqlPrep = Conexao.conectar().prepareStatement(sql);
+			sqlPrep.execute();*/
+		}catch(Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
+	}
 
 	public void deletarVenda(Venda ve) throws Exception{
 		try{

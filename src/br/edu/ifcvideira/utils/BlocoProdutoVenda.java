@@ -31,13 +31,16 @@ public class BlocoProdutoVenda extends JPanel{
 	ImageIcon imageIconLixeira = new ImageIcon(TelaLogin.class.getResource("/br/edu/ifcvideira/img/lixeira.png"));
 	Image imagemLixeira= imageIconLixeira.getImage().getScaledInstance(50, 50,  java.awt.Image.SCALE_SMOOTH);
 	
+	JLabel lblQuantidade;
+	JLabel lblValor;
+	
 	NumberFormat nf = new DecimalFormat("#.##");
 	
 	public BlocoProdutoVenda(String nomeProduto, int quantidade, double valor) {
 		setBackground(corTerciaria);
-		setPreferredSize(new Dimension(1095, 97));
-		setMaximumSize(new Dimension(1095, 97));
-		setMinimumSize(new Dimension(1095, 97));
+		setPreferredSize(new Dimension(1095, 100));
+		setMaximumSize(new Dimension(1095, 100));
+		setMinimumSize(new Dimension(1095, 100));
 		setLayout(null);
 		setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, corGeral));
 		
@@ -53,7 +56,7 @@ public class BlocoProdutoVenda extends JPanel{
 		lblQuantia.setBounds(422, 25, 86, 50);
 		add(lblQuantia);
 		
-		JLabel lblQuantidade = new JLabel(String.valueOf(quantidade));
+		lblQuantidade = new JLabel(String.valueOf(quantidade));
 		lblQuantidade.setForeground(corTexto);
 		lblQuantidade.setFont(new Font("Roboto", Font.PLAIN, 30));
 		lblQuantidade.setBounds(509, 25, 147, 50);
@@ -65,7 +68,7 @@ public class BlocoProdutoVenda extends JPanel{
 		lblTotal.setBounds(660, 25, 68, 50);
 		add(lblTotal);
 		
-		JLabel lblValor = new JLabel("R$" + nf.format(valor));
+		lblValor = new JLabel("R$" + nf.format(valor));
 		lblValor.setForeground(corTexto);
 		lblValor.setFont(new Font("Roboto", Font.PLAIN, 30));
 		lblValor.setBounds(721, 23, 188, 50);
@@ -94,5 +97,10 @@ public class BlocoProdutoVenda extends JPanel{
 		buttonLixeira.setIcon(new ImageIcon(imagemLixeira));
 		buttonLixeira.setBounds(1003, 25, 50, 50);
 		add(buttonLixeira);
+	}
+	
+	public void setQuantidade(int quantidade, double valor) {
+		this.lblQuantidade.setText(String.valueOf(quantidade));
+		this.lblValor.setText("R$" + nf.format(valor));
 	}
 }

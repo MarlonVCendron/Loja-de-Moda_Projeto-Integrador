@@ -107,6 +107,47 @@ public class ProdutoDao{
 		return info;
 	}
 	
+	public String NomeProduto(int id) throws SQLException, Exception{
+		String nome = "";
+		try {
+			String sql = "SELECT nome FROM produtos WHERE id=?";
+			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
+			sqlPrep.setInt(1, id);
+			ResultSet rs = sqlPrep.executeQuery();
+			
+			while (rs.next())
+			{
+				nome = rs.getString(1);
+			}
+			sqlPrep.close();
+			
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
+		return nome;
+	}
+	
+	public Object[] buscarProduto(int id) throws SQLException, Exception{
+		Object[] info = new Object[9];
+		try {
+			String sql = "SELECT * FROM produtos WHERE id=?";
+			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
+			sqlPrep.setInt(1, id);
+			ResultSet rs = sqlPrep.executeQuery();
+			
+			while (rs.next())
+			{
+				Object[] linha = {rs.getInt(1), rs.getString(2), rs.getDouble(3), rs.getString(4), rs.getInt(5), rs.getInt(6), rs.getString(7), rs.getInt(8), rs.getInt(9)};
+				info = linha;
+			}
+			sqlPrep.close();
+			
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
+		return info;
+	}
+	
 	public int RetornarProximoidProduto() throws Exception {
 		try{
 			String sql ="SELECT MAX(id)+1 AS id FROM produtos ";
