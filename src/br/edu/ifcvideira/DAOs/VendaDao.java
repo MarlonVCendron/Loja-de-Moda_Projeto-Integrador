@@ -14,14 +14,13 @@ import br.edu.ifcvideira.utils.Conexao;
 public class VendaDao {
 	public void CadastrarVenda(Venda ve) throws SQLException, Exception{
 		try{
-			String sql = "INSERT INTO vendas (id_usuario, id_cliente, data, desconto, status, status_pagamento) VALUES (?,?,?,?,?,?)";
+			String sql = "INSERT INTO vendas (id_usuario, id_cliente, data, status, status_pagamento) VALUES (?,?,?,?,?)";
 			java.sql.PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
 			sqlPrep.setInt(1, ve.getIdUsuario());
 			sqlPrep.setInt(2, ve.getIdCliente());
 			sqlPrep.setTimestamp(3, ve.getData());
-			sqlPrep.setDouble(4, ve.getDesconto());
-			sqlPrep.setInt(5, ve.getStatus());
-			sqlPrep.setInt(6, ve.getStatusPagamento());
+			sqlPrep.setInt(4, ve.getStatus());
+			sqlPrep.setInt(5, ve.getStatusPagamento());
 			sqlPrep.execute();
 			
 		} catch(SQLException e) {
@@ -34,15 +33,14 @@ public class VendaDao {
 
 	public void AlterarVenda(Venda ve) throws Exception {
 		try{
-			String sql = "UPDATE vendas SET id_usuario=?, id_cliente=?, data=?, desconto=?, status=?, status_pagamento=? WHERE id=?";
+			String sql = "UPDATE vendas SET id_usuario=?, id_cliente=?, data=?, status=?, status_pagamento=? WHERE id=?";
 			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
 			sqlPrep.setInt(1, ve.getIdUsuario());
 			sqlPrep.setInt(2, ve.getIdCliente());
 			sqlPrep.setTimestamp(3, ve.getData());
-			sqlPrep.setDouble(4, ve.getDesconto());
-			sqlPrep.setInt(5, ve.getStatus());
-			sqlPrep.setInt(6, ve.getStatusPagamento());
-			sqlPrep.setInt(7, ve.getId());
+			sqlPrep.setInt(4, ve.getStatus());
+			sqlPrep.setInt(5, ve.getStatusPagamento());
+			sqlPrep.setInt(6, ve.getId());
 			sqlPrep.execute();
 		}catch(Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());

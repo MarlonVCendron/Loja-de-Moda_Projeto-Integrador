@@ -1,14 +1,5 @@
 package br.edu.ifcvideira.Jframes;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.GraphicsEnvironment;
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -32,6 +23,7 @@ import br.edu.ifcvideira.Classes.Cliente;
 import br.edu.ifcvideira.Classes.Produto;
 import br.edu.ifcvideira.Classes.ProdutoVenda;
 import br.edu.ifcvideira.Classes.Venda;
+import br.edu.ifcvideira.DAOs.CategoriaDao;
 import br.edu.ifcvideira.DAOs.ClienteDao;
 import br.edu.ifcvideira.DAOs.ProdutoDao;
 import br.edu.ifcvideira.DAOs.ProdutoVendaDao;
@@ -52,10 +44,11 @@ import javax.swing.event.PopupMenuEvent;
 import java.awt.event.ContainerAdapter;
 import java.awt.event.ContainerEvent;
 import javax.swing.border.MatteBorder;
+import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 public class TelaCaixa extends JFrame {
 
-	private JPanel contentPane;
+	public static JPanel contentPane;
 	
 	Color corTexto = new Color(25, 30, 35);
 	Color corGeral = new Color(Preferencias.getR(), Preferencias.getG(), Preferencias.getB());
@@ -65,22 +58,28 @@ public class TelaCaixa extends JFrame {
 	Color corVermelho = new Color (230, 20, 20);
 	
 	public static ClienteDao clDao = new ClienteDao();
-	ProdutoDao prDao = new ProdutoDao();
+	static ProdutoDao prDao = new ProdutoDao();
+	CategoriaDao caDao = new CategoriaDao();
 	Venda ve = new Venda();
-	VendaDao veDao = new VendaDao();
+	static VendaDao veDao = new VendaDao();
 	ProdutoVendaDao pvDao = new ProdutoVendaDao();
 	
 	TelaCadastroCliente telaCadastroCliente = new TelaCadastroCliente();
 	TelaEditarCliente telaEditarCliente;
 	
 	public static JComboBox cbPesquisaCliente = new JComboBox<>(new Object[] {""});
-	JTextArea taNota;
+	static JTextArea taNota;
 	int idVendaAtual;
 	int idClienteAtual;
 	public static ArrayList<ProdutoVenda> produtosParaComprar = new ArrayList<>();
 	
-	JPanel panelPrincipal;
+	double descontoGeral = Preferencias.getDesconto();
+	
+	public static JPanel panelPrincipal;
 	int tamanhoScrollProdutosVenda = 0;
+	
+	public static String nomeClienteAtual;
+	public static String dataCompraAtual;
 	
 	/**
 	 * Launch the application.
@@ -102,7 +101,7 @@ public class TelaCaixa extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public TelaCaixa(int idUsuario) {
+	public TelaCaixa(int idUsuario) {		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setName("Tela Caixa");
 		Dimension tela = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
@@ -116,7 +115,11 @@ public class TelaCaixa extends JFrame {
 		Rectangle area = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
 		setMaximizedBounds(area);
 		GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode();
-
+		
+		ImageIcon imageIconLogo = new ImageIcon(Preferencias.getImagem());
+		Image imagemLogo = imageIconLogo.getImage().getScaledInstance(300, 300,  java.awt.Image.SCALE_SMOOTH);
+		setIconImage(imagemLogo);
+		
 		setExtendedState(MAXIMIZED_BOTH);
 		contentPane.setLayout(null);
 		
@@ -364,6 +367,11 @@ public class TelaCaixa extends JFrame {
 	    contentPane.add(btnEditar);
 	    
 	    JButton btnCompras = new JButton("Compras");
+	    btnCompras.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent arg0) {
+	    		//Tela das compras
+	    	}
+	    });
 	    btnCompras.setBounds(410, 159, 162, 45);
 	    btnCompras.setEnabled(false);
 	    btnCompras.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -574,6 +582,49 @@ public class TelaCaixa extends JFrame {
 	    taNota.setBounds(1461, 57, 402, 793);
 	    contentPane.add(taNota);
 	    
+	    JLabel lblSubTotalTitulo = new JLabel("Subtotal:");
+	    lblSubTotalTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+	    lblSubTotalTitulo.setForeground(corTexto);
+	    lblSubTotalTitulo.setFont(new Font("Roboto", Font.PLAIN, 24));
+	    lblSubTotalTitulo.setBounds(45, 246, 366, 45);
+	    contentPane.add(lblSubTotalTitulo);
+	    
+	    JLabel lblSubTotal = new JLabel("R$0.00");
+	    lblSubTotal.setHorizontalAlignment(SwingConstants.CENTER);
+	    lblSubTotal.setForeground(corTexto);
+	    lblSubTotal.setFont(new Font("Roboto", Font.PLAIN, 40));
+	    lblSubTotal.setBounds(45, 292, 366, 68);
+	    contentPane.add(lblSubTotal);
+	    
+	    JLabel lblDescontoTitulo = new JLabel("Desconto:");
+	    lblDescontoTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+	    lblDescontoTitulo.setForeground(corTexto);
+	    lblDescontoTitulo.setFont(new Font("Roboto", Font.PLAIN, 24));
+	    lblDescontoTitulo.setBounds(411, 246, 366, 45);
+	    contentPane.add(lblDescontoTitulo);
+	    
+	    JLabel lblDesconto = new JLabel(descontoGeral + "%");
+	    lblDesconto.setHorizontalAlignment(SwingConstants.CENTER);
+	    lblDesconto.setForeground(corTexto);
+	    lblDesconto.setFont(new Font("Roboto", Font.PLAIN, 40));
+	    lblDesconto.setBounds(411, 292, 366, 68);
+	    contentPane.add(lblDesconto);
+	    
+	    JLabel lblTotalTitulo = new JLabel("Total:");
+	    lblTotalTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+	    lblTotalTitulo.setForeground(corTexto);
+	    lblTotalTitulo.setFont(new Font("Roboto", Font.PLAIN, 24));
+	    lblTotalTitulo.setBounds(777, 246, 366, 45);
+	    contentPane.add(lblTotalTitulo);
+	    
+	    JLabel lblTotal = new JLabel("R$0.00");
+	    lblTotal.setHorizontalAlignment(SwingConstants.CENTER);
+	    lblTotal.setForeground(corTexto);
+	    lblTotal.setFont(new Font("Roboto", Font.PLAIN, 40));
+	    lblTotal.setBounds(777, 292, 366, 68);
+	    contentPane.add(lblTotal);
+
+	    
 	    JButton btnAdicionarProduto = new JButton("Adicionar Produto");
 	    btnAdicionarProduto.setBounds(950, 915, 195, 68);
 	    btnAdicionarProduto.addActionListener(new ActionListener() {
@@ -643,7 +694,6 @@ public class TelaCaixa extends JFrame {
 			    							ve.setIdUsuario(idUsuario);
 			    							ve.setIdCliente(idClienteAtual);
 			    							ve.setStatus(0);
-			    							ve.setDesconto(0);
 			    							ve.setData(dataDeHoje);
 			    							ve.setStatusPagamento(0);
 			    					
@@ -675,22 +725,38 @@ public class TelaCaixa extends JFrame {
 			    		    				pv.setId(pvDao.RetornarProximoCodigoProdutoVenda());
 				    		    			pv.setIdProduto(produto.getId());
 				    		    			pv.setIdVenda(ve.getId());
-				    		    			pv.setValorUnitario(produto.getValorUnitario());
 				    		    			pv.setQuantidade(quantidade);
+				    		    			
+				    		    			int idCategoria = produto.getIdCategoria();
+				    		    			double desconto = caDao.buscarDesconto(idCategoria);
+				    		    			
+				    		    			double valor = produto.getValorUnitario() - (produto.getValorUnitario() * desconto / 100);
+				    		    			pv.setValorUnitario(valor);
+				    		    			
 			    		    				
 			    		    				//pvDao.CadastrarProdutoVenda(pv);
 			    		    				produtosParaComprar.add(pv);
 			    		    				
-			    		    				BlocoProdutoVenda bloco = new BlocoProdutoVenda(produto.getNome(), pv.getQuantidade(), pv.getValorUnitario() * pv.getQuantidade());
+			    		    				BlocoProdutoVenda bloco = new BlocoProdutoVenda(produto.getNome(), pv.getQuantidade(), pv.getValorUnitario() * pv.getQuantidade(), produtosParaComprar.size() - 1);
 				    		    			panelPrincipal.add(bloco);
 			    		    			}
 			    		    			produto.setQuantidade(produto.getQuantidade() - quantidade);
-			    		    			//prDao.AlterarProduto(produto);
 			    		    			
+			    		    			nomeClienteAtual = String.valueOf(dadosCliente[1]);
+			    		    			dataCompraAtual = dataDeHoje.toString();
+			    		    			atualizarNotaFiscal(nomeClienteAtual, dataCompraAtual);
 			    		    			
-			    		    			atualizarNotaFiscal(String.valueOf(dadosCliente[1]), dataDeHoje.toString());
+			    		    			double totalAPagar = 0;
 			    		    			
-			    		    			
+			    		    			for(ProdutoVenda x : produtosParaComprar) {
+			    		    				totalAPagar += x.getQuantidade() * x.getValorUnitario();
+			    		    			}
+			    						lblSubTotal.setText("R$" + totalAPagar);
+			    						double totalComDesconto = totalAPagar - (totalAPagar * descontoGeral / 100);
+			    						totalComDesconto = (totalComDesconto < 0) ? 0 : totalComDesconto;
+			    						lblTotal.setText("R$" + totalComDesconto);
+			    						
+			    		    			scrollProdutosVenda.getVerticalScrollBar().setValue(scrollProdutosVenda.getVerticalScrollBar().getMaximum());
 			    		    			panelPrincipal.revalidate();
 			    		    			panelPrincipal.repaint();
 			    					}else {
@@ -743,39 +809,25 @@ public class TelaCaixa extends JFrame {
 	    JCheckBox cboxPrazo = new JCheckBox("Venda \u00E0 prazo");
 	    cboxPrazo.setBackground(Color.WHITE);
 	    cboxPrazo.setForeground(corTexto);
-	    cboxPrazo.setFont(new Font("Roboto", Font.PLAIN, 20));
+	    cboxPrazo.setFont(new Font("Roboto", Font.PLAIN, 28));
 	    cboxPrazo.setBounds(1461, 865, 402, 45);
 	    contentPane.add(cboxPrazo);
 	    
 	    JButton btnCancelarVenda = new JButton("Cancelar Venda");
 	    btnCancelarVenda.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent arg0) {
+	    		if(produtosParaComprar.isEmpty()) {
+	    			return;
+	    		}
 	    		ve.setId(idVendaAtual);
 				ve.setIdUsuario(idUsuario);
 				ve.setIdCliente(idClienteAtual);
 				ve.setStatus(0);
-				ve.setDesconto(0);
 				ve.setData(ve.getData());
 				ve.setStatusPagamento(0);
 				
 				try {
 					List<Object> dados = pvDao.buscarProdutosVenda(ve.getId());
-					
-					/*for(Object o : dados) {
-						Object[] dadosProdutoVenda = (Object[]) o;
-						ProdutoVenda pv = new ProdutoVenda();
-						
-						pv.setId((int) dadosProdutoVenda[0]); 
-						pv.setIdProduto((int) dadosProdutoVenda[1]);
-						pv.setIdVenda((int) dadosProdutoVenda[2]);
-						pv.setValorUnitario((double) dadosProdutoVenda[3]);
-						pv.setQuantidade((int) dadosProdutoVenda[4]);
-						
-						//System.out.println(pv.getQuantidade());
-						//System.out.println(pr.getQuantidade());
-						
-						pvDao.deletarProdutoVenda(pv);
-					}*/
 					
 					veDao.deletarVenda(ve);
 					veDao.AtualizarID();
@@ -786,6 +838,11 @@ public class TelaCaixa extends JFrame {
 					scrollProdutosVenda.setSize(1098, tamanhoScrollProdutosVenda);
 					cbPesquisaCliente.setEnabled(true);
 					produtosParaComprar.clear();
+
+					atualizarNotaFiscal("Cliente", "");
+					
+					lblSubTotal.setText("R$0.00");
+					lblTotal.setText("R$0.00");
 					
 					revalidate();
 					repaint();
@@ -824,48 +881,63 @@ public class TelaCaixa extends JFrame {
 	    JButton btnFinalizarVenda = new JButton("Finalizar Venda");
 	    btnFinalizarVenda.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent arg0) {
+	    		if(produtosParaComprar.isEmpty()) {
+	    			return;
+	    		}
+	    		
 	    		ve.setId(idVendaAtual);
 				ve.setIdUsuario(idUsuario);
 				ve.setIdCliente(idClienteAtual);
 				ve.setStatus(1);
-				ve.setDesconto(0);
 				ve.setData(ve.getData());
+				
 				if(cboxPrazo.isSelected()) {
-					
-					
-					//prazo
+					ve.setStatusPagamento(0);
 					
 					
 				}else {	
 					ve.setStatusPagamento(1);
-					try {
-						for(int i = 0; i < produtosParaComprar.size(); i++) {
-							pvDao.CadastrarProdutoVenda(produtosParaComprar.get(i));
-							
-							Produto pr = new Produto();
-							Object[] dadosProduto = prDao.buscarProduto(produtosParaComprar.get(i).getIdProduto());
-							
-							pr.setId((int) dadosProduto[0]);
-							pr.setNome(String.valueOf(dadosProduto[1]));
-							pr.setValorUnitario((double) dadosProduto[2]);
-							pr.setTamanho(String.valueOf(dadosProduto[3]));
-							pr.setIdCategoria((int) dadosProduto[4]);
-							pr.setIdFornecedor((int) dadosProduto[5]);
-							pr.setCodigoBarras(String.valueOf(dadosProduto[6]));
-							pr.setStatus((int) dadosProduto[7]);
-							pr.setQuantidade((int) dadosProduto[8] + produtosParaComprar.get(i).getQuantidade());
-							
-							prDao.AlterarProduto(pr);
-							veDao.AlterarVenda(ve);
-						}
-						
-						taNota.print();
-						//imprimir nota
-		    		}catch (Exception e) {
-		    			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-		    		}
-
 				}
+				
+				try {
+					for(int i = 0; i < produtosParaComprar.size(); i++) {
+						pvDao.CadastrarProdutoVenda(produtosParaComprar.get(i));
+						
+						Produto pr = new Produto();
+						Object[] dadosProduto = prDao.buscarProduto(produtosParaComprar.get(i).getIdProduto());
+						
+						pr.setId((int) dadosProduto[0]);
+						pr.setNome(String.valueOf(dadosProduto[1]));
+						pr.setValorUnitario((double) dadosProduto[2]);
+						pr.setTamanho(String.valueOf(dadosProduto[3]));
+						pr.setIdCategoria((int) dadosProduto[4]);
+						pr.setIdFornecedor((int) dadosProduto[5]);
+						pr.setCodigoBarras(String.valueOf(dadosProduto[6]));
+						pr.setStatus((int) dadosProduto[7]);
+						pr.setQuantidade((int) dadosProduto[8] - produtosParaComprar.get(i).getQuantidade());
+						
+						prDao.AlterarProduto(pr);
+						veDao.AlterarVenda(ve);
+					}
+					if(!cboxPrazo.isSelected()) {
+						taNota.print();
+					}
+					
+					panelPrincipal.removeAll();
+					tamanhoScrollProdutosVenda = 0;
+					panelPrincipal.setSize(1098, tamanhoScrollProdutosVenda);
+					scrollProdutosVenda.setSize(1098, tamanhoScrollProdutosVenda);
+					cbPesquisaCliente.setEnabled(true);
+					produtosParaComprar.clear();
+
+					atualizarNotaFiscal("Cliente", "");
+					
+					revalidate();
+					repaint();
+					
+	    		}catch (Exception e) {
+	    			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+	    		}
 	    	}
 	    });
 	    btnFinalizarVenda.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -892,8 +964,8 @@ public class TelaCaixa extends JFrame {
 	    btnFinalizarVenda.setBorder(null);
 	    btnFinalizarVenda.setBackground(corGeral);
 	    btnFinalizarVenda.setBounds(1668, 916, 195, 68);
-	    contentPane.add(btnFinalizarVenda);   
-	  
+	    contentPane.add(btnFinalizarVenda);   	  
+	    setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{cbPesquisaCliente, btnCadastrarCliente, btnInformacoes, btnEditar, btnCompras, tfCodigoBarras, tfQuantidade, btnAdicionarProduto, btnCancelarVenda, btnFinalizarVenda}));
 	    
 	    atualizarNotaFiscal("Cliente", "");
 	}
@@ -924,7 +996,7 @@ public class TelaCaixa extends JFrame {
 		//adiciona
 	}
 	
-	void atualizarNotaFiscal(String nomeCliente, String dataCompra) {
+	public static void atualizarNotaFiscal(String nomeCliente, String dataCompra) {
 		try {
 			NumberFormat nf = new DecimalFormat("#.##");
 			double totalAPagar = 0;
@@ -947,7 +1019,7 @@ public class TelaCaixa extends JFrame {
 				taNota.setText(taNota.getText() + "  ---------------------------------------------------------------\n");
 				totalAPagar += x.getQuantidade() * x.getValorUnitario();
 			}
-			taNota.setText(taNota.getText() + "  Total a pagar................... R$" + nf.format(totalAPagar) + "\n");
+			taNota.setText(taNota.getText() + "  Total a pagar.......................... R$" + nf.format(totalAPagar) + "\n");
 		}catch(Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 		}

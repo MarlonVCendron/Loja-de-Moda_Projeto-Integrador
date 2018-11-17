@@ -111,6 +111,9 @@ public class TelaCadastroCliente extends JFrame {
 		setResizable(false);
 		getRootPane().setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, corGeral));
 		
+		ImageIcon imageIconLogo = new ImageIcon(Preferencias.getImagem());
+		Image imagemLogo = imageIconLogo.getImage().getScaledInstance(300, 300,  java.awt.Image.SCALE_SMOOTH);
+		setIconImage(imagemLogo);
 		
 		//Variáveis que cuidam para que os campos sejam preenchidos adequadamente
 		boolean[] camposCorretos = {false, false, false, true, false, false, false};

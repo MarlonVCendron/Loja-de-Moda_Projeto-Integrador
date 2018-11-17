@@ -37,4 +37,12 @@ public class Preferencias {
 	public static int getB() {
 		return preferencias.getInt("B", 184);
 	}
+	
+	public static double getDesconto() {
+		return preferencias.getDouble("Desconto", 0);
+	}
+	
+	public static void setDesconto(double d) {
+		preferencias.putDouble("Desconto", d);
+	}
 }

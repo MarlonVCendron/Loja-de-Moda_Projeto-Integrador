@@ -91,6 +91,9 @@ public class Configuracoes extends JFrame {
 		setContentPane(contentPane);
 		getRootPane().setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, corGeral));
 		
+		ImageIcon imageIconLogo = new ImageIcon(Preferencias.getImagem());
+		Image imagemLogo = imageIconLogo.getImage().getScaledInstance(300, 300,  java.awt.Image.SCALE_SMOOTH);
+		setIconImage(imagemLogo);
 		
 		JPanel panelSuperior = new JPanel();
 		panelSuperior.addMouseListener(new MouseAdapter() {
@@ -198,6 +201,7 @@ public class Configuracoes extends JFrame {
 					Image imagemLogo = imageIconLogo.getImage().getScaledInstance(300, 300,  java.awt.Image.SCALE_SMOOTH);
 					TelaLogin.lblLogo.setIcon(new ImageIcon(imagemLogo));
 				}
+				avisoReiniciar();
 			}
 		});
 		btnEscolherLogo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -235,7 +239,7 @@ public class Configuracoes extends JFrame {
 				
 				TelaLogin telaLogin = new TelaLogin();				
 				telaLogin.setVisible(true);
-				
+				avisoReiniciar();
 			}
 		});
 		btnEscolherCor.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -246,5 +250,9 @@ public class Configuracoes extends JFrame {
 		btnEscolherCor.setBounds(49, 185, 161, 42);
 		panelConfigs.add(btnEscolherCor);
 		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{btnEscolherLogo, btnEscolherCor}));
+	}
+	
+	void avisoReiniciar() {
+		JOptionPane.showMessageDialog(null, "Reinicie o programa para aplicar as mudanças definitivamente", "Reinicie", JOptionPane.INFORMATION_MESSAGE);
 	}
 }

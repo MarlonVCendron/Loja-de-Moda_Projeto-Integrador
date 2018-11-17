@@ -9,6 +9,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import br.edu.ifcvideira.Jframes.TelaCaixa;
 import br.edu.ifcvideira.Jframes.TelaLogin;
 
 import javax.swing.JButton;
@@ -20,6 +21,8 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 public class BlocoProdutoVenda extends JPanel{
+	private int index;
+	
 	Color corGeral = new Color(Preferencias.getR(), Preferencias.getG(), Preferencias.getB());
 	Color corSecundaria = Cor.corMaisClara(corGeral, 0.2f);
 	Color corTerciaria = Cor.corMaisClara(corGeral, 0.4f);
@@ -36,7 +39,9 @@ public class BlocoProdutoVenda extends JPanel{
 	
 	NumberFormat nf = new DecimalFormat("#.##");
 	
-	public BlocoProdutoVenda(String nomeProduto, int quantidade, double valor) {
+	public BlocoProdutoVenda(String nomeProduto, int quantidade, double valor, int index) {
+		this.index = index;
+		
 		setBackground(corTerciaria);
 		setPreferredSize(new Dimension(1095, 100));
 		setMaximumSize(new Dimension(1095, 100));
@@ -79,6 +84,16 @@ public class BlocoProdutoVenda extends JPanel{
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				
+				TelaCaixa.produtosParaComprar.get(index).setQuantidade(TelaCaixa.produtosParaComprar.get(index).getQuantidade() + 1);
+
+				int q = TelaCaixa.produtosParaComprar.get(index).getQuantidade();
+				double v = (double) q * TelaCaixa.produtosParaComprar.get(index).getValorUnitario();
+				((BlocoProdutoVenda) TelaCaixa.panelPrincipal.getComponent(index)).setQuantidade(q, v);
+				
+				TelaCaixa.atualizarNotaFiscal(TelaCaixa.nomeClienteAtual, TelaCaixa.dataCompraAtual);
+				
+				TelaCaixa.contentPane.revalidate();
+				TelaCaixa.contentPane.repaint();
 			}
 		});
 		buttonMais.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -91,6 +106,15 @@ public class BlocoProdutoVenda extends JPanel{
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				
+				//TelaCaixa.panelPrincipal.getComponent(index).setVisible(false);
+//				TelaCaixa.panelPrincipal.setSize(1098, TelaCaixa.tamanhoScrollProdutosVenda);
+//				TelaCaixa.scrollProdutosVenda.setSize(1098, TelaCaixa.tamanhoScrollProdutosVenda);
+				TelaCaixa.produtosParaComprar.set(index, null);
+
+				TelaCaixa.atualizarNotaFiscal(TelaCaixa.nomeClienteAtual, TelaCaixa.dataCompraAtual);
+				
+				revalidate();
+				repaint();
 			}
 		});
 		buttonLixeira.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));

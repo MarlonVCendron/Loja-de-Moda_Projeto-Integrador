@@ -18,7 +18,6 @@ public class Conexao {
 		 try {
 			 Class.forName(driver);
 			 conexao = DriverManager.getConnection(url, usuario, senha);
-			 System.out.println("Conexão efetuada com sucesso");
 	       
 		 } catch (Exception ex) {
 			 ex.printStackTrace();

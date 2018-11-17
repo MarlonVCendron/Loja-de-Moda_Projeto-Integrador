@@ -111,4 +111,25 @@ public class CategoriaDao{
 		}
 		return info;
 	}
+	
+	public double buscarDesconto(int id) throws SQLException, Exception{
+		double desconto = 0;
+		try {
+			String sql = "SELECT desconto FROM categorias WHERE id=?";
+			//java.sql.Statement state = Conexao.conectar().createStatement();
+			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
+			sqlPrep.setInt(1, id);
+			ResultSet rs = sqlPrep.executeQuery();
+			
+			while (rs.next())
+			{
+				desconto = rs.getDouble(1);
+			}
+			sqlPrep.close();
+			
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
+		return desconto;
+	}
 }

@@ -18,6 +18,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
@@ -87,6 +88,9 @@ public class TelaInfoCliente extends JFrame {
 		setResizable(false);
 		getRootPane().setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, corGeral));
 		
+		ImageIcon imageIconLogo = new ImageIcon(Preferencias.getImagem());
+		Image imagemLogo = imageIconLogo.getImage().getScaledInstance(300, 300,  java.awt.Image.SCALE_SMOOTH);
+		setIconImage(imagemLogo);
 		
 		JPanel panelSuperior = new JPanel();
 		panelSuperior.setBounds(0, 0, 512, 32);
