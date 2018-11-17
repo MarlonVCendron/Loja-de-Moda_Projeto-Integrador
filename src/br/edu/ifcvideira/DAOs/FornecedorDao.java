@@ -103,24 +103,24 @@ public class FornecedorDao{
 		}
 	}
 	
-	public List<Object> buscarNome() throws SQLException, Exception{
-		List<Object> Fornecedor = new ArrayList<Object>();
+	public List<Object> buscarNomes() throws SQLException, Exception{
+		List<Object> info = new ArrayList<>();
 		try {
 			String sql = "SELECT nome FROM fornecedores";
-			java.sql.Statement state = Conexao.conectar().createStatement();
-			ResultSet rs = state.executeQuery(sql);
+			//java.sql.Statement state = Conexao.conectar().createStatement();
+			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
+			ResultSet rs = sqlPrep.executeQuery();
 			
 			while (rs.next())
 			{
-				Object[] linha = {rs.getString(1)};
-				Fornecedor.add(linha);
+				info.add(rs.getString(1));
 			}
-			state.close();
+			sqlPrep.close();
 			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
-		return Fornecedor;
+		return info;
 	}
 	
 	

@@ -2,6 +2,7 @@ package br.edu.ifcvideira.Jframes;
 
 import java.awt.EventQueue;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -10,21 +11,28 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.MaskFormatter;
 import javax.swing.text.MutableAttributeSet;
+import javax.swing.text.PlainDocument;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 import br.edu.ifcvideira.Classes.Categoria;
 import br.edu.ifcvideira.Classes.Fornecedor;
+import br.edu.ifcvideira.Classes.Produto;
 import br.edu.ifcvideira.DAOs.CategoriaDao;
 import br.edu.ifcvideira.DAOs.FornecedorDao;
+import br.edu.ifcvideira.DAOs.ProdutoDao;
 import br.edu.ifcvideira.utils.Cor;
 
 import javax.swing.JLabel;
@@ -82,9 +90,10 @@ public class TelaEstoque extends JFrame {
 	private JTextField tfCidade;
 	private JTextField tfId;
 	JComboBox cbEstado_1 = new JComboBox();
+	public static JComboBox cbCategoriaProd = new JComboBox();
 
 
-	private FornecedorDao fornDao = new FornecedorDao();
+	private static FornecedorDao fornDao = new FornecedorDao();
 	private Fornecedor forn = new Fornecedor();
 	
 	Color corTexto = new Color(75, 80, 85);
@@ -111,10 +120,6 @@ public class TelaEstoque extends JFrame {
 	JSeparator spRua = new JSeparator();
 	JPanel panelImgCNPJ = new JPanel();
 	JPanel panelImgDescCat = new JPanel();
-
-	JSeparator spDesc3Cat = new JSeparator();
-
-	JSeparator spDesc2Cat = new JSeparator();
 	JSeparator spDesc1Cat = new JSeparator();
 
 	JPanel panelImgNome = new JPanel();
@@ -126,9 +131,10 @@ public class TelaEstoque extends JFrame {
 	boolean[] camposCorretos = {false,false, false, false, false, false, false};
 	JButton btCadastrar = new JButton("Cadastrar");
 	JButton btnCategoria = new JButton("Categoria");
+	public static JComboBox cbFornecedoresProd = new JComboBox();
 
 	
-	boolean[] camposCorretosCat = {false,false,false};
+	boolean[] camposCorretosCat = {false,false};
 	boolean[] camposCorretosPro = {false,false,false};
 
 	
@@ -148,18 +154,16 @@ public class TelaEstoque extends JFrame {
 
 	JPanel painelProdutos = new JPanel();
 	
-	CategoriaDao  catDao = 	new CategoriaDao();
+	static CategoriaDao  catDao = 	new CategoriaDao();
 	Categoria cat = new Categoria();
-	private JTextField tfNomeCat;
 	private JTextField tfDescontoCat;
 	private JTextField tfIdCat;
 	
-	JSeparator spNomeCat = new JSeparator();
+	ProdutoDao proDao =new ProdutoDao();
+	Produto pro = new Produto();
 	private JTable tabelaCategoria;
 	JSeparator spIdCat = new JSeparator();
 	JSeparator spDescontoCat = new JSeparator();
-
-	JPanel panelImgNomeCat = new JPanel();
 	JPanel panelImgDescontoCat = new JPanel();
 	JButton btCadastrarCat = new JButton("Cadastrar");
 
@@ -173,6 +177,7 @@ public class TelaEstoque extends JFrame {
 	private JTextField tfBuscaIdPro;
 	private JTextField tfPrecoProd;
 	private JTextField tfTamanho;
+	private JTextField tfCdBarras;
 	
 	/**
 	 * Launch the application.
@@ -199,8 +204,6 @@ public class TelaEstoque extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			public void windowOpened(WindowEvent arg0) {
 				deixarCerto();
-				atualizarTabela();
-				limpar();
 				clickarFornecedor();
 				
 			}
@@ -285,207 +288,6 @@ public class TelaEstoque extends JFrame {
 			btMinimizar.setBounds(1248, 0, 42, 42);
 			btnSuperior.add(btMinimizar);
 			
-			painelProdutos.setLayout(null);
-			painelProdutos.setBorder(new EmptyBorder(5, 5, 5, 5));
-			painelProdutos.setBackground(Color.WHITE);
-			painelProdutos.setBounds(0, 0, 1386, 886);
-			painelPrincipal.add(painelProdutos);
-			
-			JLabel lblNomePro = new JLabel("Nome");
-			lblNomePro.setForeground(new Color(75, 80, 85));
-			lblNomePro.setFont(new Font("Roboto", Font.PLAIN, 20));
-			lblNomePro.setBounds(38, 136, 60, 42);
-			painelProdutos.add(lblNomePro);
-			
-			JLabel lblPrecoPro = new JLabel("Pre\u00E7o");
-			lblPrecoPro.setForeground(new Color(75, 80, 85));
-			lblPrecoPro.setFont(new Font("Roboto", Font.PLAIN, 20));
-			lblPrecoPro.setBounds(38, 243, 119, 42);
-			painelProdutos.add(lblPrecoPro);
-			
-			JLabel lblQuantPro = new JLabel("Quantidade");
-			lblQuantPro.setForeground(new Color(75, 80, 85));
-			lblQuantPro.setFont(new Font("Roboto", Font.PLAIN, 20));
-			lblQuantPro.setBounds(640, 136, 119, 42);
-			painelProdutos.add(lblQuantPro);
-			
-			JLabel label_8 = new JLabel("ID");
-			label_8.setForeground(new Color(75, 80, 85));
-			label_8.setFont(new Font("Roboto", Font.PLAIN, 20));
-			label_8.setBounds(1187, 136, 42, 42);
-			painelProdutos.add(label_8);
-			
-			JLabel lblTamanhoPro = new JLabel("Tamanho");
-			lblTamanhoPro.setForeground(new Color(75, 80, 85));
-			lblTamanhoPro.setFont(new Font("Roboto", Font.PLAIN, 20));
-			lblTamanhoPro.setBounds(38, 189, 119, 42);
-			painelProdutos.add(lblTamanhoPro);
-			
-			JLabel lblBuscaPro = new JLabel("Buscar");
-			lblBuscaPro.setForeground(new Color(75, 80, 85));
-			lblBuscaPro.setFont(new Font("Roboto", Font.PLAIN, 24));
-			lblBuscaPro.setBounds(38, 427, 119, 42);
-			painelProdutos.add(lblBuscaPro);
-			
-			JLabel lblBuscaIdPro = new JLabel("ID");
-			lblBuscaIdPro.setForeground(new Color(75, 80, 85));
-			lblBuscaIdPro.setFont(new Font("Roboto", Font.PLAIN, 18));
-			lblBuscaIdPro.setBounds(65, 467, 119, 42);
-			painelProdutos.add(lblBuscaIdPro);
-			
-			JLabel lblBuscaNomePro = new JLabel("Nome");
-			lblBuscaNomePro.setForeground(new Color(75, 80, 85));
-			lblBuscaNomePro.setFont(new Font("Roboto", Font.PLAIN, 18));
-			lblBuscaNomePro.setBounds(774, 461, 79, 42);
-			painelProdutos.add(lblBuscaNomePro);
-			
-			JSeparator spNomePro = new JSeparator();
-			spNomePro.setBackground(new Color(176, 176, 176));
-			spNomePro.setBounds(167, 176, 409, 2);
-			painelProdutos.add(spNomePro);
-			
-			JSeparator spPrecoPro = new JSeparator();
-			spPrecoPro.setBackground(new Color(176, 176, 176));
-			spPrecoPro.setBounds(167, 283, 409, 2);
-			painelProdutos.add(spPrecoPro);
-			
-			JSeparator spIdPro = new JSeparator();
-			spIdPro.setBackground(new Color(176, 176, 176));
-			spIdPro.setBounds(1230, 176, 55, 2);
-			painelProdutos.add(spIdPro);
-			
-			JSeparator spTamanhoPro = new JSeparator();
-			spTamanhoPro.setBackground(new Color(176, 176, 176));
-			spTamanhoPro.setBounds(167, 230, 407, 2);
-			painelProdutos.add(spTamanhoPro);
-			
-			JSeparator spBuscaNomePro = new JSeparator();
-			spBuscaNomePro.setBackground(new Color(176, 176, 176));
-			spBuscaNomePro.setBounds(867, 500, 418, 2);
-			painelProdutos.add(spBuscaNomePro);
-			
-			JSeparator spBuscaIdPro = new JSeparator();
-			spBuscaIdPro.setBackground(new Color(176, 176, 176));
-			spBuscaIdPro.setBounds(158, 501, 418, 2);
-			painelProdutos.add(spBuscaIdPro);
-			
-			JScrollPane scrollPane_1 = new JScrollPane();
-			scrollPane_1.setBounds(38, 520, 1301, 208);
-			painelProdutos.add(scrollPane_1);
-			
-			JButton btCadastrarPro = new JButton("Cadastrar");
-			btCadastrarPro.setForeground(new Color(75, 80, 85));
-			btCadastrarPro.setFont(new Font("Roboto", Font.PLAIN, 18));
-			btCadastrarPro.setBorder(null);
-			btCadastrarPro.setBackground(new Color(118, 184, 184));
-			btCadastrarPro.setBounds(65, 362, 215, 54);
-			painelProdutos.add(btCadastrarPro);
-			
-			JButton btEditarPro = new JButton("Editar");
-			btEditarPro.setForeground(new Color(75, 80, 85));
-			btEditarPro.setFont(new Font("Roboto", Font.PLAIN, 18));
-			btEditarPro.setBorder(null);
-			btEditarPro.setBackground(new Color(118, 184, 184));
-			btEditarPro.setBounds(403, 362, 215, 54);
-			painelProdutos.add(btEditarPro);
-			
-			JButton btExcluirPro = new JButton("Excluir");
-			btExcluirPro.setForeground(new Color(75, 80, 85));
-			btExcluirPro.setFont(new Font("Roboto", Font.PLAIN, 18));
-			btExcluirPro.setBorder(null);
-			btExcluirPro.setBackground(new Color(118, 184, 184));
-			btExcluirPro.setBounds(728, 362, 215, 54);
-			painelProdutos.add(btExcluirPro);
-			
-			JButton btLimparPro = new JButton("Limpar");
-			btLimparPro.setForeground(new Color(75, 80, 85));
-			btLimparPro.setFont(new Font("Roboto", Font.PLAIN, 18));
-			btLimparPro.setBorder(null);
-			btLimparPro.setBackground(new Color(118, 184, 184));
-			btLimparPro.setBounds(1048, 362, 215, 54);
-			painelProdutos.add(btLimparPro);
-			
-			JPanel panelImgNomePro = new JPanel();
-			panelImgNomePro.setForeground(Color.WHITE);
-			panelImgNomePro.setBackground(Color.WHITE);
-			panelImgNomePro.setBounds(6, 142, 27, 26);
-			painelProdutos.add(panelImgNomePro);
-			
-			JLabel lblXNomePro = new JLabel("");
-			lblXNomePro.setToolTipText("O nome \u00E9 obrigat\u00F3rio e n\u00E3o deve conter numeros e  simbolos");
-			lblXNomePro.setBackground(Color.WHITE);
-			lblXNomePro.setForeground(Color.WHITE);
-			lblXNomePro.setIcon(new ImageIcon(imagemX));
-			panelImgNomePro.add(lblXNomePro);
-			lblXNomePro.setIcon(new ImageIcon(imagemX));
-			
-			JPanel painelImgQuantPro = new JPanel();
-			painelImgQuantPro.setForeground(Color.WHITE);
-			painelImgQuantPro.setBackground(Color.WHITE);
-			painelImgQuantPro.setBounds(6, 194, 27, 26);
-			painelProdutos.add(painelImgQuantPro);
-			
-			JLabel label_14 = new JLabel((Icon) null);
-			label_14.setToolTipText("O email \u00E9 obrigat\u00F3rio");
-			painelImgQuantPro.add(label_14);
-			
-			JPanel panel_4 = new JPanel();
-			panel_4.setForeground(Color.WHITE);
-			panel_4.setBackground(Color.WHITE);
-			panel_4.setBounds(6, 250, 27, 26);
-			painelProdutos.add(panel_4);
-			
-			JLabel label_15 = new JLabel((Icon) null);
-			label_15.setToolTipText("O CNPJ \u00E9 obrigat\u00F3rio");
-			panel_4.add(label_15);
-			
-			tfIdPro = new JTextField();
-			tfIdPro.setHorizontalAlignment(SwingConstants.CENTER);
-			tfIdPro.setForeground(new Color(75, 80, 85));
-			tfIdPro.setFont(new Font("Roboto", Font.PLAIN, 20));
-			tfIdPro.setEditable(false);
-			tfIdPro.setColumns(10);
-			tfIdPro.setBorder(null);
-			tfIdPro.setBackground(Color.WHITE);
-			tfIdPro.setBounds(1230, 141, 55, 32);
-			painelProdutos.add(tfIdPro);
-			
-			tfNomePro = new JTextField();
-			tfNomePro.setForeground(new Color(75, 80, 85));
-			tfNomePro.setFont(new Font("Roboto", Font.PLAIN, 20));
-			tfNomePro.setColumns(10);
-			tfNomePro.setBorder(null);
-			tfNomePro.setBackground(Color.WHITE);
-			tfNomePro.setBounds(167, 141, 409, 32);
-			painelProdutos.add(tfNomePro);
-			tfNomePro.addFocusListener(new FocusAdapter() {
-				@Override
-				public void focusLost(FocusEvent arg0) {
-					camposCorretosPro[0] = (tfNomePro.getText().matches("[\\p{L}\\s]+")) ?  true: false;
-					
-					if(tfNomePro.getText().length() < 1) {
-						camposCorretosPro[0] = false;
-					}
-					
-					if(camposCorretosPro[0]) {
-						spNomePro.setBackground(corGeral);
-						panelImgNomePro.setVisible(false);
-
-						
-					}else {
-						spNomePro.setBackground(corVermelho);
-						panelImgNomePro.setVisible(true);
-					}
-				}
-				@Override
-				public void focusGained(FocusEvent arg0) {
-					spNomePro.setBackground(corGeral);
-					panelImgNomePro.setVisible(false);
-
-				}
-			});
-			
-			
 			
 			
 			
@@ -498,78 +300,436 @@ public class TelaEstoque extends JFrame {
 			
 			
 			
-			tfPrecoProd = new JTextField();
-			tfPrecoProd.setForeground(new Color(75, 80, 85));
-			tfPrecoProd.setFont(new Font("Roboto", Font.PLAIN, 20));
-			tfPrecoProd.setColumns(10);
-			tfPrecoProd.setBorder(null);
-			tfPrecoProd.setBackground(Color.WHITE);
-			tfPrecoProd.setBounds(204, 248, 377, 32);
-			painelProdutos.add(tfPrecoProd);
 			
-			tfBuscaNomePro = new JTextField();
-			tfBuscaNomePro.setForeground(new Color(75, 80, 85));
-			tfBuscaNomePro.setFont(new Font("Roboto", Font.PLAIN, 18));
-			tfBuscaNomePro.setColumns(10);
-			tfBuscaNomePro.setBorder(null);
-			tfBuscaNomePro.setBackground(Color.WHITE);
-			tfBuscaNomePro.setBounds(863, 466, 418, 32);
-			painelProdutos.add(tfBuscaNomePro);
 			
-			tfBuscaIdPro = new JTextField();
-			tfBuscaIdPro.setToolTipText("");
-			tfBuscaIdPro.setForeground(new Color(75, 80, 85));
-			tfBuscaIdPro.setFont(new Font("Roboto", Font.PLAIN, 18));
-			tfBuscaIdPro.setColumns(10);
-			tfBuscaIdPro.setBorder(null);
-			tfBuscaIdPro.setBackground(Color.WHITE);
-			tfBuscaIdPro.setBounds(158, 468, 418, 31);
-			painelProdutos.add(tfBuscaIdPro);
 			
-			JLabel lblFornecedorPro = new JLabel("Fornecedor");
-			lblFornecedorPro.setForeground(new Color(75, 80, 85));
-			lblFornecedorPro.setFont(new Font("Roboto", Font.PLAIN, 20));
-			lblFornecedorPro.setBounds(640, 190, 119, 42);
-			painelProdutos.add(lblFornecedorPro);
+		
+		painelProdutos.setLayout(null);
+		painelProdutos.setBorder(new EmptyBorder(5, 5, 5, 5));
+		painelProdutos.setBackground(Color.WHITE);
+		painelProdutos.setBounds(0, 0, 1386, 886);
+		painelPrincipal.add(painelProdutos);
+		
+		JLabel lblNomePro = new JLabel("Nome");
+		lblNomePro.setForeground(new Color(75, 80, 85));
+		lblNomePro.setFont(new Font("Roboto", Font.PLAIN, 20));
+		lblNomePro.setBounds(38, 136, 60, 42);
+		painelProdutos.add(lblNomePro);
+		
+		JLabel lblPrecoPro = new JLabel("Pre\u00E7o");
+		lblPrecoPro.setForeground(new Color(75, 80, 85));
+		lblPrecoPro.setFont(new Font("Roboto", Font.PLAIN, 20));
+		lblPrecoPro.setBounds(38, 243, 119, 42);
+		painelProdutos.add(lblPrecoPro);
+		
+		JLabel lblQuantPro = new JLabel("Quantidade");
+		lblQuantPro.setForeground(new Color(75, 80, 85));
+		lblQuantPro.setFont(new Font("Roboto", Font.PLAIN, 20));
+		lblQuantPro.setBounds(640, 136, 119, 42);
+		painelProdutos.add(lblQuantPro);
+		
+		JLabel label_8 = new JLabel("ID");
+		label_8.setForeground(new Color(75, 80, 85));
+		label_8.setFont(new Font("Roboto", Font.PLAIN, 20));
+		label_8.setBounds(1187, 136, 42, 42);
+		painelProdutos.add(label_8);
+		
+		JLabel lblTamanhoPro = new JLabel("Tamanho");
+		lblTamanhoPro.setForeground(new Color(75, 80, 85));
+		lblTamanhoPro.setFont(new Font("Roboto", Font.PLAIN, 20));
+		lblTamanhoPro.setBounds(38, 189, 119, 42);
+		painelProdutos.add(lblTamanhoPro);
+		
+		JLabel lblBuscaPro = new JLabel("Buscar");
+		lblBuscaPro.setForeground(new Color(75, 80, 85));
+		lblBuscaPro.setFont(new Font("Roboto", Font.PLAIN, 24));
+		lblBuscaPro.setBounds(38, 427, 119, 42);
+		painelProdutos.add(lblBuscaPro);
+		
+		JLabel lblBuscaIdPro = new JLabel("ID");
+		lblBuscaIdPro.setForeground(new Color(75, 80, 85));
+		lblBuscaIdPro.setFont(new Font("Roboto", Font.PLAIN, 18));
+		lblBuscaIdPro.setBounds(65, 467, 119, 42);
+		painelProdutos.add(lblBuscaIdPro);
+		
+		JLabel lblBuscaNomePro = new JLabel("Nome");
+		lblBuscaNomePro.setForeground(new Color(75, 80, 85));
+		lblBuscaNomePro.setFont(new Font("Roboto", Font.PLAIN, 18));
+		lblBuscaNomePro.setBounds(774, 461, 79, 42);
+		painelProdutos.add(lblBuscaNomePro);
+		
+		JLabel lblFornecedorPro = new JLabel("Fornecedor");
+		lblFornecedorPro.setForeground(new Color(75, 80, 85));
+		lblFornecedorPro.setFont(new Font("Roboto", Font.PLAIN, 20));
+		lblFornecedorPro.setBounds(640, 190, 119, 42);
+		painelProdutos.add(lblFornecedorPro);
+		
+		JLabel lblCategoria = new JLabel("Categoria");
+		lblCategoria.setForeground(new Color(75, 80, 85));
+		lblCategoria.setFont(new Font("Roboto", Font.PLAIN, 20));
+		lblCategoria.setBounds(640, 243, 119, 42);
+		painelProdutos.add(lblCategoria);
+		
+		
+		
+		JLabel lblR = new JLabel("R$");
+		lblR.setForeground(new Color(75, 80, 85));
+		lblR.setFont(new Font("Roboto", Font.PLAIN, 20));
+		lblR.setBounds(167, 243, 27, 42);
+		painelProdutos.add(lblR);
+		
+		JLabel lblCodigoDeBarras = new JLabel("Codigo de Barras");
+		lblCodigoDeBarras.setForeground(new Color(75, 80, 85));
+		lblCodigoDeBarras.setFont(new Font("Roboto", Font.PLAIN, 16));
+		lblCodigoDeBarras.setBounds(38, 296, 132, 42);
+		painelProdutos.add(lblCodigoDeBarras);
+		
+		JSeparator spNomePro = new JSeparator();
+		spNomePro.setBackground(new Color(176, 176, 176));
+		spNomePro.setBounds(167, 176, 409, 2);
+		painelProdutos.add(spNomePro);
+		
+		JSeparator spPrecoPro = new JSeparator();
+		spPrecoPro.setBackground(new Color(176, 176, 176));
+		spPrecoPro.setBounds(167, 283, 409, 2);
+		painelProdutos.add(spPrecoPro);
+		
+		JSeparator spIdPro = new JSeparator();
+		spIdPro.setBackground(new Color(176, 176, 176));
+		spIdPro.setBounds(1230, 176, 55, 2);
+		painelProdutos.add(spIdPro);
+		
+		JSeparator spTamanhoPro = new JSeparator();
+		spTamanhoPro.setBackground(new Color(176, 176, 176));
+		spTamanhoPro.setBounds(167, 230, 407, 2);
+		painelProdutos.add(spTamanhoPro);
+		
+		JSeparator spBuscaNomePro = new JSeparator();
+		spBuscaNomePro.setBackground(new Color(176, 176, 176));
+		spBuscaNomePro.setBounds(867, 500, 418, 2);
+		painelProdutos.add(spBuscaNomePro);
+		
+		JSeparator spBuscaIdPro = new JSeparator();
+		spBuscaIdPro.setBackground(new Color(176, 176, 176));
+		spBuscaIdPro.setBounds(158, 501, 418, 2);
+		painelProdutos.add(spBuscaIdPro);
+		
+		JSeparator spCdBarras = new JSeparator();
+		spCdBarras.setBackground(new Color(176, 176, 176));
+		spCdBarras.setBounds(169, 336, 407, 2);
+		painelProdutos.add(spCdBarras);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(38, 520, 1301, 208);
+		painelProdutos.add(scrollPane_1);
+		
+		JButton btCadastrarPro = new JButton("Cadastrar");
+		btCadastrarPro.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		btCadastrarPro.setForeground(new Color(75, 80, 85));
+		btCadastrarPro.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btCadastrarPro.setBorder(null);
+		btCadastrarPro.setBackground(new Color(118, 184, 184));
+		btCadastrarPro.setBounds(65, 362, 215, 54);
+		painelProdutos.add(btCadastrarPro);
+		
+		JButton btEditarPro = new JButton("Editar");
+		btEditarPro.setForeground(new Color(75, 80, 85));
+		btEditarPro.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btEditarPro.setBorder(null);
+		btEditarPro.setBackground(new Color(118, 184, 184));
+		btEditarPro.setBounds(403, 362, 215, 54);
+		painelProdutos.add(btEditarPro);
+		
+		JButton btExcluirPro = new JButton("Excluir");
+		btExcluirPro.setForeground(new Color(75, 80, 85));
+		btExcluirPro.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btExcluirPro.setBorder(null);
+		btExcluirPro.setBackground(new Color(118, 184, 184));
+		btExcluirPro.setBounds(728, 362, 215, 54);
+		painelProdutos.add(btExcluirPro);
+		
+		JButton btLimparPro = new JButton("Limpar");
+		btLimparPro.setForeground(new Color(75, 80, 85));
+		btLimparPro.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btLimparPro.setBorder(null);
+		btLimparPro.setBackground(new Color(118, 184, 184));
+		btLimparPro.setBounds(1048, 362, 215, 54);
+		painelProdutos.add(btLimparPro);
+		
+		JPanel panelImgNomePro = new JPanel();
+		panelImgNomePro.setForeground(Color.WHITE);
+		panelImgNomePro.setBackground(Color.WHITE);
+		panelImgNomePro.setBounds(6, 142, 27, 26);
+		painelProdutos.add(panelImgNomePro);
+		
+		JLabel lblXNomePro = new JLabel("");
+		lblXNomePro.setToolTipText("O nome \u00E9 obrigat\u00F3rio e n\u00E3o deve conter numeros e  simbolos");
+		lblXNomePro.setBackground(Color.WHITE);
+		lblXNomePro.setForeground(Color.WHITE);
+		lblXNomePro.setIcon(new ImageIcon(imagemX));
+		panelImgNomePro.add(lblXNomePro);
+		
+		JPanel panelImgTamanho = new JPanel();
+		panelImgTamanho.setForeground(Color.WHITE);
+		panelImgTamanho.setBackground(Color.WHITE);
+		panelImgTamanho.setBounds(6, 194, 27, 26);
+		painelProdutos.add(panelImgTamanho);
+		
+		JLabel lblXTamanhoPro = new JLabel((Icon) null);
+		lblXTamanhoPro.setToolTipText("O tamanho \u00E9 obrigat\u00F3rio");
+		panelImgTamanho.add(lblXTamanhoPro);
+		lblXTamanhoPro.setIcon(new ImageIcon(imagemX));
+		
+		tfIdPro = new JTextField();
+		tfIdPro.setHorizontalAlignment(SwingConstants.CENTER);
+		tfIdPro.setForeground(new Color(75, 80, 85));
+		tfIdPro.setFont(new Font("Roboto", Font.PLAIN, 20));
+		tfIdPro.setEditable(false);
+		tfIdPro.setColumns(10);
+		tfIdPro.setBorder(null);
+		try {
+			tfId.setText(String.valueOf(proDao.RetornarProximoidProduto()));
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		JPanel panelImgPreco = new JPanel();
+		panelImgPreco.setForeground(Color.WHITE);
+		panelImgPreco.setBackground(Color.WHITE);
+		panelImgPreco.setBounds(6, 249, 27, 26);
+		painelProdutos.add(panelImgPreco);
+		
+		JLabel lblXPreco = new JLabel((Icon) null);
+		lblXPreco.setToolTipText("O preço \u00E9 obrigat\u00F3rio");
+		panelImgPreco.add(lblXPreco);
+		lblXPreco.setIcon(new ImageIcon(imagemX));
+					
+					JPanel panelImgCdBarras = new JPanel();
+					panelImgCdBarras.setForeground(Color.WHITE);
+					panelImgCdBarras.setBackground(Color.WHITE);
+					panelImgCdBarras.setBounds(6, 301, 27, 26);
+					painelProdutos.add(panelImgCdBarras);
+					
+					JLabel lblXCdBarras = new JLabel((Icon) null);
+					lblXCdBarras.setToolTipText("O código de Barras \u00E9 obrigat\u00F3rio");
+					panelImgCdBarras.add(lblXCdBarras);
+					lblXCdBarras.setIcon(new ImageIcon(imagemX));
+
+		
+					
+					tfIdPro.setBackground(Color.WHITE);
+					tfIdPro.setBounds(1230, 141, 55, 32);
+					painelProdutos.add(tfIdPro);
+					
+					tfNomePro = new JTextField();
+					tfNomePro.setForeground(new Color(75, 80, 85));
+					tfNomePro.setFont(new Font("Roboto", Font.PLAIN, 20));
+					tfNomePro.setColumns(10);
+					tfNomePro.setBorder(null);
+					tfNomePro.setBackground(Color.WHITE);
+					tfNomePro.setBounds(167, 141, 409, 32);
+					painelProdutos.add(tfNomePro);
+					tfNomePro.addFocusListener(new FocusAdapter() {
+						@Override
+						public void focusLost(FocusEvent arg0) {
+							camposCorretosPro[0] = (tfNomePro.getText().matches("[\\p{L}\\s]+")) ?  true: false;
+							
+							if(tfNomePro.getText().length() < 1) {
+								camposCorretosPro[0] = false;
+							}
+							
+							if(camposCorretosPro[0]) {
+								spNomePro.setBackground(corGeral);
+								panelImgNomePro.setVisible(false);
+
+								
+							}else {
+								spNomePro.setBackground(corVermelho);
+								panelImgNomePro.setVisible(true);
+							}
+						}
+						@Override
+						public void focusGained(FocusEvent arg0) {
+							spNomePro.setBackground(corGeral);
+							panelImgNomePro.setVisible(false);
+
+						}
+					});
+					tfPrecoProd = new JTextField();
+					tfPrecoProd.addKeyListener(new KeyAdapter() {
+						@Override
+						public void keyTyped(KeyEvent e) { 
+							char q = e.getKeyChar(); 
+							if((!(Character.isDigit(q)))){ 
+								e.consume(); 
+							} 
+						} 
+					});
+					tfPrecoProd.setOpaque(false);
+					tfPrecoProd.setBounds(221, 250, 355, 32);
+					tfPrecoProd.setForeground(corTexto);
+					tfPrecoProd.setFont(new Font("Roboto", Font.PLAIN, 20));
+					tfPrecoProd.setBorder(null);
+					tfPrecoProd.setBackground(painelFornecedor.getBackground());
+					tfPrecoProd.addFocusListener(new FocusAdapter() {
+						@Override
+						public void focusLost(FocusEvent e) {
+							String numerosPrecoProd = tfPrecoProd.getText();
+							numerosPrecoProd = numerosPrecoProd.replaceAll("[^\\d]", "");
+							camposCorretos[2] = (numerosPrecoProd.length() < 1) ? false : true;
+							spPrecoPro.setBackground(corGeral);
+							
+							if(camposCorretos[2]) {
+								spPrecoPro.setBackground(corGeral);
+								panelImgPreco.setVisible(false);
+								
+							}else {
+								spPrecoPro.setBackground(corVermelho);
+								panelImgPreco.setVisible(true);
+
+							}
+						}
+						
+						
+						@Override
+						public void focusGained(FocusEvent arg0) {
+							spPrecoPro.setBackground(corGeral);
+							panelImgPreco.setVisible(false);
+
+						}
+					});
+					
+
+					tfTamanho = new JTextField();
+					tfTamanho.setOpaque(false);
+					tfTamanho.setBounds(167, 199, 409, 32);
+					tfTamanho.setForeground(corTexto);
+					tfTamanho.setFont(new Font("Roboto", Font.PLAIN, 20));
+					tfTamanho.setBorder(null);
+					tfTamanho.setBackground(painelFornecedor.getBackground());
+					tfTamanho.addFocusListener(new FocusAdapter() {
+						@Override
+						public void focusLost(FocusEvent e) {
+							camposCorretosPro[1] = (tfTamanho.getText().matches("[\\p{L}\\s]+")) ?  true: false;
+							if(tfTamanho.getText().length() < 2) {
+								camposCorretosPro[1] = false;
+							}
+							
+							if(camposCorretosPro[1]) {
+								spTamanhoPro.setBackground(corGeral);
+								panelImgTamanho.setVisible(false);
+								
+							}else {
+								spTamanhoPro.setBackground(corVermelho);
+								panelImgTamanho.setVisible(true);
+
+							}
+						}
+						
+						@Override
+						public void focusGained(FocusEvent arg0) {
+							spTamanhoPro.setBackground(corGeral);
+							panelImgTamanho.setVisible(false);
+
+						}
+					});
+					tfTamanho.addKeyListener(new KeyAdapter() {
+						@Override
+						public void keyPressed(KeyEvent arg0) {
+							if(tfTamanho.getText().length()>=2)
+						    {
+								tfTamanho.setText(tfTamanho.getText().substring(0, 1));
+						    }
+						}
+					});
+					tfTamanho.setColumns(10);
+					painelProdutos.add(tfTamanho);
+					tfPrecoProd.setColumns(10);
+					painelProdutos.add(tfPrecoProd);
+					
+					
+					
+					tfCdBarras = new JTextField();
+					tfCdBarras.addKeyListener(new KeyAdapter() { 
+						public void keyTyped(KeyEvent ke) { 
+							char c = ke.getKeyChar(); 
+							if((!(Character.isDigit(c)))){ 
+								ke.consume(); 
+							} 
+						} 
+						public void keyReleased(KeyEvent e){} 
+						public void keyPressed(KeyEvent e){} 
+					});
+					tfCdBarras.setForeground(new Color(75, 80, 85));
+					tfCdBarras.setFont(new Font("Roboto", Font.PLAIN, 20));
+					tfCdBarras.setColumns(10);
+					tfCdBarras.setBorder(null);
+					tfCdBarras.setBackground(Color.WHITE);
+					tfCdBarras.setBounds(167, 301, 409, 32);
+					painelProdutos.add(tfCdBarras);
+					
+					
+					
+					
+					
+					tfBuscaNomePro = new JTextField();
+					tfBuscaNomePro.setForeground(new Color(75, 80, 85));
+					tfBuscaNomePro.setFont(new Font("Roboto", Font.PLAIN, 18));
+					tfBuscaNomePro.setColumns(10);
+					tfBuscaNomePro.setBorder(null);
+					tfBuscaNomePro.setBackground(Color.WHITE);
+					tfBuscaNomePro.setBounds(863, 466, 418, 32);
+					painelProdutos.add(tfBuscaNomePro);
+					
+					tfBuscaIdPro = new JTextField();
+					tfBuscaIdPro.setToolTipText("");
+					tfBuscaIdPro.setForeground(new Color(75, 80, 85));
+					tfBuscaIdPro.setFont(new Font("Roboto", Font.PLAIN, 18));
+					tfBuscaIdPro.setColumns(10);
+					tfBuscaIdPro.setBorder(null);
+					tfBuscaIdPro.setBackground(Color.WHITE);
+					tfBuscaIdPro.setBounds(158, 468, 418, 31);
+					painelProdutos.add(tfBuscaIdPro);
+					
+					
+					
+					
+					cbFornecedoresProd = new JComboBox(new Object[]{""});
+					cbFornecedoresProd.setBounds(774, 200, 409, 32);
+					
+					 		
+			cbFornecedoresProd.setFont(new Font("Roboto", Font.PLAIN, 20));
+			cbFornecedoresProd.setForeground(corTexto);
+			AutoCompleteDecorator.decorate(cbFornecedoresProd);
+			painelProdutos.add(cbFornecedoresProd);
 			
-			JLabel lblCategoria = new JLabel("Categoria");
-			lblCategoria.setForeground(new Color(75, 80, 85));
-			lblCategoria.setFont(new Font("Roboto", Font.PLAIN, 20));
-			lblCategoria.setBounds(640, 243, 119, 42);
-			painelProdutos.add(lblCategoria);
 			
-			JComboBox comboBox_1 = new JComboBox();
-			comboBox_1.setFont(new Font("Roboto", Font.PLAIN, 20));
-			comboBox_1.setBounds(769, 204, 290, 28);
-			painelProdutos.add(comboBox_1);
 			
-			JComboBox comboBox_2 = new JComboBox();
-			comboBox_2.setFont(new Font("Roboto", Font.PLAIN, 20));
-			comboBox_2.setBounds(769, 257, 290, 28);
-			painelProdutos.add(comboBox_2);
 			
-			tfTamanho = new JTextField();
-			tfTamanho.setForeground(new Color(75, 80, 85));
-			tfTamanho.setFont(new Font("Roboto", Font.PLAIN, 20));
-			tfTamanho.setColumns(10);
-			tfTamanho.setBorder(null);
-			tfTamanho.setBackground(Color.WHITE);
-			tfTamanho.setBounds(167, 195, 290, 32);
-			painelProdutos.add(tfTamanho);
-			
-			JLabel lblR = new JLabel("R$");
-			lblR.setForeground(new Color(75, 80, 85));
-			lblR.setFont(new Font("Roboto", Font.PLAIN, 20));
-			lblR.setBounds(167, 243, 27, 42);
-			painelProdutos.add(lblR);
+			 cbCategoriaProd = new JComboBox(new Object[]{""});
+			 cbCategoriaProd.setBounds(774, 250, 409, 32);
+			 
+				cbCategoriaProd.setFont(new Font("Roboto", Font.PLAIN, 20));
+				cbCategoriaProd.setForeground(corTexto);
+				AutoCompleteDecorator.decorate(cbCategoriaProd);
+				painelProdutos.add(cbCategoriaProd);
+				
+				
+			cbCategoriaProd.setFont(new Font("Roboto", Font.PLAIN, 20));
+			painelProdutos.add(cbCategoriaProd);
 			
 			JSpinner spinner = new JSpinner();
 			spinner.setFont(new Font("Roboto", Font.PLAIN, 20));
 			spinner.setBounds(774, 141, 119, 32);
 			painelProdutos.add(spinner);
-		
+							
 			
-			///PARTE DE CATEGORIA
+			
+///PARTE DE CATEGORIA
 			
 			
 
@@ -578,13 +738,6 @@ public class TelaEstoque extends JFrame {
 			painelCategoria.setBackground(Color.WHITE);
 			painelCategoria.setBounds(0, 0, 1386, 886);
 			painelPrincipal.add(painelCategoria);
-			
-					
-					JLabel lblNomeCat = new JLabel("Nome");
-					lblNomeCat.setBounds(38, 136, 60, 42);
-					lblNomeCat.setForeground(new Color(75, 80, 85));
-					lblNomeCat.setFont(new Font("Roboto", Font.PLAIN, 20));
-					painelCategoria.add(lblNomeCat);
 					
 					JLabel lblDescontoCat = new JLabel("Desconto");
 					lblDescontoCat.setBounds(38, 190, 119, 42);
@@ -599,7 +752,7 @@ public class TelaEstoque extends JFrame {
 					painelCategoria.add(lblIdCat);
 					
 					JLabel lblDescricaoCat = new JLabel("Descri\u00E7\u00E3o");
-					lblDescricaoCat.setBounds(704, 136, 119, 42);
+					lblDescricaoCat.setBounds(38, 136, 119, 42);
 					lblDescricaoCat.setForeground(new Color(75, 80, 85));
 					lblDescricaoCat.setFont(new Font("Roboto", Font.PLAIN, 20));
 					painelCategoria.add(lblDescricaoCat);
@@ -617,15 +770,11 @@ public class TelaEstoque extends JFrame {
 					lblBuscaIdCat.setBounds(65, 467, 119, 42);
 					painelCategoria.add(lblBuscaIdCat);
 					
-					JLabel lblBuscaNomeCat = new JLabel("Nome");
+					JLabel lblBuscaNomeCat = new JLabel("Descri\u00E7\u00E3o");
 					lblBuscaNomeCat.setForeground(new Color(75, 80, 85));
 					lblBuscaNomeCat.setFont(new Font("Roboto", Font.PLAIN, 18));
 					lblBuscaNomeCat.setBounds(774, 461, 79, 42);
 					painelCategoria.add(lblBuscaNomeCat);
-					
-					spNomeCat.setBounds(167, 176, 409, 2);
-					spNomeCat.setBackground(new Color(176, 176, 176));
-					painelCategoria.add(spNomeCat);
 					spIdCat.setBounds(167, 290, 55, 2);
 					spIdCat.setBackground(new Color(176, 176, 176));
 					painelCategoria.add(spIdCat);
@@ -638,22 +787,14 @@ public class TelaEstoque extends JFrame {
 					spBuscaNomeCat.setBackground(new Color(176, 176, 176));
 					spBuscaNomeCat.setBounds(867, 500, 418, 2);
 					painelCategoria.add(spBuscaNomeCat);
-					
-					spDesc2Cat.setBackground(new Color(176, 176, 176));
-					spDesc2Cat.setBounds(876, 230, 407, 2);
-					painelCategoria.add(spDesc2Cat);
 					JSeparator spBuscaIdCat = new JSeparator();
-
-					spDesc3Cat.setBackground(new Color(176, 176, 176));
-					spDesc3Cat.setBounds(876, 290, 407, 2);
-					painelCategoria.add(spDesc3Cat);
 					
 					spBuscaIdCat.setBackground(new Color(176, 176, 176));
 					spBuscaIdCat.setBounds(158, 501, 418, 2);
 					painelCategoria.add(spBuscaIdCat);
 					
 					spDesc1Cat.setBackground(new Color(176, 176, 176));
-					spDesc1Cat.setBounds(876, 171, 407, 2);
+					spDesc1Cat.setBounds(167, 176, 407, 2);
 					painelCategoria.add(spDesc1Cat);
 					
 							
@@ -691,7 +832,7 @@ public class TelaEstoque extends JFrame {
 								new Object[][] {
 								},
 								new String[] {
-									"Codigo", "Descrição", "Desconto", "Nome"
+									"Codigo", "Descrição", "Desconto"
 								}
 							));
 							btCadastrarCat.addMouseListener(new MouseAdapter() {
@@ -729,7 +870,6 @@ public class TelaEstoque extends JFrame {
 										try {
 											cat.setDescricao(String.valueOf(tfDescricaoCat.getText()));
 											cat.setDesconto(Double.parseDouble(tfDescontoCat.getText()));
-											cat.setNome(String.valueOf(tfNomeCat.getText()));
 
 											
 											catDao.CadastrarCategoria(cat);
@@ -757,7 +897,6 @@ public class TelaEstoque extends JFrame {
 									if (camposEstaoCorretosCat(camposCorretosCat)) {
 										cat.setDescricao(String.valueOf(tfDescricaoCat.getText()));
 										cat.setDesconto(Double.parseDouble(tfDescontoCat.getText()));
-										cat.setNome(String.valueOf(tfNomeCat.getText()));
 										cat.setId(Integer.parseInt(tfIdCat.getText()));
 										try {
 											
@@ -907,25 +1046,6 @@ public class TelaEstoque extends JFrame {
 							btnLimparCat.setBackground(new Color(118, 184, 184));
 							painelCategoria.add(btnLimparCat);
 							
-							
-							
-							
-							
-
-							
-							panelImgNomeCat.setBounds(6, 142, 27, 26);
-							painelCategoria.add(panelImgNomeCat);
-							panelImgNomeCat.setBackground(Color.WHITE);
-							panelImgNomeCat.setForeground(Color.WHITE);
-							
-							JLabel labelXnomeCat = new JLabel("");
-							labelXnomeCat.setToolTipText("O nome \u00E9 obrigat\u00F3rio e n\u00E3o deve conter numeros e  simbolos");
-							labelXnomeCat.setBackground(Color.WHITE);
-							labelXnomeCat.setForeground(Color.WHITE);
-							labelXnomeCat.setIcon(new ImageIcon(imagemX));
-							panelImgNomeCat.add(labelXnomeCat);
-							labelXnomeCat.setIcon(new ImageIcon(imagemX));
-							
 							panelImgDescontoCat.setBounds(6, 194, 27, 26);
 							painelCategoria.add(panelImgDescontoCat);
 							panelImgDescontoCat.setForeground(Color.WHITE);
@@ -937,7 +1057,7 @@ public class TelaEstoque extends JFrame {
 							
 							panelImgDescCat.setForeground(Color.WHITE);
 							panelImgDescCat.setBackground(Color.WHITE);
-							panelImgDescCat.setBounds(667, 142, 27, 26);
+							panelImgDescCat.setBounds(6, 142, 27, 26);
 							painelCategoria.add(panelImgDescCat);
 							
 							JLabel labelXDescCat = new JLabel(new ImageIcon(imagemX));
@@ -1033,44 +1153,6 @@ public class TelaEstoque extends JFrame {
 							painelCategoria.add(tfBuscaIdCat);
 							
 							
-							
-							
-							tfNomeCat = new JTextField();
-							tfNomeCat.setBounds(167, 141, 409, 32);
-							painelCategoria.add(tfNomeCat);
-							tfNomeCat.setForeground(corTexto);
-							tfNomeCat.setFont(new Font("Roboto", Font.PLAIN, 20));
-							tfNomeCat.setBorder(null);
-							tfNomeCat.setBackground(painelCategoria.getBackground());
-							tfNomeCat.addFocusListener(new FocusAdapter() {
-								@Override
-								public void focusLost(FocusEvent arg0) {
-									camposCorretosCat[0] = (tfNomeCat.getText().matches("[\\p{L}\\s]+")) ?  true: false;
-									
-									if(tfNomeCat.getText().length() < 1) {
-										camposCorretosCat[0] = false;
-									}
-									
-									if(camposCorretosCat[0]) {
-										spNomeCat.setBackground(corGeral);
-										panelImgNomeCat.setVisible(false);
-
-										
-									}else {
-										spNomeCat.setBackground(corVermelho);
-										panelImgNomeCat.setVisible(true);
-									}
-								}
-								@Override
-								public void focusGained(FocusEvent arg0) {
-									spNomeCat.setBackground(corGeral);
-									panelImgNomeCat.setVisible(false);
-
-								}
-							});
-							tfNomeCat.setColumns(10);
-							
-							
 							try {
 								MaskFormatter tfDescontoCatFormatter = new MaskFormatter("##");
 								tfDescontoCatFormatter.setPlaceholderCharacter('0');
@@ -1085,10 +1167,10 @@ public class TelaEstoque extends JFrame {
 								public void focusLost(FocusEvent arg0) {
 									String numerosDescontoCat = tfDescontoCat.getText();
 									numerosDescontoCat = numerosDescontoCat.replaceAll("[^\\d]", "");
-									camposCorretos[2] = (numerosDescontoCat.length() < 2) ? false : true;
+									camposCorretos[1] = (numerosDescontoCat.length() < 2) ? false : true;
 									spDescontoCat.setBackground(corGeral);
 									
-									if(camposCorretos[2]) {
+									if(camposCorretos[1]) {
 										spDescontoCat.setBackground(corGeral);
 										panelImgDescontoCat.setVisible(false);
 									
@@ -1112,7 +1194,7 @@ public class TelaEstoque extends JFrame {
 							
 							tfDescricaoCat = 	new JTextField();
 							tfDescricaoCat.setOpaque(false);
-							tfDescricaoCat.setBounds(876, 142, 417, 32);
+							tfDescricaoCat.setBounds(167, 146, 417, 32);
 							tfDescricaoCat.setForeground(new Color(75, 80, 85));
 							tfDescricaoCat.setFont(new Font("Roboto", Font.PLAIN, 18));
 							tfDescricaoCat.setColumns(10);
@@ -1121,13 +1203,13 @@ public class TelaEstoque extends JFrame {
 							tfDescricaoCat.addFocusListener(new FocusAdapter() {
 								@Override
 								public void focusLost(FocusEvent arg0) {
-									camposCorretosCat[1] = (tfDescricaoCat.getText().matches("[\\p{L}\\s]+")) ? true : false;
+									camposCorretosCat[0] = (tfDescricaoCat.getText().matches("[\\p{L}\\s]+")) ? true : false;
 									
 									if(tfDescricaoCat.getText().length() < 1) {
-										camposCorretosCat[1] = false;
+										camposCorretosCat[0] = false;
 									}
 									
-									if(camposCorretosCat[1]) {
+									if(camposCorretosCat[0]) {
 										spDesc1Cat.setBackground(corGeral);
 										panelImgDescCat.setVisible(false);
 									}else {
@@ -1143,7 +1225,6 @@ public class TelaEstoque extends JFrame {
 								}
 							});
 							painelCategoria.add(tfDescricaoCat);
-							
 
 		painelFornecedor.setLayout(null);
 		painelFornecedor.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -1372,6 +1453,11 @@ public class TelaEstoque extends JFrame {
 								forn.setId(fornDao.RetornarProximoidFornecedor());
 								
 								fornDao.CadastrarFornecedor(forn);
+								limpar();
+
+								
+
+								
 							}else {
 								JOptionPane.showMessageDialog(null, "Erro, um ou mais campos não foram preenchidos corretamente");
 							}
@@ -1383,7 +1469,6 @@ public class TelaEstoque extends JFrame {
 					
 				
 				atualizarTabela();
-				limpar();
 			}
 			
 		});
@@ -2245,6 +2330,9 @@ public class TelaEstoque extends JFrame {
 			painelFornecedor.setVisible(true);
 			painelCategoria.setVisible(false);
 			painelProdutos.setVisible(false);
+			atualizarTabela();
+			limpar();
+			
 		//	setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{tfNome, tfEmail, tfCNPJ , tfTelefone, cbEstado_1, tfCidade, tfBairro, tfRua,tfBuscaId,tfBuscaNome}));
 
 			btnCategoria.setBackground(Color.LIGHT_GRAY);
@@ -2419,10 +2507,16 @@ public class TelaEstoque extends JFrame {
 		
 		public void clickarProdutos() {
 			painelCategoria.setVisible(false);
+			atualizarCbPesquisa();
+			atualizarCbPesquisaCat();
 			painelFornecedor.setVisible(false);
 			painelProdutos.setVisible(true);
 			btnFornecedor.setBackground(Color.LIGHT_GRAY);
 			btnCategoria.setBackground(Color.LIGHT_GRAY);
+			try {
+				tfId.setText(String.valueOf(proDao.RetornarProximoidProduto()));
+			} catch (Exception e1) {}
+
 			
 			btnProdutos.addMouseListener(new MouseAdapter() {
 
@@ -2517,7 +2611,6 @@ public class TelaEstoque extends JFrame {
 			
 			try {
 				tfIdCat.setText(String.valueOf(catDao.RetornarProximoidCategoria()));
-				tfNomeCat.setText(null);
 				tfDescricaoCat.setText(null);
 				tfDescontoCat.setText("0");
 			} catch (Exception e) {}
@@ -2527,21 +2620,18 @@ public class TelaEstoque extends JFrame {
 		
 		public void setCamposFromTabelaCat() {
 			tfIdCat.setText(String.valueOf(tabelaCategoria.getValueAt(tabelaCategoria.getSelectedRow(), 0)));
-			tfNomeCat.setText(String.valueOf(tabelaCategoria.getValueAt(tabelaCategoria.getSelectedRow(), 3)));
 			tfDescontoCat.setText(String.valueOf(tabelaCategoria.getValueAt(tabelaCategoria.getSelectedRow(), 2)));
 			tfDescricaoCat.setText(String.valueOf(tabelaCategoria.getValueAt(tabelaCategoria.getSelectedRow(), 1)));			
 			
 		}
 		public void deixarCertoCat() {
 			
-			spNomeCat.setBackground(corGeral);
-			panelImgNomeCat.setVisible(false);
+			
 			spDescontoCat.setBackground(corGeral);
 			panelImgDescontoCat.setVisible(false);
 
 			spDesc1Cat.setBackground(corGeral);
-			spDesc2Cat.setBackground(corGeral);
-			spDesc3Cat.setBackground(corGeral);
+			
 			panelImgDescCat.setVisible(false);
 			
 			
@@ -2561,31 +2651,16 @@ public class TelaEstoque extends JFrame {
 			
 			
 			
-					camposCorretosCat[0] = (tfNomeCat.getText().matches("[\\p{L}\\s]+")) ?  true: false;
+				
+			
+
+					camposCorretosCat[0] = true ;
 					
-					if(tfNomeCat.getText().length() < 1) {
+					if(tfDescricaoCat.getText().length() < 1) {
 						camposCorretosCat[0] = false;
 					}
 					
 					if(camposCorretosCat[0]) {
-						spNomeCat.setBackground(corGeral);
-						panelImgNomeCat.setVisible(false);
-
-						
-					}else {
-						spNomeCat.setBackground(corVermelho);
-						panelImgNomeCat.setVisible(true);
-					}
-				
-			
-
-					camposCorretosCat[1] = true ;
-					
-					if(tfDescricaoCat.getText().length() < 1) {
-						camposCorretosCat[1] = false;
-					}
-					
-					if(camposCorretosCat[1]) {
 						spDesc1Cat.setBackground(corGeral);
 						panelImgDescCat.setVisible(false);
 					}else {
@@ -2597,10 +2672,10 @@ public class TelaEstoque extends JFrame {
 			
 					String numerosDescontoCat = tfDescontoCat.getText();
 					numerosDescontoCat = numerosDescontoCat.replaceAll("[^\\d]", "");
-					camposCorretosCat[2] = (numerosDescontoCat.length() < 2) ? false : true;
+					camposCorretosCat[1] = (numerosDescontoCat.length() < 2) ? false : true;
 					spDescontoCat.setBackground(corGeral);
 					
-					if(camposCorretosCat[2]) {
+					if(camposCorretosCat[1]) {
 						spDescontoCat.setBackground(corGeral);
 						panelImgDescontoCat.setVisible(false);
 					
@@ -2608,9 +2683,46 @@ public class TelaEstoque extends JFrame {
 						spDescontoCat.setBackground(corVermelho);
 						panelImgDescontoCat.setVisible(true);
 					}
+		}
+		public static void atualizarCbPesquisa() {
+			List<Object> nomesForn = new ArrayList<>();	    		
+			try {
+				nomesForn = fornDao.buscarNomes();
 				
-		
+				ArrayList<String> nomesFornTxt = new ArrayList<>();
+				for(Object n : nomesForn) {
+					nomesFornTxt.add(String.valueOf(n));
+				}
+				Collections.sort(nomesFornTxt);
 				
+				cbFornecedoresProd.removeAllItems();
+				
+				for(Object n : nomesFornTxt) {
+					cbFornecedoresProd.addItem(n);
+				}
+				
+				cbFornecedoresProd.setSelectedIndex(0);
+			}catch(Exception e) { }
+		}
+		public static void atualizarCbPesquisaCat() {
+			List<Object> nomesCat = new ArrayList<>();	    		
+			try {
+				nomesCat= catDao.buscarNomes();
+				
+				ArrayList<String> nomesCatTxt = new ArrayList<>();
+				for(Object n : nomesCat) {
+					nomesCatTxt.add(String.valueOf(n));
+				}
+				Collections.sort(nomesCatTxt);
+				
+				cbCategoriaProd.removeAllItems();
+				
+				for(Object n : nomesCatTxt) {
+					cbCategoriaProd.addItem(n);
+				}
+				
+				cbCategoriaProd.setSelectedIndex(0);
+			}catch(Exception e) { }
 		}
 }
 

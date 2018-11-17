@@ -15,11 +15,10 @@ public class CategoriaDao{
 	
 	public void CadastrarCategoria(Categoria cat) throws SQLException, Exception{
 		try{
-			String sql = "INSERT INTO categorias (descricao, desconto, nome) VALUES (?,?,?)";
+			String sql = "INSERT INTO categorias (descricao, desconto) VALUES (?,?)";
 			java.sql.PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
 			sqlPrep.setString(1, cat.getDescricao());
 			sqlPrep.setDouble(2, cat.getDesconto());
-			sqlPrep.setString(3, cat.getNome());
 			sqlPrep.execute();
 			
 		} catch(SQLException e) {
@@ -32,14 +31,13 @@ public class CategoriaDao{
 
 	public void AlterarCategoria(Categoria cat) throws Exception {
 		try{
-			String sql = "UPDATE categorias SET descricao=?, desconto=?, nome=?  WHERE id=?";
+			String sql = "UPDATE categorias SET descricao=?, desconto=?  WHERE id=?";
 			System.out.println("Chegou aqui");
 
 			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
 			sqlPrep.setString(1, cat.getDescricao());
 			sqlPrep.setDouble(2, cat.getDesconto());
-			sqlPrep.setString(3, cat.getNome());
-			sqlPrep.setInt(4, cat.getId());
+			sqlPrep.setInt(3, cat.getId());
 			sqlPrep.execute();
 
 		}catch(Exception e) {
@@ -67,7 +65,7 @@ public class CategoriaDao{
 			
 			while (rs.next())
 			{
-				Object[] linha = {rs.getString(1), rs.getString(2), rs.getString(3),rs.getString(4)};
+				Object[] linha = {rs.getString(1), rs.getString(2), rs.getString(3)};
 				Categoria.add(linha);
 			}
 			state.close();
@@ -92,5 +90,25 @@ public class CategoriaDao{
 			JOptionPane.showMessageDialog(null, e.getMessage());
 			return 1;
 		}
+	}
+	
+	public List<Object> buscarNomes() throws SQLException, Exception{
+		List<Object> info = new ArrayList<>();
+		try {
+			String sql = "SELECT descricao FROM categorias";
+			//java.sql.Statement state = Conexao.conectar().createStatement();
+			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
+			ResultSet rs = sqlPrep.executeQuery();
+			
+			while (rs.next())
+			{
+				info.add(rs.getString(1));
+			}
+			sqlPrep.close();
+			
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
+		return info;
 	}
 }
