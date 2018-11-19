@@ -13,6 +13,8 @@ import br.edu.ifcvideira.utils.Conexao;
 
 public class ProdutoDao{
 	
+	private static final String RetornarNomeCategoria = null;
+
 	public void CadastrarProduto(Produto pr) throws SQLException, Exception{
 		try{
 			String sql = "INSERT INTO produtos (nome , valor_unitario , tamanho, id_categoria, id_fornecedor, codigo_barras, status, qtde) VALUES (?,?,?,?,?,?,?,?)";
@@ -147,8 +149,7 @@ public class ProdutoDao{
 		}
 		return info;
 	}
-	
-	public int RetornarProximoidProduto() throws Exception {
+	public int RetornarProximoidProdutos() throws Exception {
 		try{
 			String sql ="SELECT MAX(id)+1 AS id FROM produtos ";
 			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
@@ -163,4 +164,133 @@ public class ProdutoDao{
 			return 1;
 		}
 	}
+	
+	
+	public int RetornarIdFornecedor(Produto pr) throws SQLException, Exception{
+		try{
+			String sql = "SELECT id FROM fornecedores WHERE nome=?";
+			java.sql.PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
+			sqlPrep.setString(1, pr.getNomeFornecedor());
+			
+			ResultSet rs = sqlPrep.executeQuery();
+			
+			if (rs.next()){
+				return rs.getInt("id");
+			}else{
+				return 1;
+			}
+		} catch(Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			return 1;
+		}
+	}
+	
+	public int RetornarIdCategoria(Produto pr) throws SQLException, Exception{
+		try{
+			String sql = "SELECT id FROM categorias WHERE descricao=?";
+			java.sql.PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
+			sqlPrep.setString(1, pr.getNomeCategoria());
+			
+			ResultSet rs = sqlPrep.executeQuery();
+			
+			if (rs.next()){
+				return rs.getInt("id");
+			}else{
+				return 1;
+			}
+		} catch(Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			return 1;
+		}
+	}
+	
+	public String RetornarNomeCategoria(Produto pr) throws SQLException, Exception{
+		try{
+			String sql = "SELECT descricao FROM categorias WHERE id=?";
+			java.sql.PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
+			sqlPrep.setInt(1, pr.getIdCategoria());
+			
+			ResultSet rs = sqlPrep.executeQuery();
+			
+			if (rs.next()){
+				return rs.getString("descricao");
+			}else{
+				return RetornarNomeCategoria;
+			}
+		} catch(Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			return RetornarNomeCategoria;
+		}
+	}
+	
+	public String RetornarNomeFornecedor(Produto pr) throws SQLException, Exception{
+		try{
+			String sql = "SELECT nome FROM fornecedores WHERE id=?";
+			java.sql.PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
+			sqlPrep.setInt(1, pr.getIdFornecedor());
+			
+			ResultSet rs = sqlPrep.executeQuery();
+			
+			if (rs.next()){
+				return rs.getString("nome");
+			}else{
+				return RetornarNomeCategoria;
+			}
+		} catch(Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			return RetornarNomeCategoria;
+		}
+	}
+	
+	public Boolean RetornarCdBarras(Produto pr) throws SQLException, Exception{
+		try{
+			String sql = "SELECT id FROM produtos WHERE codigo_barras=? AND id!=?";
+			java.sql.PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
+
+			sqlPrep.setString(1, pr.getCodigoBarras());
+			sqlPrep.setInt(2, pr.getId());
+			
+			ResultSet rs = sqlPrep.executeQuery(); 
+			if (rs.next()){
+				return false;
+			}else{
+				return true;
+			}
+		} catch(Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			return true;
+		}
+	}
+	public Boolean RetornarFornecedor(Produto pr) throws SQLException, Exception{
+		try{
+			String sql = "SELECT id FROM fornecedores ";
+			java.sql.PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);			
+			ResultSet rs = sqlPrep.executeQuery(); 
+			if (rs.next()){
+				return false;
+			}else{
+				return true;
+			}
+		} catch(Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			return true;
+		}
+	}
+	public Boolean RetornarCategoria(Produto pr) throws SQLException, Exception{
+		try{
+			String sql = "SELECT id FROM categorias ";
+			java.sql.PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);			
+			ResultSet rs = sqlPrep.executeQuery(); 
+			if (rs.next()){
+				return false;
+			}else{
+				return true;
+			}
+		} catch(Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			return true;
+		}
+	}
+	
+	
 }

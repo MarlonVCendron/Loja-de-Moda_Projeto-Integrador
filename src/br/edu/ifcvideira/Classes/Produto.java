@@ -10,8 +10,23 @@ public class Produto {
 	private String codigoBarras;
 	private int status;
 	private int quantidade;
+	private String nomeFornecedor;
+	private String nomeCategoria;
 	
 	
+	
+	public String getNomeFornecedor() {
+		return nomeFornecedor;
+	}
+	public void setNomeFornecedor(String nomeFornecedor) {
+		this.nomeFornecedor = nomeFornecedor;
+	}
+	public String getNomeCategoria() {
+		return nomeCategoria;
+	}
+	public void setNomeCategoria(String nomeCategoria) {
+		this.nomeCategoria = nomeCategoria;
+	}
 	public int getId() {
 		return id;
 	}

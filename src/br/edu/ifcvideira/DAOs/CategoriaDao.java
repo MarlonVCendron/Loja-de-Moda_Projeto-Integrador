@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 import br.edu.ifcvideira.Classes.Categoria;
+import br.edu.ifcvideira.Classes.Produto;
 import br.edu.ifcvideira.utils.Conexao;
 
 
@@ -132,4 +133,30 @@ public class CategoriaDao{
 		}
 		return desconto;
 	}
+	
+	
+	public Boolean RetornarForeignKey(Categoria cat) throws SQLException, Exception{
+		try{
+			String sql = "SELECT id FROM produtos WHERE id_categoria=? ";
+			java.sql.PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);			
+			sqlPrep.setInt(1,cat.getId());
+
+			ResultSet rs = sqlPrep.executeQuery(); 
+			
+			
+			
+			if (rs.next()){
+				return false;
+			}else{
+				return true;
+			}
+		} catch(Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			return true;
+		}
+	}
+	
+	
+	
+	
 }
