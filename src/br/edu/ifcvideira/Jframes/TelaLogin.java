@@ -142,25 +142,7 @@ public class TelaLogin extends JFrame {
 		panelEsquerda.setBounds(0, 0, 476, 653);
 		contentPane.add(panelEsquerda);
 		panelEsquerda.setBackground(corGeral);
-		
-		
-		JPanel panelConfig = new JPanel();
-		panelConfig.setBounds(432, 600, 40, 40);
-		panelConfig.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				confView.setVisible(true);
-			}
-		});
 		panelEsquerda.setLayout(null);
-		panelConfig.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		panelConfig.setBackground(corGeral);
-		panelEsquerda.add(panelConfig);
-		
-		JLabel imgConfig = new JLabel("");
-		imgConfig.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		imgConfig.setIcon(new ImageIcon(imagemEngrenagem));
-		panelConfig.add(imgConfig);
 		
 		JPanel panelLogo = new JPanel();
 		panelLogo.setOpaque(false);

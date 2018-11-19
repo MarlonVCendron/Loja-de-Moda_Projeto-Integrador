@@ -107,8 +107,11 @@ public class BlocoProdutoVenda extends JPanel{
 			public void mouseClicked(MouseEvent arg0) {
 				
 				//TelaCaixa.panelPrincipal.getComponent(index).setVisible(false);
-//				TelaCaixa.panelPrincipal.setSize(1098, TelaCaixa.tamanhoScrollProdutosVenda);
-//				TelaCaixa.scrollProdutosVenda.setSize(1098, TelaCaixa.tamanhoScrollProdutosVenda);
+				TelaCaixa.panelPrincipal.remove(TelaCaixa.panelPrincipal.getComponent(index));
+				TelaCaixa.tamanhoScrollProdutosVenda = TelaCaixa.tamanhoScrollProdutosVenda - 100;
+				TelaCaixa.panelPrincipal.setSize(1098, TelaCaixa.tamanhoScrollProdutosVenda);
+				TelaCaixa.scrollProdutosVenda.setSize(1098, TelaCaixa.tamanhoScrollProdutosVenda);
+				TelaCaixa.atualizarTamanhoScroll();
 				TelaCaixa.produtosParaComprar.set(index, null);
 
 				TelaCaixa.atualizarNotaFiscal(TelaCaixa.nomeClienteAtual, TelaCaixa.dataCompraAtual);

@@ -132,11 +132,7 @@ public class FornecedorDao{
 
 			ResultSet rs = sqlPrep.executeQuery(); 
 			
-			if (rs.next()){
-				return false;
-			}else{
-				return true;
-			}
+			return (rs.next()) ? false : true;
 		} catch(Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 			return true;

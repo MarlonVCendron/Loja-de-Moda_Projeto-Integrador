@@ -38,11 +38,20 @@ public class Preferencias {
 		return preferencias.getInt("B", 184);
 	}
 	
+	public static void setDesconto(double d) {
+		preferencias.putDouble("Desconto", d);
+	}
+	
 	public static double getDesconto() {
 		return preferencias.getDouble("Desconto", 0);
 	}
 	
-	public static void setDesconto(double d) {
-		preferencias.putDouble("Desconto", d);
+	public static void setNomeLoja(String nome) {
+		String nomeLoja = nome.toUpperCase();
+		preferencias.put("NomeLoja", nomeLoja);
+	}
+	
+	public static String getNomeLoja() {
+		return preferencias.get("NomeLoja", "LOJA DE MODA");
 	}
 }

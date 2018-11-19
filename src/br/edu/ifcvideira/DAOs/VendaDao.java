@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import br.edu.ifcvideira.Classes.Fornecedor;
 import br.edu.ifcvideira.Classes.Venda;
 import br.edu.ifcvideira.utils.Conexao;
 
@@ -120,6 +121,21 @@ public class VendaDao {
 		} catch(Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 			return 1;
+		}
+	}
+	
+	public Boolean TemForeignKey(int idCliente) throws SQLException, Exception{
+		try{
+			String sql = "SELECT id FROM vendas WHERE id_cliente=? ";
+			java.sql.PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);			
+			sqlPrep.setInt(1, idCliente);
+
+			ResultSet rs = sqlPrep.executeQuery(); 
+			
+			return (rs.next()) ? false : true;
+		} catch(Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			return true;
 		}
 	}
 }

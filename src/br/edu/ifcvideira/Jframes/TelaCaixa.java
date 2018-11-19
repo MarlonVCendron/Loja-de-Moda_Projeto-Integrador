@@ -68,6 +68,8 @@ public class TelaCaixa extends JFrame {
 	TelaEditarCliente telaEditarCliente;
 	
 	public static JComboBox cbPesquisaCliente = new JComboBox<>(new Object[] {""});
+	public static JScrollPane scrollProdutosVenda;
+	public static int tamanhoScrollProdutosVenda;
 	static JTextArea taNota;
 	int idVendaAtual;
 	int idClienteAtual;
@@ -76,7 +78,6 @@ public class TelaCaixa extends JFrame {
 	double descontoGeral = Preferencias.getDesconto();
 	
 	public static JPanel panelPrincipal;
-	int tamanhoScrollProdutosVenda = 0;
 	
 	public static String nomeClienteAtual;
 	public static String dataCompraAtual;
@@ -524,12 +525,9 @@ public class TelaCaixa extends JFrame {
 	    lblQuantidade.setForeground(corTexto);
 	    contentPane.add(lblQuantidade);
 	    
-	    JScrollPane scrollProdutosVenda = new JScrollPane();
+	    scrollProdutosVenda = new JScrollPane();
 	    scrollProdutosVenda.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 	    scrollProdutosVenda.getVerticalScrollBar().setUnitIncrement(10);
-	    
-
-	    
 	    scrollProdutosVenda.setBounds(45, 752, 1098, 100);
 	    contentPane.add(scrollProdutosVenda);
 	    
@@ -545,7 +543,7 @@ public class TelaCaixa extends JFrame {
 	    	    		tamanhoScrollProdutosVenda += 100;
 	    	    	}
 	    		}
-	    		scrollProdutosVenda.setBounds(45, 850 - tamanhoScrollProdutosVenda, 1098, tamanhoScrollProdutosVenda);
+	    		atualizarTamanhoScroll();
 	    	}
 	    });
 	    panelPrincipal.setLayout(new BoxLayout(panelPrincipal, BoxLayout.Y_AXIS));
@@ -572,11 +570,26 @@ public class TelaCaixa extends JFrame {
 	    lblClienteInvalido.setFont(new Font("Roboto", Font.PLAIN, 14));
 	    lblClienteInvalido.setBounds(45, 45, 162, 16);
 	    contentPane.add(lblClienteInvalido);
+	    
+	   /* JScrollPane scrollPaneNotaFiscal = new JScrollPane();
+	    scrollPaneNotaFiscal.setBounds(1461, 57, 402, 793);
+	    scrollPaneNotaFiscal.setOpaque(false);
+	    scrollPaneNotaFiscal.setBackground(Color.WHITE);
+	    scrollPaneNotaFiscal.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+	    contentPane.add(scrollPaneNotaFiscal);
+	    
+	    JPanel panelNota = new JPanel();
+	    panelNota.setBounds(0, 0, 402, 793);
+	    panelNota.setSize(new Dimension(402, 793));
+	    panelNota.setBackground(Color.WHITE);
+	    scrollPaneNotaFiscal.setOpaque(false);
+	    panelNota.setLayout(null);
+	    scrollPaneNotaFiscal.add(panelNota);*/
 
 	    taNota = new JTextArea();
 	    taNota.setEditable(false);
 	    taNota.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-	    taNota.setForeground(corTexto);
+	    //taNota.setForeground(corTexto);
 	    taNota.setFont(new Font("Roboto", Font.PLAIN, 20));
 	    taNota.setBackground(Color.WHITE);
 	    taNota.setBounds(1461, 57, 402, 793);
@@ -1023,5 +1036,9 @@ public class TelaCaixa extends JFrame {
 		}catch(Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 		}
+	}
+	
+	public static void atualizarTamanhoScroll() {
+		scrollProdutosVenda.setBounds(45, 850 - tamanhoScrollProdutosVenda, 1098, tamanhoScrollProdutosVenda);
 	}
 }

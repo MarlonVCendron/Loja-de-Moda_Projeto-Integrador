@@ -41,6 +41,7 @@ import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 import br.edu.ifcvideira.Classes.Cliente;
 import br.edu.ifcvideira.DAOs.ClienteDao;
+import br.edu.ifcvideira.DAOs.VendaDao;
 import br.edu.ifcvideira.utils.Cor;
 import br.edu.ifcvideira.utils.Preferencias;
 public class TelaEditarCliente extends JFrame {
@@ -736,9 +737,14 @@ public class TelaEditarCliente extends JFrame {
 		btnExcluir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					daoCl.deletarCliente(Integer.parseInt(tfId.getText()));
-					TelaCaixa.atualizarCbPesquisa();
-					dispose();
+					VendaDao veDao = new VendaDao();
+					if(veDao.TemForeignKey(cliente.getId())) {
+						daoCl.deletarCliente(Integer.parseInt(tfId.getText()));
+						TelaCaixa.atualizarCbPesquisa();
+						dispose();
+					}else {
+						JOptionPane.showMessageDialog(null, "Não é possível excluir o cliente, ele está atribuído a alguma venda existente", "Erro", JOptionPane.ERROR_MESSAGE);
+					}
 				}catch (Exception e){
 					JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 				}
