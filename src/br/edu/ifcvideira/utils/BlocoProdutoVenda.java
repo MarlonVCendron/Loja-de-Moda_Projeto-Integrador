@@ -90,7 +90,11 @@ public class BlocoProdutoVenda extends JPanel{
 				double v = (double) q * TelaCaixa.produtosParaComprar.get(index).getValorUnitario();
 				((BlocoProdutoVenda) TelaCaixa.panelPrincipal.getComponent(index)).setQuantidade(q, v);
 				
-				TelaCaixa.atualizarNotaFiscal(TelaCaixa.nomeClienteAtual, TelaCaixa.dataCompraAtual);
+				if(TelaCaixa.cboxCpf.isSelected()) {
+					TelaCaixa.atualizarNotaFiscal(TelaCaixa.nomeClienteAtual, TelaCaixa.dataCompraAtual, TelaCaixa.cpfAtual, String.valueOf(TelaCaixa.descontoGeral));
+    			}else {
+    				TelaCaixa.atualizarNotaFiscal(TelaCaixa.nomeClienteAtual, TelaCaixa.dataCompraAtual, null, String.valueOf(TelaCaixa.descontoGeral));
+    			}
 				
 				TelaCaixa.contentPane.revalidate();
 				TelaCaixa.contentPane.repaint();
@@ -112,10 +116,13 @@ public class BlocoProdutoVenda extends JPanel{
 				TelaCaixa.panelPrincipal.setSize(1098, TelaCaixa.tamanhoScrollProdutosVenda);
 				TelaCaixa.scrollProdutosVenda.setSize(1098, TelaCaixa.tamanhoScrollProdutosVenda);
 				TelaCaixa.atualizarTamanhoScroll();
-				TelaCaixa.produtosParaComprar.set(index, null);
+				TelaCaixa.produtosParaComprar.remove(index);
 
-				TelaCaixa.atualizarNotaFiscal(TelaCaixa.nomeClienteAtual, TelaCaixa.dataCompraAtual);
-				
+				if(TelaCaixa.cboxCpf.isSelected()) {
+					TelaCaixa.atualizarNotaFiscal(TelaCaixa.nomeClienteAtual, TelaCaixa.dataCompraAtual, TelaCaixa.cpfAtual, String.valueOf(TelaCaixa.descontoGeral));
+    			}else {
+    				TelaCaixa.atualizarNotaFiscal(TelaCaixa.nomeClienteAtual, TelaCaixa.dataCompraAtual, null, String.valueOf(TelaCaixa.descontoGeral));
+    			}
 				revalidate();
 				repaint();
 			}

@@ -74,13 +74,14 @@ public class TelaCaixa extends JFrame {
 	int idVendaAtual;
 	int idClienteAtual;
 	public static ArrayList<ProdutoVenda> produtosParaComprar = new ArrayList<>();
-	
-	double descontoGeral = Preferencias.getDesconto();
+	public static JCheckBox cboxCpf;
+	public static double descontoGeral = Preferencias.getDesconto();
 	
 	public static JPanel panelPrincipal;
 	
 	public static String nomeClienteAtual;
 	public static String dataCompraAtual;
+	public static String cpfAtual;
 	
 	/**
 	 * Launch the application.
@@ -444,6 +445,23 @@ public class TelaCaixa extends JFrame {
 	    AutoCompleteDecorator.decorate(cbPesquisaCliente);
 	    contentPane.add(cbPesquisaCliente);
 	    
+	    cboxCpf = new JCheckBox("CPF na nota");
+	    cboxCpf.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent arg0) {
+	    		if(cboxCpf.isSelected()) {
+    				atualizarNotaFiscal(nomeClienteAtual, dataCompraAtual, cpfAtual, String.valueOf(descontoGeral));
+    			}else {
+    				atualizarNotaFiscal(nomeClienteAtual, dataCompraAtual, null, String.valueOf(descontoGeral));
+    			}
+	    	}
+	    });
+	    cboxCpf.setForeground(new Color(25, 30, 35));
+	    cboxCpf.setFont(new Font("Roboto", Font.PLAIN, 28));
+	    cboxCpf.setBackground(Color.WHITE);
+	    cboxCpf.setBounds(1461, 821, 402, 45);
+	    contentPane.add(cboxCpf);
+	    
+	    
 	    JSeparator spCliente = new JSeparator();
 	    spCliente.setBounds(35, 217, 547, 2);
 	    spCliente.setBackground(corSeparador);
@@ -592,7 +610,7 @@ public class TelaCaixa extends JFrame {
 	    //taNota.setForeground(corTexto);
 	    taNota.setFont(new Font("Roboto", Font.PLAIN, 20));
 	    taNota.setBackground(Color.WHITE);
-	    taNota.setBounds(1461, 57, 402, 793);
+	    taNota.setBounds(1461, 57, 402, 742);
 	    contentPane.add(taNota);
 	    
 	    JLabel lblSubTotalTitulo = new JLabel("Subtotal:");
@@ -703,6 +721,7 @@ public class TelaCaixa extends JFrame {
 			    							
 			    							idClienteAtual = (int) dadosCliente[0];
 			    							idVendaAtual = veDao.RetornarProximoCodigoVenda();
+			    							cpfAtual = (String) dadosCliente[2];
 			    							ve.setId(idVendaAtual);
 			    							ve.setIdUsuario(idUsuario);
 			    							ve.setIdCliente(idClienteAtual);
@@ -757,7 +776,12 @@ public class TelaCaixa extends JFrame {
 			    		    			
 			    		    			nomeClienteAtual = String.valueOf(dadosCliente[1]);
 			    		    			dataCompraAtual = dataDeHoje.toString();
-			    		    			atualizarNotaFiscal(nomeClienteAtual, dataCompraAtual);
+			    		    			if(cboxCpf.isSelected()) {
+			    		    				atualizarNotaFiscal(nomeClienteAtual, dataCompraAtual, cpfAtual, String.valueOf(descontoGeral));
+			    		    			}else {
+			    		    				atualizarNotaFiscal(nomeClienteAtual, dataCompraAtual, null, String.valueOf(descontoGeral));
+			    		    			}
+			    		    			
 			    		    			
 			    		    			double totalAPagar = 0;
 			    		    			
@@ -852,7 +876,7 @@ public class TelaCaixa extends JFrame {
 					cbPesquisaCliente.setEnabled(true);
 					produtosParaComprar.clear();
 
-					atualizarNotaFiscal("Cliente", "");
+					atualizarNotaFiscal("Cliente", "", null, String.valueOf(descontoGeral));
 					
 					lblSubTotal.setText("R$0.00");
 					lblTotal.setText("R$0.00");
@@ -943,7 +967,7 @@ public class TelaCaixa extends JFrame {
 					cbPesquisaCliente.setEnabled(true);
 					produtosParaComprar.clear();
 
-					atualizarNotaFiscal("Cliente", "");
+					atualizarNotaFiscal("Cliente", "", null, String.valueOf(descontoGeral));
 					
 					revalidate();
 					repaint();
@@ -977,10 +1001,12 @@ public class TelaCaixa extends JFrame {
 	    btnFinalizarVenda.setBorder(null);
 	    btnFinalizarVenda.setBackground(corGeral);
 	    btnFinalizarVenda.setBounds(1668, 916, 195, 68);
-	    contentPane.add(btnFinalizarVenda);   	  
+	    contentPane.add(btnFinalizarVenda);   
+	    
 	    setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{cbPesquisaCliente, btnCadastrarCliente, btnInformacoes, btnEditar, btnCompras, tfCodigoBarras, tfQuantidade, btnAdicionarProduto, btnCancelarVenda, btnFinalizarVenda}));
 	    
-	    atualizarNotaFiscal("Cliente", "");
+	    atualizarNotaFiscal("Cliente", "", null, String.valueOf(descontoGeral));
+	    
 	}
 	
 	public static void atualizarCbPesquisa() {
@@ -1005,22 +1031,25 @@ public class TelaCaixa extends JFrame {
 		}catch(Exception e) { }
 	}
 	
-	void adicionarProdutoVenda(ProdutoVenda produtoVenda) {
-		//adiciona
-	}
-	
-	public static void atualizarNotaFiscal(String nomeCliente, String dataCompra) {
+	public static void atualizarNotaFiscal(String nomeCliente, String dataCompra, String cpfCliente, String desconto) {
 		try {
 			NumberFormat nf = new DecimalFormat("#.##");
 			double totalAPagar = 0;
 			taNota.setText(                   "  ---------------------------------------------------------------\n");
 			taNota.setText(taNota.getText() + "\n");
-			taNota.setText(taNota.getText() + "                          LOJA DE MODA\n");
+			taNota.setText(taNota.getText() + "  LOJA DE MODA" + "\n");
 			taNota.setText(taNota.getText() + "\n");
 			taNota.setText(taNota.getText() + "  ---------------------------------------------------------------\n");
 			taNota.setText(taNota.getText() + "  Venda número: " + veDao.RetornarProximoCodigoVenda() + "\n");
-			taNota.setText(taNota.getText() + "  Cliente: " + nomeCliente + "\n");
-			taNota.setText(taNota.getText() + "  " + dataCompra + "\n");
+			if(nomeCliente != null) {
+				taNota.setText(taNota.getText() + "  Cliente: " + nomeCliente + "\n");	
+			}
+			if(cpfCliente != null) {
+				taNota.setText(taNota.getText() + "  Cpf: " + cpfCliente + "\n");
+			}
+			if(dataCompra != null) {
+				taNota.setText(taNota.getText() + "  " + dataCompra + "\n");
+			}
 			taNota.setText(taNota.getText() + "  ---------------------------------------------------------------\n");
 			taNota.setText(taNota.getText() + "\n");
 			taNota.setText(taNota.getText() + "  Código     Descrição   \n");
@@ -1032,6 +1061,7 @@ public class TelaCaixa extends JFrame {
 				taNota.setText(taNota.getText() + "  ---------------------------------------------------------------\n");
 				totalAPagar += x.getQuantidade() * x.getValorUnitario();
 			}
+			taNota.setText(taNota.getText() + "  Desconto................................. " + desconto + "%\n");
 			taNota.setText(taNota.getText() + "  Total a pagar.......................... R$" + nf.format(totalAPagar) + "\n");
 		}catch(Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
