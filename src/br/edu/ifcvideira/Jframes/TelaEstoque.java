@@ -193,14 +193,13 @@ public class TelaEstoque extends JFrame {
 	private JTextField tfPrecoProd;
 	private JTextField tfTamanho;
 	private JTextField tfCdBarras;
-	
-	
+
 	JButton btnEditar = new JButton("Editar");
 
 	JButton btnExcluir = new JButton("Excluir");
 
 	JButton btnLimpar = new JButton("Limpar");
-	
+
 	JButton btEditarPro = new JButton("Editar");
 
 	JButton btExcluirPro = new JButton("Excluir");
@@ -210,14 +209,10 @@ public class TelaEstoque extends JFrame {
 	JButton btnEditarCat = new JButton("Editar");
 
 	JButton btnExcluirCat = new JButton("Excluir");
-	
+
 	JButton btnLimparCat = new JButton("Limpar");
 
 	JButton btCadastrarPro = new JButton("Cadastrar");
-
-
-
-
 
 	/**
 	 * Launch the application.
@@ -306,6 +301,37 @@ public class TelaEstoque extends JFrame {
 				System.exit(0);
 			}
 		});
+		
+		btSair.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+
+				btSair.setBackground(corSecundaria);
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btSair.setBackground(corGeral);
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				btSair.setBackground(corTerciaria);
+
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				btSair.setBackground(corGeral);
+
+			}
+
+		});
+
+		
 		btSair.setMaximumSize(new Dimension(80, 50));
 		btSair.setFont(new Font("Roboto", Font.PLAIN, 13));
 		btSair.setBorder(null);
@@ -320,6 +346,37 @@ public class TelaEstoque extends JFrame {
 
 			}
 		});
+		
+		
+		btMinimizar.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+
+				btMinimizar.setBackground(corSecundaria);
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btMinimizar.setBackground(corGeral);
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				btMinimizar.setBackground(corTerciaria);
+
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				btMinimizar.setBackground(corGeral);
+
+			}
+
+		});
+
 		btMinimizar.setMaximumSize(new Dimension(80, 50));
 		btMinimizar.setFont(new Font("Roboto", Font.PLAIN, 15));
 		btMinimizar.setBorder(null);
@@ -501,6 +558,35 @@ public class TelaEstoque extends JFrame {
 				atualizarTabelaPro();
 			}
 		});
+		btCadastrarPro.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+
+				btCadastrarPro.setBackground(corSecundaria);
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btCadastrarPro.setBackground(corGeral);
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				btCadastrarPro.setBackground(corTerciaria);
+
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				btCadastrarPro.setBackground(corGeral);
+
+			}
+
+		});
+
 
 		btCadastrarPro.setForeground(corTexto);
 		btCadastrarPro.setFont(new Font("Roboto", Font.PLAIN, 18));
@@ -564,8 +650,6 @@ public class TelaEstoque extends JFrame {
 		btEditarPro.setBounds(403, 362, 215, 54);
 		painelProdutos.add(btEditarPro);
 
-		
-		
 		btExcluirPro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -593,6 +677,41 @@ public class TelaEstoque extends JFrame {
 				}
 			}
 		});
+		
+		btEditarPro.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+
+				btEditarPro.setBackground(corSecundaria);
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btEditarPro.setBackground(corGeral);
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				btEditarPro.setBackground(corTerciaria);
+
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				btEditarPro.setBackground(corGeral);
+
+			}
+
+		});
+
+		
+		
+		
+		
+		
 		btExcluirPro.setForeground(corTexto);
 		btExcluirPro.setFont(new Font("Roboto", Font.PLAIN, 18));
 		btExcluirPro.setBorder(null);
@@ -604,12 +723,72 @@ public class TelaEstoque extends JFrame {
 				limparPro();
 			}
 		});
+		btExcluirPro.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+
+				btExcluirPro.setBackground(corSecundaria);
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btExcluirPro.setBackground(corGeral);
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				btExcluirPro.setBackground(corTerciaria);
+
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				btExcluirPro.setBackground(corGeral);
+
+			}
+
+		});
+
 		btLimparPro.setForeground(corTexto);
 		btLimparPro.setFont(new Font("Roboto", Font.PLAIN, 18));
 		btLimparPro.setBorder(null);
 		btLimparPro.setBackground(corGeral);
 		btLimparPro.setBounds(1048, 362, 215, 54);
 		painelProdutos.add(btLimparPro);
+		
+		
+		btLimparPro.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+
+				btLimparPro.setBackground(corSecundaria);
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btLimparPro.setBackground(corGeral);
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				btLimparPro.setBackground(corTerciaria);
+
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				btLimparPro.setBackground(corGeral);
+
+			}
+
+		});
+
 
 		panelImgNomePro.setForeground(Color.WHITE);
 		panelImgNomePro.setBackground(Color.WHITE);
@@ -1133,7 +1312,6 @@ public class TelaEstoque extends JFrame {
 		btnEditarCat.setBackground(corGeral);
 		painelCategoria.add(btnEditarCat);
 
-		
 		btnExcluirCat.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnExcluirCat.addMouseListener(new MouseAdapter() {
 			@Override
@@ -1713,8 +1891,7 @@ public class TelaEstoque extends JFrame {
 		btnEditar.setBorder(null);
 		btnEditar.setBackground(corGeral);
 		painelFornecedor.add(btnEditar);
-		
-		
+
 		btnExcluir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnExcluir.addMouseListener(new MouseAdapter() {
 			@Override
@@ -1791,7 +1968,7 @@ public class TelaEstoque extends JFrame {
 		btnExcluir.setBorder(null);
 		btnExcluir.setBackground(corGeral);
 		painelFornecedor.add(btnExcluir);
-				btnLimpar.addActionListener(new ActionListener() {
+		btnLimpar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				limpar();
 				deixarCerto();
@@ -2467,13 +2644,13 @@ public class TelaEstoque extends JFrame {
 
 	public void clickarFornecedor() {
 		limpar();
+		
+		deixarCerto();
 
 		painelFornecedor.setVisible(true);
 		painelCategoria.setVisible(false);
 		painelProdutos.setVisible(false);
 		atualizarTabela();
-
-		
 
 		btnCategoria.setBackground(Color.LIGHT_GRAY);
 		btnProdutos.setBackground(Color.LIGHT_GRAY);
@@ -2567,9 +2744,6 @@ public class TelaEstoque extends JFrame {
 		painelCategoria.setVisible(true);
 		painelFornecedor.setVisible(false);
 		painelProdutos.setVisible(false);
-		
-
-		
 
 		btnFornecedor.setBackground(Color.LIGHT_GRAY);
 		btnProdutos.setBackground(Color.LIGHT_GRAY);
@@ -2659,8 +2833,6 @@ public class TelaEstoque extends JFrame {
 
 	public void clickarProdutos() {
 
-
-		
 		try {
 			if (!((proDao.RetornarCategoria(pro) || (proDao.RetornarFornecedor(pro))))) {
 
