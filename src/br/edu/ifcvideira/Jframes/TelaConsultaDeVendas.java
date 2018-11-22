@@ -51,7 +51,6 @@ public class TelaConsultaDeVendas extends JFrame {
 	private JTextField tfCelular;
 	private JTextField tfTelefone;
 	private JTextField tfCpf;
-	private JTextField tfNome;
 	
 	private JPanel panelImgNome;
 	private JPanel panelImgCpf;
@@ -76,7 +75,7 @@ public class TelaConsultaDeVendas extends JFrame {
 	
 	ImageIcon imageIconX = new ImageIcon(TelaLogin.class.getResource("/br/edu/ifcvideira/img/xerro.png"));
 	Image imagemX = imageIconX.getImage().getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH);
-	private JTextField tfData;
+	private JTextField tfNome;
 
 
 	/**
@@ -101,13 +100,14 @@ public class TelaConsultaDeVendas extends JFrame {
 	public TelaConsultaDeVendas(Cliente cliente) {
 		setName("Tela ConsultaDeVendas Cliente");
 		Dimension tela = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-		int largura = 513;
+		int largura = 1000;
 		int altura = 700;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds((tela.width / 2) - (largura / 2), (tela.height / 2) - (altura / 2), largura, altura);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
+		contentPane.setBackground(Color.WHITE);
 		setUndecorated(true);
 		contentPane.setLayout(null);
 		setResizable(false);
@@ -121,7 +121,7 @@ public class TelaConsultaDeVendas extends JFrame {
 		boolean[] camposCorretos = {true, true, true, true, true, true, true};
 		
 		JPanel panelSuperior = new JPanel();
-		panelSuperior.setBounds(0, 0, 512, 32);
+		panelSuperior.setBounds(0, 0, largura, 32);
 		contentPane.add(panelSuperior);
 		panelSuperior.addMouseListener(new MouseAdapter() {
 			@Override
@@ -169,7 +169,7 @@ public class TelaConsultaDeVendas extends JFrame {
 				dispose();	
 			}
 		});
-		btnX.setBounds(470, 0, 42, 30);
+		btnX.setBounds(957, 0, 42, 30);
 		btnX.setMaximumSize(new Dimension(80, 50));
 		btnX.setFont(new Font("Roboto", Font.PLAIN, 13));
 		btnX.setBorder(null);
@@ -204,11 +204,55 @@ public class TelaConsultaDeVendas extends JFrame {
 		btnMinimizar.setMaximumSize(new Dimension(80, 50));
 		btnMinimizar.setFont(new Font("Roboto", Font.PLAIN, 15));
 		btnMinimizar.setBorder(null);
-		btnMinimizar.setBounds(424, 0, 42, 30);
+		btnMinimizar.setBounds(911, 0, 42, 30);
 		panelSuperior.add(btnMinimizar);
 		
 		
 		
+		
+		
+		
+		tfNome = new JTextField();
+		tfNome.setEditable(false);
+		tfNome.setText(cliente.getNome().toString());
+		tfNome.setBounds(75, 35, 167, 29);
+		tfNome.setForeground(corTexto);
+		tfNome.setFont(new Font("Roboto", Font.PLAIN, 14));
+		tfNome.setBorder(null);
+		tfNome.setBackground(Color.WHITE);
+		contentPane.add(tfNome);
+		
+		JSeparator spData = new JSeparator();
+		spData.setBounds(75, 64, 167, 2);
+		spData.setBackground(corSeparador);
+		contentPane.add(spData);
+		
+		JLabel lblNome = new JLabel("Nome");
+		lblNome.setBounds(12, 32, 51, 42);
+		lblNome.setForeground(new Color(75, 80, 85));
+		lblNome.setFont(new Font("Roboto", Font.PLAIN, 15));
+		contentPane.add(lblNome);
+		
+		JTextField tfId = new JTextField();
+		tfId.setEditable(false);
+		tfId.setText(String.valueOf(cliente.getId()));
+		tfId.setBounds(334, 35, 15, 29);
+		tfId.setForeground(corTexto);
+		tfId.setFont(new Font("Roboto", Font.PLAIN, 14));
+		tfId.setBorder(null);
+		tfId.setBackground(Color.WHITE);
+		contentPane.add(tfId);
+		
+		JSeparator spId = new JSeparator();
+		spId.setBounds(334, 64, 15, 2);
+		spId.setBackground(corSeparador);
+		contentPane.add(spId);
+		
+		JLabel lblId = new JLabel("Id");
+		lblId.setBounds(304, 32, 37, 42);
+		lblId.setForeground(new Color(75, 80, 85));
+		lblId.setFont(new Font("Roboto", Font.PLAIN, 15));
+		contentPane.add(lblId);
 	}
 
 	

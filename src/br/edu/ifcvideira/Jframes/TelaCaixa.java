@@ -65,7 +65,7 @@ public class TelaCaixa extends JFrame {
 	ProdutoVendaDao pvDao = new ProdutoVendaDao();
 	
 	TelaCadastroCliente telaCadastroCliente = new TelaCadastroCliente();
-	TelaEditarCliente telaEditarCliente;
+	
 	
 	public static JComboBox cbPesquisaCliente = new JComboBox<>(new Object[] {""});
 	public static JScrollPane scrollProdutosVenda;
@@ -325,7 +325,7 @@ public class TelaCaixa extends JFrame {
 		    		cliente.setCidade(dadosCliente[8].toString());
 		    		cliente.setEstado(dadosCliente[9].toString());
 		    		
-		    		telaEditarCliente = new TelaEditarCliente(cliente);
+		    		TelaEditarCliente telaEditarCliente = new TelaEditarCliente(cliente);
 		    		telaEditarCliente.setVisible(true);
 	    		}catch(Exception e) {
 	    			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro ao alterar", JOptionPane.ERROR_MESSAGE);

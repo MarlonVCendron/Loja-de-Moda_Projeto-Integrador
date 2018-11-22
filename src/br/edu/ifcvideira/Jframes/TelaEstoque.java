@@ -251,13 +251,93 @@ public class TelaEstoque extends JFrame {
 		painelPrincipal.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(painelPrincipal);
 		painelPrincipal.setLayout(null);
+		
+		Dimension tela = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+		int largura = 1386;
+		int altura = 886;
+		JPanel mainPanel = new JPanel();
+		mainPanel.setBounds((tela.width / 2) - (largura / 2), (tela.height / 2) - (altura / 2), largura, altura);
+		mainPanel.setLayout(null);
+		painelPrincipal.add(mainPanel);
+		
+		//PAINEL SUPERIOR
+		
+		JPanel panelSuperior = new JPanel();
+		panelSuperior.setBounds(0, 0, 1920, 32);
+		painelPrincipal.add(panelSuperior);
+		panelSuperior.setBackground(new Color(255, 255, 255));
+		panelSuperior.setLayout(null);
+		
+		JButton btnX = new JButton("X");
+		btnX.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnX.setBackground(corSecundaria);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnX.setBackground(corGeral);
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				btnX.setBackground(corTerciaria);
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				btnX.setBackground(corGeral);
+			}
+		});
+		btnX.setBackground(corGeral);
+		btnX.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		btnX.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.exit(0);
+			}
+		});
+		btnX.setBounds(1878, 0, 42, 30);
+		btnX.setMaximumSize(new Dimension(80, 50));
+		btnX.setFont(new Font("Roboto", Font.PLAIN, 13));
+		btnX.setBorder(null);
+		panelSuperior.add(btnX);
+		
+		JButton btnMinimizar = new JButton("-");
+		btnMinimizar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnMinimizar.setBackground(corSecundaria);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnMinimizar.setBackground(corGeral);
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				btnMinimizar.setBackground(corTerciaria);
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				btnMinimizar.setBackground(corGeral);
+			}
+		});
+		btnMinimizar.setBackground(corGeral);
+		btnMinimizar.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		btnMinimizar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setState(JFrame.ICONIFIED);
+			}
+		});
+		btnMinimizar.setMaximumSize(new Dimension(80, 50));
+		btnMinimizar.setFont(new Font("Roboto", Font.PLAIN, 15));
+		btnMinimizar.setBorder(null);
+		btnMinimizar.setBounds(1835, 0, 42, 30);
+		panelSuperior.add(btnMinimizar);
 
 		JPanel btnSuperior = new JPanel();
 		btnSuperior.setLayout(null);
 		btnSuperior.setBorder(new EmptyBorder(5, 5, 5, 5));
 		btnSuperior.setBackground(Color.WHITE);
 		btnSuperior.setBounds(0, 0, 1386, 121);
-		painelPrincipal.add(btnSuperior);
+		mainPanel.add(btnSuperior);
 		btnFornecedor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				clickarFornecedor();
@@ -295,7 +375,7 @@ public class TelaEstoque extends JFrame {
 		btnProdutos.setBounds(927, 57, 400, 54);
 		btnSuperior.add(btnProdutos);
 
-		JButton btSair = new JButton("X");
+		/*JButton btSair = new JButton("X");
 		btSair.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
@@ -382,7 +462,7 @@ public class TelaEstoque extends JFrame {
 		btMinimizar.setBorder(null);
 		btMinimizar.setBackground(corGeral);
 		btMinimizar.setBounds(1248, 0, 42, 42);
-		btnSuperior.add(btMinimizar);
+		btnSuperior.add(btMinimizar);*/
 
 		try {
 			MaskFormatter tfDescontoCatFormatter = new MaskFormatter("##");
@@ -395,7 +475,7 @@ public class TelaEstoque extends JFrame {
 		painelProdutos.setBorder(new EmptyBorder(5, 5, 5, 5));
 		painelProdutos.setBackground(Color.WHITE);
 		painelProdutos.setBounds(0, 0, 1386, 886);
-		painelPrincipal.add(painelProdutos);
+		mainPanel.add(painelProdutos);
 
 		JLabel lblNomePro = new JLabel("Nome");
 		lblNomePro.setForeground(corTexto);
@@ -1124,7 +1204,7 @@ public class TelaEstoque extends JFrame {
 		painelCategoria.setBorder(new EmptyBorder(5, 5, 5, 5));
 		painelCategoria.setBackground(Color.WHITE);
 		painelCategoria.setBounds(0, 0, 1386, 886);
-		painelPrincipal.add(painelCategoria);
+		mainPanel.add(painelCategoria);
 
 		JLabel lblDescontoCat = new JLabel("Desconto");
 		lblDescontoCat.setBounds(38, 190, 119, 42);
@@ -1603,7 +1683,7 @@ public class TelaEstoque extends JFrame {
 		painelFornecedor.setBorder(new EmptyBorder(5, 5, 5, 5));
 		painelFornecedor.setBackground(Color.WHITE);
 		painelFornecedor.setBounds(0, 0, 1386, 886);
-		painelPrincipal.add(painelFornecedor);
+		mainPanel.add(painelFornecedor);
 
 		JLabel lblNome = new JLabel("Nome");
 		lblNome.setBounds(38, 136, 60, 42);
