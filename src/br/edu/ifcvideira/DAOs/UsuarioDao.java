@@ -16,6 +16,7 @@ public class UsuarioDao {
 		try{
 			String sql = "INSERT INTO usuario (tipo, nome, senha, cpf, rg, telefone, celular, data_cadastro, status) VALUES (?,?,?,?,?,?,?,?,?)";
 			java.sql.PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
+			System.out.println("safas");
 			sqlPrep.setInt(1, us.getTipo());
 			sqlPrep.setString(2, us.getNome());
 			sqlPrep.setString(3, us.getSenha());
@@ -123,5 +124,25 @@ public class UsuarioDao {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 			return 1;
 		}
+	}
+	
+	public List<Object> buscarNomes() throws SQLException, Exception{
+		List<Object> info = new ArrayList<>();
+		try {
+			String sql = "SELECT nome FROM usuario";
+			//java.sql.Statement state = Conexao.conectar().createStatement();
+			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
+			ResultSet rs = sqlPrep.executeQuery();
+			
+			while (rs.next())
+			{
+				info.add(rs.getString(1));
+			}
+			sqlPrep.close();
+			
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
+		return info;
 	}
 }

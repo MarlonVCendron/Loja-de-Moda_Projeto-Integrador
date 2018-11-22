@@ -433,6 +433,14 @@ public class TelaCaixa extends JFrame {
 						btnCompras.setBackground(corGeral);
 						btnInformacoes.setBackground(corGeral);
 					}
+	    		}else {
+	    			btnEditar.setEnabled(false);
+					btnCompras.setEnabled(false);
+					btnInformacoes.setEnabled(false);
+					
+					btnEditar.setBackground(new Color(200, 200, 200));
+					btnCompras.setBackground(new Color(200, 200, 200));
+					btnInformacoes.setBackground(new Color(200, 200, 200));
 	    		}
 	    		
 	    	}
