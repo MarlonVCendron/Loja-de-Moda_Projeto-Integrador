@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -40,29 +41,30 @@ import javax.swing.text.MaskFormatter;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 import br.edu.ifcvideira.Classes.Cliente;
+import br.edu.ifcvideira.Classes.Venda;
 import br.edu.ifcvideira.DAOs.ClienteDao;
+import br.edu.ifcvideira.DAOs.ProdutoVendaDao;
 import br.edu.ifcvideira.DAOs.VendaDao;
+import br.edu.ifcvideira.utils.BlocoProdutoVenda;
+import br.edu.ifcvideira.utils.BlocoVendaFiado;
+import br.edu.ifcvideira.utils.BlocoVendaPaga;
 import br.edu.ifcvideira.utils.Cor;
 import br.edu.ifcvideira.utils.Preferencias;
+import javax.swing.JScrollPane;
 public class TelaConsultaDeVendas extends JFrame {
 
 	private JPanel contentPane;
 	
-	private JTextField tfCelular;
-	private JTextField tfTelefone;
-	private JTextField tfCpf;
-	
-	private JPanel panelImgNome;
-	private JPanel panelImgCpf;
-	private JPanel panelImgTelefone;
-	private JPanel panelImgRua;
-	private JPanel panelImgBairro;
-	private JPanel panelImgCidade;
+	public static JPanel panelFiado;
+	public static JPanel panelPaga;
 	
 	public static JLabel lblLogo;
 	
-	private Cliente cl = new Cliente();
-	private ClienteDao daoCl = new ClienteDao();
+	public static Cliente cl = new Cliente();
+	public static ClienteDao daoCl = new ClienteDao();
+	
+	public static Venda ve = new Venda();
+	public static VendaDao veDao = new VendaDao();
 	
 	Color corTexto = new Color(75, 80, 85);
 	Color corGeral = new Color(Preferencias.getR(), Preferencias.getG(), Preferencias.getB());
@@ -85,7 +87,11 @@ public class TelaConsultaDeVendas extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TelaConsultaDeVendas frame = new TelaConsultaDeVendas(null);
+					Cliente cl = new Cliente();
+					cl.setNome("Josias");
+					Timestamp dataCadastro = new Timestamp(System.currentTimeMillis());
+					cl.setDataCadastro(dataCadastro);
+					TelaConsultaDeVendas frame = new TelaConsultaDeVendas(cl);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -98,9 +104,9 @@ public class TelaConsultaDeVendas extends JFrame {
 	 * Create the frame.
 	 */
 	public TelaConsultaDeVendas(Cliente cliente) {
-		setName("Tela ConsultaDeVendas Cliente");
+		setName("Tela Consulta De Vendas Cliente");
 		Dimension tela = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-		int largura = 1000;
+		int largura = 1400;
 		int altura = 700;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds((tela.width / 2) - (largura / 2), (tela.height / 2) - (altura / 2), largura, altura);
@@ -116,6 +122,9 @@ public class TelaConsultaDeVendas extends JFrame {
 		ImageIcon imageIconLogo = new ImageIcon(Preferencias.getImagem());
 		Image imagemLogo = imageIconLogo.getImage().getScaledInstance(300, 300,  java.awt.Image.SCALE_SMOOTH);
 		setIconImage(imagemLogo);
+		
+		setTitle(Preferencias.getNomeLoja());
+		
 		
 		//Variáveis que cuidam para que os campos sejam preenchidos adequadamente
 		boolean[] camposCorretos = {true, true, true, true, true, true, true};
@@ -169,7 +178,7 @@ public class TelaConsultaDeVendas extends JFrame {
 				dispose();	
 			}
 		});
-		btnX.setBounds(957, 0, 42, 30);
+		btnX.setBounds(1358, 0, 42, 30);
 		btnX.setMaximumSize(new Dimension(80, 50));
 		btnX.setFont(new Font("Roboto", Font.PLAIN, 13));
 		btnX.setBorder(null);
@@ -204,7 +213,7 @@ public class TelaConsultaDeVendas extends JFrame {
 		btnMinimizar.setMaximumSize(new Dimension(80, 50));
 		btnMinimizar.setFont(new Font("Roboto", Font.PLAIN, 15));
 		btnMinimizar.setBorder(null);
-		btnMinimizar.setBounds(911, 0, 42, 30);
+		btnMinimizar.setBounds(1312, 0, 42, 30);
 		panelSuperior.add(btnMinimizar);
 		
 		
@@ -215,20 +224,20 @@ public class TelaConsultaDeVendas extends JFrame {
 		tfNome = new JTextField();
 		tfNome.setEditable(false);
 		tfNome.setText(cliente.getNome().toString());
-		tfNome.setBounds(75, 35, 167, 29);
+		tfNome.setBounds(101, 38, 167, 29);
 		tfNome.setForeground(corTexto);
 		tfNome.setFont(new Font("Roboto", Font.PLAIN, 14));
 		tfNome.setBorder(null);
 		tfNome.setBackground(Color.WHITE);
 		contentPane.add(tfNome);
 		
-		JSeparator spData = new JSeparator();
-		spData.setBounds(75, 64, 167, 2);
-		spData.setBackground(corSeparador);
-		contentPane.add(spData);
+		JSeparator spNome = new JSeparator();
+		spNome.setBounds(101, 67, 167, 2);
+		spNome.setBackground(corSeparador);
+		contentPane.add(spNome);
 		
 		JLabel lblNome = new JLabel("Nome");
-		lblNome.setBounds(12, 32, 51, 42);
+		lblNome.setBounds(38, 35, 51, 42);
 		lblNome.setForeground(new Color(75, 80, 85));
 		lblNome.setFont(new Font("Roboto", Font.PLAIN, 15));
 		contentPane.add(lblNome);
@@ -253,6 +262,54 @@ public class TelaConsultaDeVendas extends JFrame {
 		lblId.setForeground(new Color(75, 80, 85));
 		lblId.setFont(new Font("Roboto", Font.PLAIN, 15));
 		contentPane.add(lblId);
+		
+		JLabel lblNaoPagas = new JLabel("Vendas n\u00E3o pagas");
+		lblNaoPagas.setForeground(corTexto);
+		lblNaoPagas.setFont(new Font("Roboto", Font.PLAIN, 24));
+		lblNaoPagas.setBounds(36, 115, 345, 55);
+		contentPane.add(lblNaoPagas);
+		
+		JLabel lblPagas = new JLabel("Vendas pagas");
+		lblPagas.setForeground(corTexto);
+		lblPagas.setFont(new Font("Roboto", Font.PLAIN, 24));
+		lblPagas.setBounds(747, 115, 345, 55);
+		contentPane.add(lblPagas);
+		
+		
+		
+		JScrollPane scrollFiado = new JScrollPane();
+		scrollFiado.setBounds(35, 183, 620, 482);
+		scrollFiado.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollFiado.getVerticalScrollBar().setUnitIncrement(10);
+		contentPane.add(scrollFiado);
+		
+		JScrollPane scrollPaga = new JScrollPane();
+		scrollPaga.setBounds(747, 183, 620, 482);
+		scrollPaga.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPaga.getVerticalScrollBar().setUnitIncrement(10);
+		contentPane.add(scrollPaga);
+		
+		panelFiado = new JPanel();
+		panelFiado.setBackground(Color.WHITE);
+		panelFiado.setLayout(new BoxLayout(panelFiado, BoxLayout.Y_AXIS));
+		scrollFiado.setViewportView(panelFiado);
+		
+		panelPaga = new JPanel();
+		panelPaga.setBackground(Color.WHITE);
+		panelPaga.setLayout(new BoxLayout(panelPaga, BoxLayout.Y_AXIS));
+		scrollPaga.setViewportView(panelPaga);
+		
+		
+		
+		ArrayList<BlocoVendaPaga> blocosVendaPaga = pegarBlocosVendasPagas(cliente.getId());
+		for(BlocoVendaPaga bvp : blocosVendaPaga) {
+			panelPaga.add(bvp);
+		}
+		
+		ArrayList<BlocoVendaFiado> blocosVendaFiado = pegarBlocosVendasFiado(cliente.getId());
+		for(BlocoVendaFiado bvf : blocosVendaFiado) {
+			panelFiado.add(bvf);
+		}
 	}
 
 	
@@ -262,5 +319,87 @@ public class TelaConsultaDeVendas extends JFrame {
 			x = x && a;
 		}
 		return x;
+	}
+	
+	ArrayList<BlocoVendaPaga> pegarBlocosVendasPagas(int idCliente) {
+		VendaDao veDao = new VendaDao();
+		ArrayList<BlocoVendaPaga> blocos = new ArrayList<>();
+		try {
+			List<Object> dadosTodasVendas = veDao.buscarVendasCliente(idCliente);
+			for(Object o : dadosTodasVendas) {
+				Object[] dadosVenda = (Object[]) o;
+				
+				if((int) dadosVenda[5] != 0) {
+					int idVenda = (int) dadosVenda[0];
+					int idUsuario = (int) dadosVenda[1];
+					Timestamp dataVenda = (Timestamp) dadosVenda[3];
+					int desconto = (int) dadosVenda[6];
+					
+					double valorTotal = 0;
+					
+					ProdutoVendaDao pvDao = new ProdutoVendaDao();
+					List<Object> dadosTodosProdutos = pvDao.buscarProdutosVenda(idVenda);
+					for(Object p : dadosTodosProdutos) {
+						Object[] dadosProdutoVenda = (Object[]) p;
+						
+						int quantidade = (int) dadosProdutoVenda[4];
+						
+						valorTotal += (double) dadosProdutoVenda[3] * quantidade;
+					}
+					valorTotal -= valorTotal * desconto / 100;
+					
+					BlocoVendaPaga bvp = new BlocoVendaPaga(idVenda, idUsuario, valorTotal, dataVenda);
+					blocos.add(bvp);
+				}
+			}
+			
+			
+			
+		}catch(Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+		}
+		
+		return blocos;
+	}
+	
+	ArrayList<BlocoVendaFiado> pegarBlocosVendasFiado(int idCliente) {
+		VendaDao veDao = new VendaDao();
+		ArrayList<BlocoVendaFiado> blocos = new ArrayList<>();
+		try {
+			List<Object> dadosTodasVendas = veDao.buscarVendasCliente(idCliente);
+			for(Object o : dadosTodasVendas) {
+				Object[] dadosVenda = (Object[]) o;
+				
+				if((int) dadosVenda[5] == 0) {
+					int idVenda = (int) dadosVenda[0];
+					int idUsuario = (int) dadosVenda[1];
+					Timestamp dataVenda = (Timestamp) dadosVenda[3];
+					int desconto = (int) dadosVenda[6];
+					
+					double valorTotal = 0;
+					
+					ProdutoVendaDao pvDao = new ProdutoVendaDao();
+					List<Object> dadosTodosProdutos = pvDao.buscarProdutosVenda(idVenda);
+					for(Object p : dadosTodosProdutos) {
+						Object[] dadosProdutoVenda = (Object[]) p;
+						
+						int quantidade = (int) dadosProdutoVenda[4];
+						
+						valorTotal += (double) dadosProdutoVenda[3] * quantidade;
+					}
+					valorTotal -= valorTotal * desconto / 100;
+					
+					BlocoVendaFiado bvf = new BlocoVendaFiado(idVenda, idUsuario, valorTotal, dataVenda);
+					blocos.add(bvf);
+				}
+			}
+			
+			
+			
+		}catch(Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+		}
+		
+		return blocos;
 	}
 }

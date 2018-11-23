@@ -121,6 +121,7 @@ public class TelaCaixa extends JFrame {
 		ImageIcon imageIconLogo = new ImageIcon(Preferencias.getImagem());
 		Image imagemLogo = imageIconLogo.getImage().getScaledInstance(300, 300,  java.awt.Image.SCALE_SMOOTH);
 		setIconImage(imagemLogo);
+		setTitle(Preferencias.getNomeLoja());
 		
 		setExtendedState(MAXIMIZED_BOTH);
 		contentPane.setLayout(null);
@@ -371,7 +372,23 @@ public class TelaCaixa extends JFrame {
 	    JButton btnCompras = new JButton("Compras");
 	    btnCompras.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent arg0) {
-	    		//Tela das compras
+	    		String nomeCliente = cbPesquisaCliente.getSelectedItem().toString();
+	    		 
+	    		
+	    		try {
+	    			Object[] dadosCliente = clDao.buscarCliente(nomeCliente);
+	    			
+	    			Cliente cliente = new Cliente();
+	    			
+		    		cliente.setId((int) dadosCliente[0]);
+		    		cliente.setNome(dadosCliente[1].toString());
+		    		cliente.setDataCadastro((Timestamp) dadosCliente[5]);
+		    		
+		    		TelaConsultaDeVendas telaConsultaDeVendas = new TelaConsultaDeVendas(cliente);
+		    		telaConsultaDeVendas.setVisible(true);
+	    		}catch(Exception e) {
+	    			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro ao visualizar informações", JOptionPane.ERROR_MESSAGE);
+	    		}
 	    	}
 	    });
 	    btnCompras.setBounds(410, 159, 162, 45);
@@ -433,6 +450,14 @@ public class TelaCaixa extends JFrame {
 						btnCompras.setBackground(corGeral);
 						btnInformacoes.setBackground(corGeral);
 					}
+	    		}else {
+	    			btnEditar.setEnabled(false);
+					btnCompras.setEnabled(false);
+					btnInformacoes.setEnabled(false);
+					
+					btnEditar.setBackground(new Color(200, 200, 200));
+					btnCompras.setBackground(new Color(200, 200, 200));
+					btnInformacoes.setBackground(new Color(200, 200, 200));
 	    		}
 	    		
 	    	}
@@ -927,6 +952,7 @@ public class TelaCaixa extends JFrame {
 				ve.setIdCliente(idClienteAtual);
 				ve.setStatus(1);
 				ve.setData(ve.getData());
+				ve.setDesconto((int) (Math.floor(descontoGeral)));
 				
 				if(cboxPrazo.isSelected()) {
 					ve.setStatusPagamento(0);
@@ -962,6 +988,9 @@ public class TelaCaixa extends JFrame {
 					
 					panelPrincipal.removeAll();
 					tamanhoScrollProdutosVenda = 0;
+					lblSubTotal.setText("R$0.00");
+					lblDesconto.setText("0%");
+					lblTotal.setText("R$0.00");
 					panelPrincipal.setSize(1098, tamanhoScrollProdutosVenda);
 					scrollProdutosVenda.setSize(1098, tamanhoScrollProdutosVenda);
 					cbPesquisaCliente.setEnabled(true);

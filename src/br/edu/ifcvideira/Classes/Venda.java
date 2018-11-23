@@ -9,6 +9,7 @@ public class Venda {
 	private Timestamp data;
 	private int status;
 	private int statusPagamento;
+	private int desconto;
 	
 	public int getId() {
 		return id;
@@ -45,5 +46,12 @@ public class Venda {
 	}
 	public void setStatusPagamento(int statusPagamento) {
 		this.statusPagamento = statusPagamento;
+	}
+	public int getDesconto() {
+		return desconto;
+	}
+	public void setDesconto(int desconto) {
+		this.desconto = desconto;
 	}	
+	
 }

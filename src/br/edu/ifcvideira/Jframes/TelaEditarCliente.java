@@ -116,6 +116,7 @@ public class TelaEditarCliente extends JFrame {
 		ImageIcon imageIconLogo = new ImageIcon(Preferencias.getImagem());
 		Image imagemLogo = imageIconLogo.getImage().getScaledInstance(300, 300,  java.awt.Image.SCALE_SMOOTH);
 		setIconImage(imagemLogo);
+		setTitle(Preferencias.getNomeLoja());
 		
 		//Variáveis que cuidam para que os campos sejam preenchidos adequadamente
 		boolean[] camposCorretos = {true, true, true, true, true, true, true};

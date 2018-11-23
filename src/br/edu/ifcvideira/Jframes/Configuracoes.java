@@ -95,6 +95,8 @@ public class Configuracoes extends JFrame {
 		Image imagemLogo = imageIconLogo.getImage().getScaledInstance(300, 300,  java.awt.Image.SCALE_SMOOTH);
 		setIconImage(imagemLogo);
 		
+		setTitle(Preferencias.getNomeLoja());
+		
 		JPanel panelSuperior = new JPanel();
 		panelSuperior.addMouseListener(new MouseAdapter() {
 			@Override

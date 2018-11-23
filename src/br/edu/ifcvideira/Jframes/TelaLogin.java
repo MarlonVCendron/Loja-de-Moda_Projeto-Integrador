@@ -135,6 +135,8 @@ public class TelaLogin extends JFrame {
 		setIconImage(imagemLogo);
 		
 		
+		
+		
 		//Variáveis que cuidam para que os campos sejam preenchidos adequadamente
 		boolean[] camposCorretos = {false, false, false, false, false, false, false};
 		

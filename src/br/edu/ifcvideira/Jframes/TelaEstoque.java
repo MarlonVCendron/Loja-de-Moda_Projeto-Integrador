@@ -260,6 +260,8 @@ public class TelaEstoque extends JFrame {
 		mainPanel.setLayout(null);
 		painelPrincipal.add(mainPanel);
 		
+		setTitle(Preferencias.getNomeLoja());
+		
 		//PAINEL SUPERIOR
 		
 		JPanel panelSuperior = new JPanel();

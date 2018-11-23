@@ -15,13 +15,14 @@ import br.edu.ifcvideira.utils.Conexao;
 public class VendaDao {
 	public void CadastrarVenda(Venda ve) throws SQLException, Exception{
 		try{
-			String sql = "INSERT INTO vendas (id_usuario, id_cliente, data, status, status_pagamento) VALUES (?,?,?,?,?)";
+			String sql = "INSERT INTO vendas (id_usuario, id_cliente, data, status, status_pagamento, desconto) VALUES (?,?,?,?,?,?)";
 			java.sql.PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
 			sqlPrep.setInt(1, ve.getIdUsuario());
 			sqlPrep.setInt(2, ve.getIdCliente());
 			sqlPrep.setTimestamp(3, ve.getData());
 			sqlPrep.setInt(4, ve.getStatus());
 			sqlPrep.setInt(5, ve.getStatusPagamento());
+			sqlPrep.setInt(6, ve.getDesconto());
 			sqlPrep.execute();
 			
 		} catch(SQLException e) {
@@ -34,14 +35,15 @@ public class VendaDao {
 
 	public void AlterarVenda(Venda ve) throws Exception {
 		try{
-			String sql = "UPDATE vendas SET id_usuario=?, id_cliente=?, data=?, status=?, status_pagamento=? WHERE id=?";
+			String sql = "UPDATE vendas SET id_usuario=?, id_cliente=?, data=?, status=?, status_pagamento=?, desconto=? WHERE id=?";
 			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
 			sqlPrep.setInt(1, ve.getIdUsuario());
 			sqlPrep.setInt(2, ve.getIdCliente());
 			sqlPrep.setTimestamp(3, ve.getData());
 			sqlPrep.setInt(4, ve.getStatus());
 			sqlPrep.setInt(5, ve.getStatusPagamento());
-			sqlPrep.setInt(6, ve.getId());
+			sqlPrep.setInt(6, ve.getDesconto());
+			sqlPrep.setInt(7, ve.getId());
 			sqlPrep.execute();
 		}catch(Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
@@ -88,16 +90,37 @@ public class VendaDao {
 		}
 	}
 	
+	public List<Object> buscarVendasCliente(int idCliente) throws SQLException, Exception{
+		List<Object> Venda = new ArrayList<Object>();
+		try {
+			String sql = "SELECT * FROM vendas WHERE id_cliente=?";
+			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
+			sqlPrep.setInt(1, idCliente);
+			ResultSet rs = sqlPrep.executeQuery();
+			
+			while (rs.next())
+			{
+				Object[] linha = {rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getTimestamp(4), rs.getInt(5), rs.getInt(6), rs.getInt(7)};
+				Venda.add(linha);
+			}
+			sqlPrep.close();
+			
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
+		return Venda;
+	}
+	
 	public List<Object> buscarTodos() throws SQLException, Exception{
 		List<Object> Venda = new ArrayList<Object>();
 		try {
-			String sql = "SELECT * FROM venda";
+			String sql = "SELECT * FROM vendas";
 			java.sql.Statement state = Conexao.conectar().createStatement();
 			ResultSet rs = state.executeQuery(sql);
 			
 			while (rs.next())
 			{
-				Object[] linha = {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6)};
+				Object[] linha = {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7)};
 				Venda.add(linha);
 			}
 			state.close();

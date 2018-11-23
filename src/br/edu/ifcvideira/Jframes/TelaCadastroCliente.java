@@ -115,6 +115,8 @@ public class TelaCadastroCliente extends JFrame {
 		Image imagemLogo = imageIconLogo.getImage().getScaledInstance(300, 300,  java.awt.Image.SCALE_SMOOTH);
 		setIconImage(imagemLogo);
 		
+		setTitle(Preferencias.getNomeLoja());
+		
 		//Variáveis que cuidam para que os campos sejam preenchidos adequadamente
 		boolean[] camposCorretos = {false, false, false, true, false, false, false};
 		

@@ -92,6 +92,8 @@ public class TelaInfoCliente extends JFrame {
 		Image imagemLogo = imageIconLogo.getImage().getScaledInstance(300, 300,  java.awt.Image.SCALE_SMOOTH);
 		setIconImage(imagemLogo);
 		
+		setTitle(Preferencias.getNomeLoja());
+		
 		JPanel panelSuperior = new JPanel();
 		panelSuperior.setBounds(0, 0, 512, 32);
 		contentPane.add(panelSuperior);
