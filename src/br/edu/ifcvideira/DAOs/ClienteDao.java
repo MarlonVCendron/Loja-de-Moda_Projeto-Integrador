@@ -106,6 +106,27 @@ public class ClienteDao {
 		return info;
 	}
 	
+	public String[] buscarInfoCliente(int id) throws SQLException, Exception{
+		String[] info = new String[2];
+		try {
+			String sql = "SELECT nome, cpf FROM clientes WHERE id=?";
+			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
+			sqlPrep.setInt(1, id);
+			ResultSet rs = sqlPrep.executeQuery();
+			
+			while (rs.next())
+			{
+				String[] linha = {rs.getString(1), rs.getString(2)};
+				info = linha;
+			}
+			sqlPrep.close();
+			
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
+		return info;
+	}
+	
 	public Object[] buscarCliente(String nome) throws SQLException, Exception{
 		Object[] info = new Object[10];
 		try {

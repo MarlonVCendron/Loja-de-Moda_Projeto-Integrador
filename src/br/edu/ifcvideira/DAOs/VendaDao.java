@@ -111,6 +111,27 @@ public class VendaDao {
 		return Venda;
 	}
 	
+	public Object[] buscarVenda(int id) throws SQLException, Exception{
+		Object[] venda = new Object[7];
+		try {
+			String sql = "SELECT * FROM vendas WHERE id=?";
+			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
+			sqlPrep.setInt(1, id);
+			ResultSet rs = sqlPrep.executeQuery();
+			
+			while (rs.next())
+			{
+				Object[] linha = {rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getTimestamp(4), rs.getInt(5), rs.getInt(6), rs.getInt(7)};
+				venda = linha;
+			}
+			sqlPrep.close();
+			
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
+		return venda;
+	}
+	
 	public List<Object> buscarTodos() throws SQLException, Exception{
 		List<Object> Venda = new ArrayList<Object>();
 		try {

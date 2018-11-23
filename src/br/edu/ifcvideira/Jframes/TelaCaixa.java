@@ -632,7 +632,7 @@ public class TelaCaixa extends JFrame {
 	    taNota = new JTextArea();
 	    taNota.setEditable(false);
 	    taNota.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-	    //taNota.setForeground(corTexto);
+	    taNota.setForeground(corTexto);
 	    taNota.setFont(new Font("Roboto", Font.PLAIN, 20));
 	    taNota.setBackground(Color.WHITE);
 	    taNota.setBounds(1461, 57, 402, 742);
@@ -1066,8 +1066,14 @@ public class TelaCaixa extends JFrame {
 			double totalAPagar = 0;
 			taNota.setText(                   "  ---------------------------------------------------------------\n");
 			taNota.setText(taNota.getText() + "\n");
-			taNota.setText(taNota.getText() + "  LOJA DE MODA" + "\n");
+			taNota.setText(taNota.getText() + "  " + Preferencias.getNomeLoja() + "\n");
 			taNota.setText(taNota.getText() + "\n");
+			if(Preferencias.getEnderecoLoja() != "") {
+				taNota.setText(taNota.getText() + "  " + Preferencias.getEnderecoLoja() + "\n");
+			}
+			if(Preferencias.getTelefoneLoja() != "") {
+				taNota.setText(taNota.getText() + "  " + Preferencias.getTelefoneLoja() + "\n");
+			}
 			taNota.setText(taNota.getText() + "  ---------------------------------------------------------------\n");
 			taNota.setText(taNota.getText() + "  Venda número: " + veDao.RetornarProximoCodigoVenda() + "\n");
 			if(nomeCliente != null) {
