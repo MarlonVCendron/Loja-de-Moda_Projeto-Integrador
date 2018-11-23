@@ -54,4 +54,23 @@ public class Preferencias {
 	public static String getNomeLoja() {
 		return preferencias.get("NomeLoja", "LOJA DE MODA");
 	}
+	
+	
+	public static void setTelefoneLoja(String telefone) {
+		preferencias.put("TelefoneLoja", telefone);
+	}
+	
+	public static String getTelefoneLoja() {
+		return preferencias.get("TelefoneLoja", "");
+	}
+	
+	public static void setEnderecoLoja(String endereco) {
+		preferencias.put("EnderecoLoja", endereco);
+	}
+	
+	public static String getEnderecoLoja() {
+		return preferencias.get("EnderecoLoja", "");
+	}
+	
+	
 }
