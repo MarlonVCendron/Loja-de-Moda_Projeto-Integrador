@@ -39,6 +39,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusAdapter;
 import javax.swing.event.PopupMenuListener;
+import javax.swing.plaf.ButtonUI;
+import javax.swing.plaf.basic.BasicButtonUI;
 import javax.swing.text.NumberFormatter;
 import javax.swing.event.PopupMenuEvent;
 import java.awt.event.ContainerAdapter;
@@ -135,6 +137,7 @@ public class TelaCaixa extends JFrame {
 		panelSuperior.setLayout(null);
 		
 		JButton btnX = new JButton("X");
+		btnX.setUI((ButtonUI) BasicButtonUI.createUI(btnX));
 		btnX.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -167,6 +170,7 @@ public class TelaCaixa extends JFrame {
 		panelSuperior.add(btnX);
 		
 		JButton btnMinimizar = new JButton("-");
+		btnMinimizar.setUI((ButtonUI) BasicButtonUI.createUI(btnMinimizar));
 		btnMinimizar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -206,6 +210,7 @@ public class TelaCaixa extends JFrame {
 	    contentPane.add(lblPesquisarClientes);
 	    
 	    JButton btnCadastrarCliente = new JButton("Cadastrar Cliente");
+	    btnCadastrarCliente.setUI((ButtonUI) BasicButtonUI.createUI(btnCadastrarCliente));
 	    btnCadastrarCliente.setBounds(410, 90, 162, 45);
 	    btnCadastrarCliente.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent arg0) {
@@ -239,6 +244,7 @@ public class TelaCaixa extends JFrame {
 	    contentPane.add(btnCadastrarCliente);
 	    
 	    JButton btnInformacoes = new JButton("Informa\u00E7\u00F5es");
+	    btnInformacoes.setUI((ButtonUI) BasicButtonUI.createUI(btnInformacoes));
 	    btnInformacoes.setBounds(45, 159, 162, 45);
 	    btnInformacoes.setEnabled(false);
 	    btnInformacoes.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -304,6 +310,7 @@ public class TelaCaixa extends JFrame {
 	    contentPane.add(btnInformacoes);
 	    
 	    JButton btnEditar = new JButton("Editar");
+	    btnEditar.setUI((ButtonUI) BasicButtonUI.createUI(btnEditar));
 	    btnEditar.setBounds(229, 159, 162, 45);
 	    btnEditar.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent arg0) {
@@ -370,6 +377,7 @@ public class TelaCaixa extends JFrame {
 	    contentPane.add(btnEditar);
 	    
 	    JButton btnCompras = new JButton("Compras");
+	    btnCompras.setUI((ButtonUI) BasicButtonUI.createUI(btnCompras));
 	    btnCompras.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent arg0) {
 	    		String nomeCliente = cbPesquisaCliente.getSelectedItem().toString();
@@ -682,6 +690,7 @@ public class TelaCaixa extends JFrame {
 
 	    
 	    JButton btnAdicionarProduto = new JButton("Adicionar Produto");
+	    btnAdicionarProduto.setUI((ButtonUI) BasicButtonUI.createUI(btnAdicionarProduto));
 	    btnAdicionarProduto.setBounds(950, 915, 195, 68);
 	    btnAdicionarProduto.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent arg0) {
@@ -876,6 +885,7 @@ public class TelaCaixa extends JFrame {
 	    contentPane.add(cboxPrazo);
 	    
 	    JButton btnCancelarVenda = new JButton("Cancelar Venda");
+	    btnCancelarVenda.setUI((ButtonUI) BasicButtonUI.createUI(btnCancelarVenda));
 	    btnCancelarVenda.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent arg0) {
 	    		if(produtosParaComprar.isEmpty()) {
@@ -941,6 +951,7 @@ public class TelaCaixa extends JFrame {
 	    contentPane.add(btnCancelarVenda);
 	    
 	    JButton btnFinalizarVenda = new JButton("Finalizar Venda");
+	    btnFinalizarVenda.setUI((ButtonUI) BasicButtonUI.createUI(btnFinalizarVenda));
 	    btnFinalizarVenda.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent arg0) {
 	    		if(produtosParaComprar.isEmpty()) {

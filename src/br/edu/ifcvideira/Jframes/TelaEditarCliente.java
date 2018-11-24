@@ -35,6 +35,8 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.ButtonUI;
+import javax.swing.plaf.basic.BasicButtonUI;
 import javax.swing.text.MaskFormatter;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
@@ -145,6 +147,7 @@ public class TelaEditarCliente extends JFrame {
 		panelSuperior.setLayout(null);
 		
 		JButton btnX = new JButton("X");
+		btnX.setUI((ButtonUI) BasicButtonUI.createUI(btnX));
 		btnX.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -196,6 +199,7 @@ public class TelaEditarCliente extends JFrame {
 			}
 		});
 		btnMinimizar.setBackground(corGeral);
+		btnMinimizar.setUI((ButtonUI) BasicButtonUI.createUI(btnMinimizar));
 		btnMinimizar.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		btnMinimizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -582,6 +586,7 @@ public class TelaEditarCliente extends JFrame {
 		panelCampos.setLayout(null);
 		
 		JButton btnEditar = new JButton("Editar");
+		btnEditar.setUI((ButtonUI) BasicButtonUI.createUI(btnEditar));
 		btnEditar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -712,6 +717,7 @@ public class TelaEditarCliente extends JFrame {
 		panelImgNome.setVisible(false);
 		
 		JButton btnExcluir = new JButton("Excluir");
+		btnExcluir.setUI((ButtonUI) BasicButtonUI.createUI(btnExcluir));
 		btnExcluir.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {

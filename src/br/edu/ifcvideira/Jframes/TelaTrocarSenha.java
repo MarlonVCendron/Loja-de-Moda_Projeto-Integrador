@@ -26,6 +26,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.ButtonUI;
+import javax.swing.plaf.basic.BasicButtonUI;
 
 import br.edu.ifcvideira.Classes.Usuario;
 import br.edu.ifcvideira.DAOs.UsuarioDao;
@@ -118,6 +120,7 @@ public class TelaTrocarSenha extends JFrame {
 		panelSuperior.setLayout(null);
 		
 		JButton btnX = new JButton("X");
+		btnX.setUI((ButtonUI) BasicButtonUI.createUI(btnX));
 		btnX.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -169,6 +172,7 @@ public class TelaTrocarSenha extends JFrame {
 			}
 		});
 		btnMinimizar.setBackground(corGeral);
+		btnMinimizar.setUI((ButtonUI) BasicButtonUI.createUI(btnMinimizar));
 		btnMinimizar.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		btnMinimizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -283,6 +287,7 @@ public class TelaTrocarSenha extends JFrame {
 	
 		
 		JButton btnTrocar = new JButton("Alterar senha");
+		btnTrocar.setUI((ButtonUI) BasicButtonUI.createUI(btnTrocar));
 		btnTrocar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnTrocar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {			

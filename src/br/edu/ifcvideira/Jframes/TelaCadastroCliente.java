@@ -35,6 +35,8 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.ButtonUI;
+import javax.swing.plaf.basic.BasicButtonUI;
 import javax.swing.text.MaskFormatter;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
@@ -144,6 +146,7 @@ public class TelaCadastroCliente extends JFrame {
 		panelSuperior.setLayout(null);
 		
 		JButton btnX = new JButton("X");
+		btnX.setUI((ButtonUI) BasicButtonUI.createUI(btnX));
 		btnX.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -176,6 +179,7 @@ public class TelaCadastroCliente extends JFrame {
 		panelSuperior.add(btnX);
 		
 		JButton btnMinimizar = new JButton("-");
+		btnMinimizar.setUI((ButtonUI) BasicButtonUI.createUI(btnMinimizar));
 		btnMinimizar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -552,6 +556,7 @@ public class TelaCadastroCliente extends JFrame {
 		});
 		btnCadastrar.setBounds((largura / 2) - (215 / 2), 570, 215, 54);
 		panelCampos.add(btnCadastrar);
+		btnCadastrar.setUI((ButtonUI) BasicButtonUI.createUI(btnCadastrar));
 		btnCadastrar.setBackground(corGeral);
 		btnCadastrar.setBorder(null);
 		btnCadastrar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));

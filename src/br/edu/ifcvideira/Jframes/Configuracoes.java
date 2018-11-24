@@ -28,7 +28,9 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.plaf.ButtonUI;
 import javax.swing.plaf.FileChooserUI;
+import javax.swing.plaf.basic.BasicButtonUI;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -123,6 +125,7 @@ public class Configuracoes extends JFrame {
 
 		
 		JButton btnX = new JButton("X");
+		btnX.setUI((ButtonUI) BasicButtonUI.createUI(btnX));
 		btnX.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -146,6 +149,7 @@ public class Configuracoes extends JFrame {
 		panelSuperior.add(btnX);
 		
 		JButton button = new JButton("-");
+		button.setUI((ButtonUI) BasicButtonUI.createUI(button));
 		button.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -175,6 +179,7 @@ public class Configuracoes extends JFrame {
 		panelConfigs.setLayout(null);
 		
 		JButton btnEscolherLogo = new JButton("Escolher logo");
+		btnEscolherLogo.setUI((ButtonUI) BasicButtonUI.createUI(btnEscolherLogo));
 		btnEscolherLogo.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -215,6 +220,7 @@ public class Configuracoes extends JFrame {
 		panelConfigs.add(btnEscolherLogo);
 		
 		JButton btnEscolherCor = new JButton("Escolher cor");
+		btnEscolherCor.setUI((ButtonUI) BasicButtonUI.createUI(btnEscolherCor));
 		btnEscolherCor.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
