@@ -14,7 +14,7 @@ import br.edu.ifcvideira.utils.Conexao;
 public class UsuarioDao {
 	public void CadastrarUsuario(Usuario us) throws SQLException, Exception{
 		try{
-			String sql = "INSERT INTO usuario (tipo, nome, senha, cpf, rg, telefone, celular, data_cadastro, status) VALUES (?,?,?,?,?,?,?,?,?)";
+			String sql = "INSERT INTO usuario (tipo, nome, senha, cpf, rg, telefone, celular, data_cadastro, status, email) VALUES (?,?,?,?,?,?,?,?,?,?)";
 			java.sql.PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
 			System.out.println("safas");
 			sqlPrep.setInt(1, us.getTipo());
@@ -25,7 +25,9 @@ public class UsuarioDao {
 			sqlPrep.setString(6, us.getTelefone());
 			sqlPrep.setString(7, us.getCelular());
 			sqlPrep.setTimestamp(8, us.getDataCadastro());
-			sqlPrep.setInt(9, us.getStatus());
+			sqlPrep.setTimestamp(9, us.getDataCadastro());
+			sqlPrep.setString(10, us.getEmail());
+			
 			sqlPrep.execute();
 			
 		} catch(SQLException e) {
@@ -38,7 +40,7 @@ public class UsuarioDao {
 
 	public void AlterarUsuario(Usuario us) throws Exception {
 		try{
-			String sql = "UPDATE usuario SET tipo=?, nome=?, senha=?, cpf=?, rg=?, telefone=?, celular=?, data_cadastro=?, status=? WHERE id=?";
+			String sql = "UPDATE usuario SET tipo=?, nome=?, senha=?, cpf=?, rg=?, telefone=?, celular=?, data_cadastro=?, status=?,email=? WHERE id=?";
 			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
 			sqlPrep.setInt(1, us.getTipo());
 			sqlPrep.setString(2, us.getNome());
@@ -50,6 +52,7 @@ public class UsuarioDao {
 			sqlPrep.setTimestamp(8, us.getDataCadastro());
 			sqlPrep.setInt(9, us.getStatus());
 			sqlPrep.setInt(10, us.getId());
+			sqlPrep.setInt(11, us.getId());
 			sqlPrep.execute();
 		}catch(Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
@@ -76,7 +79,7 @@ public class UsuarioDao {
 			
 			while (rs.next())
 			{
-				Object[] linha = {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9)};
+				Object[] linha = {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9),rs.getString(9),rs.getString(10)};
 				Usuario.add(linha);
 			}
 			state.close();
@@ -123,7 +126,7 @@ public class UsuarioDao {
 		} catch(Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 			return 1;
-		}
+		}	
 	}
 	
 	public List<Object> buscarNomes() throws SQLException, Exception{

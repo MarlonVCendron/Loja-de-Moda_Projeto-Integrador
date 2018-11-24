@@ -14,6 +14,15 @@ public class Usuario {
 	private Timestamp dataCadastro;
 	private int status;
 	
+	
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	private String email;
+	
 	public int getId() {
 		return id;
 	}
