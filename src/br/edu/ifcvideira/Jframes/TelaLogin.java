@@ -14,6 +14,8 @@ import java.awt.Color;
 import javax.swing.UIManager;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Point;
@@ -61,6 +63,7 @@ public class TelaLogin extends JFrame {
 	private JTextField tfRg;
 	private JTextField tfCpf;
 	private JTextField tfNome;
+	private JTextField tfEmail;
 	private JPasswordField pfSenha;
 	private JPasswordField pfRepetir;
 	
@@ -70,6 +73,7 @@ public class TelaLogin extends JFrame {
 	private JPanel panelImgTelefone;
 	private JPanel panelImgSenha;
 	private JPanel panelImgRepetir;
+	private JPanel panelImgEmail;
 	
 	public static JLabel lblLogo;
 	
@@ -138,7 +142,7 @@ public class TelaLogin extends JFrame {
 		
 		
 		//Variáveis que cuidam para que os campos sejam preenchidos adequadamente
-		boolean[] camposCorretos = {false, false, false, false, false, false, false};
+		boolean[] camposCorretos = {false, false, false, false, false, false, false, false};
 		
 		JPanel panelEsquerda = new JPanel();
 		panelEsquerda.setBounds(0, 0, 476, 653);
@@ -244,7 +248,7 @@ public class TelaLogin extends JFrame {
 		
 		JPanel panelCadastro = new JPanel();
 		panelCadastro.setBackground(new Color(255, 255, 255));
-		panelCadastro.setBounds(477, 32, 512, 621);
+		panelCadastro.setBounds(1000/*477*/, 32, 512, 621);
 		contentPane.add(panelCadastro);
 		panelCadastro.setLayout(null);
 		
@@ -290,6 +294,12 @@ public class TelaLogin extends JFrame {
 		lblRepitaASenha.setBounds(74, 390, 163, 42);
 		panelCadastro.add(lblRepitaASenha);
 		
+		JLabel lblEmail = new JLabel("E-mail");
+		lblEmail.setForeground(corTexto);
+		lblEmail.setFont(new Font("Roboto", Font.PLAIN, 20));
+		lblEmail.setBounds(74, 445, 163, 42);
+		panelCadastro.add(lblEmail);
+		
 		JSeparator spNome = new JSeparator();
 		spNome.setBackground(corSeparador);
 		spNome.setBounds(236, 104, 215, 2);
@@ -324,6 +334,11 @@ public class TelaLogin extends JFrame {
 		spRepetir.setBackground(corSeparador);
 		spRepetir.setBounds(236, 434, 215, 2);
 		panelCadastro.add(spRepetir);
+		
+		JSeparator spEmail = new JSeparator();
+		spEmail.setBackground(corSeparador);
+		spEmail.setBounds(236, 489, 215, 2);
+		panelCadastro.add(spEmail);
 		
 		tfNome = new JTextField();
 		tfNome.setForeground(corTexto);
@@ -544,6 +559,41 @@ public class TelaLogin extends JFrame {
 		panelCadastro.add(pfRepetir);
 		pfRepetir.setColumns(10);
 		
+		tfEmail = new JTextField();
+		tfEmail.setForeground(corTexto);
+		tfEmail.setFont(new Font("Roboto", Font.PLAIN, 18));
+		tfEmail.setBorder(null);
+		tfEmail.setBackground(panelCadastro.getBackground());
+		tfEmail.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				camposCorretos[7] = (tfEmail.getText().matches("^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$")) ? true : false;
+
+				if (tfEmail.getText().length() < 1) {
+					camposCorretos[7] = false;
+				}
+
+				if (camposCorretos[7]) {
+					spEmail.setBackground(corGeral);
+					panelImgEmail.setVisible(false);
+
+				} else {
+					spEmail.setBackground(corVermelho);
+					panelImgEmail.setVisible(true);
+				}
+			}
+
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				spEmail.setBackground(corGeral);
+				panelImgEmail.setVisible(false);
+
+			}
+		});
+		tfEmail.setColumns(10);
+		tfEmail.setBounds(236, 457, 215, 32);
+		panelCadastro.add(tfEmail);
+		
 		JPanel panelCampos = new JPanel();
 		panelCampos.setOpaque(false);
 		panelCampos.setBounds(0, 0, 506, 620);
@@ -570,7 +620,7 @@ public class TelaLogin extends JFrame {
 				btnCadastrar.setBackground(corGeral);
 			}
 		});
-		btnCadastrar.setBounds(163, 462, 215, 54);
+		btnCadastrar.setBounds(165, 512, 215, 54);
 		panelCampos.add(btnCadastrar);
 		btnCadastrar.setBackground(corGeral);
 		btnCadastrar.setBorder(null);
@@ -590,6 +640,7 @@ public class TelaLogin extends JFrame {
 					us.setTelefone(tfTelefone.getText());
 					us.setCelular(tfCelular.getText());
 					us.setSenha(Senha.encriptarSenha(pfSenha.getText()));
+					us.setEmail(tfEmail.getText());
 					
 					try {
 						daoUs.CadastrarUsuario(us);
@@ -646,6 +697,14 @@ public class TelaLogin extends JFrame {
 						spRepetir.setBackground(corSeparador);
 						panelImgRepetir.setVisible(false);
 					}
+					
+					if(!camposCorretos[7]) {
+						spEmail.setBackground(corVermelho);
+						panelImgEmail.setVisible(true);
+					}else {
+						spEmail.setBackground(corSeparador);
+						panelImgEmail.setVisible(false);
+					}
 				}
 			}
 		});
@@ -677,6 +736,10 @@ public class TelaLogin extends JFrame {
 		JLabel imgXRepetir = new JLabel(new ImageIcon(imagemX));
 		imgXRepetir.setBackground(new Color(255, 255, 255));
 		imgXRepetir.setToolTipText("Repita a senha corretamente");
+		
+		JLabel imgXEmail = new JLabel(new ImageIcon(imagemX));
+		imgXEmail.setBackground(new Color(255, 255, 255));
+		imgXEmail.setToolTipText("E-mail inválido");
 		
 		panelImgNome = new JPanel();
 		panelImgNome.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -721,6 +784,13 @@ public class TelaLogin extends JFrame {
 		panelImgRepetir.setBounds(37, 398, 32, 32);
 		panelCampos.add(panelImgRepetir); 
 		panelImgRepetir.add(imgXRepetir);
+		
+		panelImgEmail = new JPanel();
+		panelImgEmail.setVisible(false);
+		panelImgEmail.setBackground(new Color(255, 255, 255));
+		panelImgEmail.setBounds(37, 453, 32, 32);
+		panelCampos.add(panelImgEmail); 
+		panelImgEmail.add(imgXEmail);
 		
 		
 		JPanel panelLogin = new JPanel();
@@ -832,11 +902,11 @@ public class TelaLogin extends JFrame {
 						lblErroNome.setVisible(false);
 						spNomeLogin.setBackground(corSeparador);
 						
-						int idUsuario = Integer.parseInt(String.valueOf(infoUsuario.get(0)));
-						String senhaUsuario = String.valueOf(infoUsuario.get(1));
-						int tipoUsuario = Integer.parseInt(String.valueOf(infoUsuario.get(2)));
+						int idUsuario = (int) infoUsuario.get(0);
+						String senhaUsuario = String.valueOf(infoUsuario.get(3));
+						int tipoUsuario = Integer.parseInt(String.valueOf(infoUsuario.get(1)));
 						
-						if(senha.equals(senhaUsuario)) {	
+						if(senha.equals(senhaUsuario)) {
 							lblErroSenha.setVisible(false);
 							spSenhaLogin.setBackground(corSeparador);
 							
@@ -861,10 +931,13 @@ public class TelaLogin extends JFrame {
 							spSenhaLogin.setBackground(corVermelho);
 						}
 					}else {
+						lblErroNome.setText("Nome inexistente");
 						lblErroNome.setVisible(true);
 						spNomeLogin.setBackground(corVermelho);
 					}
-				}catch(Exception e) { }
+				}catch(Exception e) {
+					JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		
@@ -874,8 +947,58 @@ public class TelaLogin extends JFrame {
 		btnEntrar.setBounds(139, 471, 242, 57);
 		btnEntrar.setBackground(corGeral);
 		panelLogin.add(btnEntrar);
-		contentPane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{tfNome, tfCpf, tfRg, tfTelefone, tfCelular, pfSenha, pfRepetir, btnCadastrar, tfNomeLogin, pfSenhaLogin, btnEntrar}));
-		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{tfNome, tfCpf, tfRg, tfTelefone, tfCelular, pfSenha, pfRepetir, btnCadastrar, tfNomeLogin, pfSenhaLogin, btnEntrar}));
+		
+		JLabel btnRecuperarSenha = new JLabel("Recuperar senha");
+		btnRecuperarSenha.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				String nome = tfNomeLogin.getText();
+				List<Object> infoUsuario = new ArrayList<>();
+				if(nome.equals("")) {
+					lblErroNome.setText("Preencha o nome");
+					lblErroNome.setVisible(true);
+				}else {
+					lblErroNome.setVisible(false);
+					try {
+						infoUsuario = daoUs.buscarUsuario(nome);
+						
+						if(!infoUsuario.isEmpty()) {
+							Usuario usuario = new Usuario();
+							
+							usuario.setId((int) infoUsuario.get(0));
+							/*usuario.setTipo((int) infoUsuario.get(1));
+							usuario.setNome((String) infoUsuario.get(2));
+							usuario.setSenha((String) infoUsuario.get(3));
+							usuario.setCpf((String) infoUsuario.get(4));
+							usuario.setRg((String) infoUsuario.get(5));
+							usuario.setTelefone((String) infoUsuario.get(6));
+							usuario.setCelular((String) infoUsuario.get(7));
+							usuario.setDataCadastro((Timestamp) infoUsuario.get(8));
+							usuario.setStatus((int) infoUsuario.get(9));*/
+							usuario.setEmail((String) infoUsuario.get(10));
+							
+							TelaRecuperarSenha telaRecuperarSenha = new TelaRecuperarSenha(usuario);
+							
+							telaRecuperarSenha.setVisible(true);
+						}else {
+							lblErroNome.setText("Nome inexistente");
+							lblErroNome.setVisible(true);
+						}
+					}catch(Exception e) {
+						JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
+		btnRecuperarSenha.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnRecuperarSenha.setHorizontalAlignment(SwingConstants.LEFT);
+		btnRecuperarSenha.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btnRecuperarSenha.setBounds(87, 398, 250, 29);
+		btnRecuperarSenha.setForeground(corGeral);
+		panelLogin.add(btnRecuperarSenha);
+		
+		contentPane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{tfNome, tfCpf, tfRg, tfTelefone, tfCelular, pfSenha, pfRepetir, tfEmail, btnCadastrar, tfNomeLogin, pfSenhaLogin, btnEntrar}));
+		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{tfNome, tfCpf, tfRg, tfTelefone, tfCelular, pfSenha, pfRepetir, tfEmail, btnCadastrar, tfNomeLogin, pfSenhaLogin, btnEntrar}));
 		
 		
 		

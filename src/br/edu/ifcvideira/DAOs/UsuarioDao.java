@@ -25,7 +25,7 @@ public class UsuarioDao {
 			sqlPrep.setString(6, us.getTelefone());
 			sqlPrep.setString(7, us.getCelular());
 			sqlPrep.setTimestamp(8, us.getDataCadastro());
-			sqlPrep.setTimestamp(9, us.getDataCadastro());
+			sqlPrep.setInt(9, us.getStatus());
 			sqlPrep.setString(10, us.getEmail());
 			
 			sqlPrep.execute();
@@ -51,8 +51,20 @@ public class UsuarioDao {
 			sqlPrep.setString(7, us.getCelular());
 			sqlPrep.setTimestamp(8, us.getDataCadastro());
 			sqlPrep.setInt(9, us.getStatus());
-			sqlPrep.setInt(10, us.getId());
+			sqlPrep.setString(10, us.getEmail());
 			sqlPrep.setInt(11, us.getId());
+			sqlPrep.execute();
+		}catch(Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
+	}
+	
+	public void AlterarSenha(int idUsuario, String senha) throws Exception {
+		try{
+			String sql = "UPDATE usuario SET senha=? WHERE id=?";
+			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
+			sqlPrep.setString(1, senha);
+			sqlPrep.setInt(2, idUsuario);
 			sqlPrep.execute();
 		}catch(Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
@@ -79,7 +91,7 @@ public class UsuarioDao {
 			
 			while (rs.next())
 			{
-				Object[] linha = {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9),rs.getString(9),rs.getString(10)};
+				Object[] linha = {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9),rs.getString(10),rs.getString(11)};
 				Usuario.add(linha);
 			}
 			state.close();
@@ -93,7 +105,7 @@ public class UsuarioDao {
 	public List<Object> buscarUsuario(String nome) throws SQLException, Exception{
 		List<Object> info = new ArrayList<>();
 		try {
-			String sql = "SELECT id, senha, tipo FROM usuario WHERE nome=?";
+			String sql = "SELECT * FROM usuario WHERE nome=?";
 			//java.sql.Statement state = Conexao.conectar().createStatement();
 			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
 			sqlPrep.setString(1, nome);
@@ -102,8 +114,16 @@ public class UsuarioDao {
 			while (rs.next())
 			{
 				info.add(rs.getInt(1));
-				info.add(rs.getString(2));
+				info.add(rs.getInt(2));
 				info.add(rs.getString(3));
+				info.add(rs.getString(4));
+				info.add(rs.getString(5));
+				info.add(rs.getString(6));
+				info.add(rs.getString(7));
+				info.add(rs.getString(8));
+				info.add(rs.getTimestamp(9));
+				info.add(rs.getInt(10));
+				info.add(rs.getString(11));
 			}
 			sqlPrep.close();
 			
