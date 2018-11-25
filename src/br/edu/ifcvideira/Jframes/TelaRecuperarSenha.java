@@ -352,6 +352,24 @@ public class TelaRecuperarSenha extends JFrame {
 				}
 			}
 		});
+		btnRecuperar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnRecuperar.setBackground(corSecundaria);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnRecuperar.setBackground(corGeral);
+			}
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				btnRecuperar.setBackground(corTerciaria);
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				btnRecuperar.setBackground(corGeral);
+			}
+		});
 		btnRecuperar.setForeground(new Color(75, 80, 85));
 		btnRecuperar.setFont(new Font("Roboto", Font.PLAIN, 18));
 		btnRecuperar.setBorder(null);

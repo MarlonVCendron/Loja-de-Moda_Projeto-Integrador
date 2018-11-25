@@ -300,7 +300,8 @@ public class TelaTrocarSenha extends JFrame {
 						UsuarioDao usDao = new UsuarioDao();
 						usDao.AlterarSenha(us.getId(), novaSenha);
 						
-						JOptionPane.showMessageDialog(null, "Senha alterada", "Sucesso", JOptionPane.DEFAULT_OPTION);
+						Mensagem mensagem = new Mensagem("Senha alterada com sucesso", "Senha alterada");
+					    mensagem.setVisible(true);
 						
 						Window[] janelas = Window.getWindows();
 						
@@ -315,6 +316,24 @@ public class TelaTrocarSenha extends JFrame {
 				}else {
 					lblErroSenha.setVisible(true);
 				}
+			}
+		});
+		btnTrocar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnTrocar.setBackground(corSecundaria);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnTrocar.setBackground(corGeral);
+			}
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				btnTrocar.setBackground(corTerciaria);
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				btnTrocar.setBackground(corGeral);
 			}
 		});
 		btnTrocar.setForeground(new Color(75, 80, 85));

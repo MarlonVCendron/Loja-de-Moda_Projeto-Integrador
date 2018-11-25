@@ -7,6 +7,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.swing.JOptionPane;
 
+import br.edu.ifcvideira.Jframes.Mensagem;
+
 public class Email {
 	public static void enviarEmailRecuperacao(String emailDestino, String codigo) {
 		String destino = emailDestino;
@@ -45,7 +47,9 @@ public class Email {
 		    Transport.send(message);  
 		    transport.close();
 		    
-		    JOptionPane.showMessageDialog(null, "E-mail enviado com sucesso");
+		    //JOptionPane.showMessageDialog(null, "E-mail enviado com sucesso");
+		    Mensagem mensagem = new Mensagem("E-mail enviado com sucesso", "E-mail");
+		    mensagem.setVisible(true);
 	    }catch(Exception e) {
 	    	JOptionPane.showMessageDialog(null, e.getMessage());
 	    }
