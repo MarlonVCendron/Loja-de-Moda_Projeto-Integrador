@@ -247,21 +247,21 @@ public class TelaEstoque extends JFrame {
 		});
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1386, 886);
+		setBounds(100, 100, 1920, 1030);
 		painelPrincipal = new JPanel();
 		painelPrincipal.setBackground(Color.WHITE);
 		painelPrincipal.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(painelPrincipal);
 		painelPrincipal.setLayout(null);
 		
-		Dimension tela = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-		int largura = 1386;
-		int altura = 886;
 		JPanel mainPanel = new JPanel();
-		mainPanel.setBounds((tela.width / 2) - (largura / 2), (tela.height / 2) - (altura / 2), largura, altura);
+		mainPanel.setBounds(0, 32, 1920, 1000);
 		mainPanel.setLayout(null);
 		painelPrincipal.add(mainPanel);
 		
+		ImageIcon imageIconLogo = new ImageIcon(Preferencias.getImagem());
+		Image imagemLogo = imageIconLogo.getImage().getScaledInstance(300, 300,  java.awt.Image.SCALE_SMOOTH);
+		setIconImage(imagemLogo);
 		setTitle(Preferencias.getNomeLoja());
 		
 		//PAINEL SUPERIOR
@@ -273,7 +273,7 @@ public class TelaEstoque extends JFrame {
 		panelSuperior.setLayout(null);
 		
 		JButton btnX = new JButton("X");
-		btnX.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnX.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		
 		btnX.addMouseListener(new MouseAdapter() {
 			@Override
@@ -330,7 +330,7 @@ public class TelaEstoque extends JFrame {
 		});
 		btnMinimizar.setUI((ButtonUI) BasicButtonUI.createUI(btnMinimizar));
 		btnMinimizar.setBackground(corGeral);
-		btnMinimizar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnMinimizar.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		btnMinimizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setState(JFrame.ICONIFIED);
@@ -346,7 +346,7 @@ public class TelaEstoque extends JFrame {
 		btnSuperior.setLayout(null);
 		btnSuperior.setBorder(new EmptyBorder(5, 5, 5, 5));
 		btnSuperior.setBackground(Color.WHITE);
-		btnSuperior.setBounds(0, 0, 1386, 121);
+		btnSuperior.setBounds(0, 0, 1920, 121);
 		mainPanel.add(btnSuperior);
 		btnFornecedor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -354,12 +354,12 @@ public class TelaEstoque extends JFrame {
 			}
 		});
 
-		btnFornecedor.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btnFornecedor.setFont(new Font("Roboto", Font.PLAIN, 24));
 		btnFornecedor.setBorder(null);
 		btnFornecedor.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnFornecedor.setUI((ButtonUI) BasicButtonUI.createUI(btnFornecedor));
 		btnFornecedor.setBackground(corGeral);
-		btnFornecedor.setBounds(38, 57, 400, 54);
+		btnFornecedor.setBounds(38, 24, 461, 87);
 		btnSuperior.add(btnFornecedor);
 
 		btnCategoria.addActionListener(new ActionListener() {
@@ -369,11 +369,11 @@ public class TelaEstoque extends JFrame {
 		});
 
 		btnCategoria.setForeground(corTexto);
-		btnCategoria.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btnCategoria.setFont(new Font("Roboto", Font.PLAIN, 24));
 		btnCategoria.setBorder(null);
 		btnCategoria.setUI((ButtonUI) BasicButtonUI.createUI(btnCategoria));
 		btnCategoria.setBackground(Color.LIGHT_GRAY);
-		btnCategoria.setBounds(482, 57, 400, 54);
+		btnCategoria.setBounds(734, 24, 461, 87);
 		btnSuperior.add(btnCategoria);
 		btnCategoria.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnProdutos.addActionListener(new ActionListener() {
@@ -383,12 +383,12 @@ public class TelaEstoque extends JFrame {
 		});
 
 		btnProdutos.setForeground(corTexto);
-		btnProdutos.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btnProdutos.setFont(new Font("Roboto", Font.PLAIN, 24));
 		btnProdutos.setBorder(null);
 		btnProdutos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnProdutos.setUI((ButtonUI) BasicButtonUI.createUI(btnProdutos));
 		btnProdutos.setBackground(Color.LIGHT_GRAY);
-		btnProdutos.setBounds(927, 57, 400, 54);
+		btnProdutos.setBounds(1418, 24, 461, 87);
 		btnSuperior.add(btnProdutos);
 
 		try {
@@ -401,117 +401,117 @@ public class TelaEstoque extends JFrame {
 		painelProdutos.setLayout(null);
 		painelProdutos.setBorder(new EmptyBorder(5, 5, 5, 5));
 		painelProdutos.setBackground(Color.WHITE);
-		painelProdutos.setBounds(0, 0, 1386, 886);
+		painelProdutos.setBounds(0, 0, 1920, 1000);
 		mainPanel.add(painelProdutos);
 
 		JLabel lblNomePro = new JLabel("Nome");
 		lblNomePro.setForeground(corTexto);
 		lblNomePro.setFont(new Font("Roboto", Font.PLAIN, 20));
-		lblNomePro.setBounds(38, 136, 60, 42);
+		lblNomePro.setBounds(392, 152, 60, 42);
 		painelProdutos.add(lblNomePro);
 
 		JLabel lblPrecoPro = new JLabel("Pre\u00E7o");
 		lblPrecoPro.setForeground(corTexto);
 		lblPrecoPro.setFont(new Font("Roboto", Font.PLAIN, 20));
-		lblPrecoPro.setBounds(38, 243, 119, 42);
+		lblPrecoPro.setBounds(392, 259, 119, 42);
 		painelProdutos.add(lblPrecoPro);
 
 		JLabel lblQuantPro = new JLabel("Quantidade");
 		lblQuantPro.setForeground(corTexto);
 		lblQuantPro.setFont(new Font("Roboto", Font.PLAIN, 20));
-		lblQuantPro.setBounds(640, 136, 119, 42);
+		lblQuantPro.setBounds(994, 152, 119, 42);
 		painelProdutos.add(lblQuantPro);
 
 		JLabel label_8 = new JLabel("ID");
 		label_8.setForeground(corTexto);
 		label_8.setFont(new Font("Roboto", Font.PLAIN, 20));
-		label_8.setBounds(1187, 136, 42, 42);
+		label_8.setBounds(1541, 152, 42, 42);
 		painelProdutos.add(label_8);
 
 		JLabel lblTamanhoPro = new JLabel("Tamanho");
 		lblTamanhoPro.setForeground(corTexto);
 		lblTamanhoPro.setFont(new Font("Roboto", Font.PLAIN, 20));
-		lblTamanhoPro.setBounds(38, 189, 119, 42);
+		lblTamanhoPro.setBounds(392, 205, 119, 42);
 		painelProdutos.add(lblTamanhoPro);
 
 		JLabel lblBuscaPro = new JLabel("Buscar");
 		lblBuscaPro.setForeground(corTexto);
-		lblBuscaPro.setFont(new Font("Roboto", Font.PLAIN, 24));
-		lblBuscaPro.setBounds(38, 427, 119, 42);
+		lblBuscaPro.setFont(new Font("Roboto", Font.PLAIN, 26));
+		lblBuscaPro.setBounds(102, 549, 119, 42);
 		painelProdutos.add(lblBuscaPro);
 
 		JLabel lblBuscaIdPro = new JLabel("ID");
 		lblBuscaIdPro.setForeground(corTexto);
 		lblBuscaIdPro.setFont(new Font("Roboto", Font.PLAIN, 18));
-		lblBuscaIdPro.setBounds(65, 467, 119, 42);
+		lblBuscaIdPro.setBounds(360, 552, 119, 42);
 		painelProdutos.add(lblBuscaIdPro);
 
 		JLabel lblBuscaNomePro = new JLabel("Nome");
 		lblBuscaNomePro.setForeground(corTexto);
 		lblBuscaNomePro.setFont(new Font("Roboto", Font.PLAIN, 18));
-		lblBuscaNomePro.setBounds(774, 461, 79, 42);
+		lblBuscaNomePro.setBounds(1069, 546, 79, 42);
 		painelProdutos.add(lblBuscaNomePro);
 
 		JLabel lblFornecedorPro = new JLabel("Fornecedor");
 		lblFornecedorPro.setForeground(corTexto);
 		lblFornecedorPro.setFont(new Font("Roboto", Font.PLAIN, 20));
-		lblFornecedorPro.setBounds(640, 190, 119, 42);
+		lblFornecedorPro.setBounds(994, 206, 119, 42);
 		painelProdutos.add(lblFornecedorPro);
 
 		JLabel lblCategoria = new JLabel("Categoria");
 		lblCategoria.setForeground(corTexto);
 		lblCategoria.setFont(new Font("Roboto", Font.PLAIN, 20));
-		lblCategoria.setBounds(640, 243, 119, 42);
+		lblCategoria.setBounds(994, 259, 119, 42);
 		painelProdutos.add(lblCategoria);
 
 		JLabel lblR = new JLabel("R$");
 		lblR.setForeground(corTexto);
 		lblR.setFont(new Font("Roboto", Font.PLAIN, 20));
-		lblR.setBounds(167, 243, 27, 42);
+		lblR.setBounds(521, 259, 27, 42);
 		painelProdutos.add(lblR);
 
 		JLabel lblCodigoDeBarras = new JLabel("Codigo de Barras");
 		lblCodigoDeBarras.setForeground(corTexto);
 		lblCodigoDeBarras.setFont(new Font("Roboto", Font.PLAIN, 16));
-		lblCodigoDeBarras.setBounds(38, 296, 132, 42);
+		lblCodigoDeBarras.setBounds(392, 312, 132, 42);
 		painelProdutos.add(lblCodigoDeBarras);
 
 		JLabel lblStatus = new JLabel("Status");
 		lblStatus.setForeground(corTexto);
 		lblStatus.setFont(new Font("Roboto", Font.PLAIN, 20));
-		lblStatus.setBounds(640, 296, 119, 42);
+		lblStatus.setBounds(994, 312, 119, 42);
 		painelProdutos.add(lblStatus);
 
 		spNomePro.setBackground(corGeral);
-		spNomePro.setBounds(167, 176, 409, 2);
+		spNomePro.setBounds(521, 192, 409, 2);
 		painelProdutos.add(spNomePro);
 
 		JSeparator spPrecoPro = new JSeparator();
 		spPrecoPro.setBackground(corGeral);
-		spPrecoPro.setBounds(167, 283, 409, 2);
+		spPrecoPro.setBounds(521, 299, 409, 2);
 		painelProdutos.add(spPrecoPro);
 
 		JSeparator spIdPro = new JSeparator();
 		spIdPro.setBackground(corGeral);
-		spIdPro.setBounds(1230, 176, 55, 2);
+		spIdPro.setBounds(1584, 192, 55, 2);
 		painelProdutos.add(spIdPro);
 
 		spTamanhoPro.setBackground(corGeral);
-		spTamanhoPro.setBounds(167, 230, 407, 2);
+		spTamanhoPro.setBounds(521, 246, 407, 2);
 		painelProdutos.add(spTamanhoPro);
 
 		JSeparator spBuscaNomePro = new JSeparator();
 		spBuscaNomePro.setBackground(corGeral);
-		spBuscaNomePro.setBounds(867, 500, 418, 2);
+		spBuscaNomePro.setBounds(1162, 585, 418, 2);
 		painelProdutos.add(spBuscaNomePro);
 
 		JSeparator spBuscaIdPro = new JSeparator();
 		spBuscaIdPro.setBackground(corGeral);
-		spBuscaIdPro.setBounds(158, 501, 418, 2);
+		spBuscaIdPro.setBounds(502, 589, 418, 2);
 		painelProdutos.add(spBuscaIdPro);
 
 		spCdBarras.setBackground(corGeral);
-		spCdBarras.setBounds(169, 336, 407, 2);
+		spCdBarras.setBounds(523, 352, 407, 2);
 		painelProdutos.add(spCdBarras);
 
 		btCadastrarPro.addActionListener(new ActionListener() {
@@ -596,11 +596,11 @@ public class TelaEstoque extends JFrame {
 
 
 		btCadastrarPro.setForeground(corTexto);
-		btCadastrarPro.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btCadastrarPro.setFont(new Font("Roboto", Font.PLAIN, 22));
 		btCadastrarPro.setBorder(null);
 		btCadastrarPro.setUI((ButtonUI) BasicButtonUI.createUI(btCadastrarPro));
 		btCadastrarPro.setBackground(corGeral);
-		btCadastrarPro.setBounds(65, 362, 215, 54);
+		btCadastrarPro.setBounds(386, 415, 235, 80);
 		painelProdutos.add(btCadastrarPro);
 		btCadastrarPro.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
@@ -654,11 +654,11 @@ public class TelaEstoque extends JFrame {
 		});
 		btEditarPro.setForeground(corTexto);
 		btEditarPro.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btEditarPro.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btEditarPro.setFont(new Font("Roboto", Font.PLAIN, 22));
 		btEditarPro.setBorder(null);
 		btEditarPro.setUI((ButtonUI) BasicButtonUI.createUI(btEditarPro));
 		btEditarPro.setBackground(corGeral);
-		btEditarPro.setBounds(403, 362, 215, 54);
+		btEditarPro.setBounds(713, 415, 235, 80);
 		painelProdutos.add(btEditarPro);
 
 		btExcluirPro.addActionListener(new ActionListener() {
@@ -724,11 +724,11 @@ public class TelaEstoque extends JFrame {
 		
 		
 		btExcluirPro.setForeground(corTexto);
-		btExcluirPro.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btExcluirPro.setFont(new Font("Roboto", Font.PLAIN, 22));
 		btExcluirPro.setBorder(null);
 		btExcluirPro.setUI((ButtonUI) BasicButtonUI.createUI(btExcluirPro));
 		btExcluirPro.setBackground(corGeral);
-		btExcluirPro.setBounds(728, 362, 215, 54);
+		btExcluirPro.setBounds(1038, 415, 235, 80);
 		btExcluirPro.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		painelProdutos.add(btExcluirPro);
 		btLimparPro.addActionListener(new ActionListener() {
@@ -766,11 +766,11 @@ public class TelaEstoque extends JFrame {
 		});
 
 		btLimparPro.setForeground(corTexto);
-		btLimparPro.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btLimparPro.setFont(new Font("Roboto", Font.PLAIN, 22));
 		btLimparPro.setBorder(null);
 		btLimparPro.setUI((ButtonUI) BasicButtonUI.createUI(btLimparPro));
 		btLimparPro.setBackground(corGeral);
-		btLimparPro.setBounds(1048, 362, 215, 54);
+		btLimparPro.setBounds(1358, 415, 235, 80);
 		painelProdutos.add(btLimparPro);
 		btLimparPro.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
@@ -806,7 +806,7 @@ public class TelaEstoque extends JFrame {
 
 		panelImgNomePro.setForeground(Color.WHITE);
 		panelImgNomePro.setBackground(Color.WHITE);
-		panelImgNomePro.setBounds(6, 142, 27, 26);
+		panelImgNomePro.setBounds(360, 158, 27, 26);
 		painelProdutos.add(panelImgNomePro);
 
 		JLabel lblXNomePro = new JLabel("");
@@ -818,7 +818,7 @@ public class TelaEstoque extends JFrame {
 
 		panelImgTamanho.setForeground(Color.WHITE);
 		panelImgTamanho.setBackground(Color.WHITE);
-		panelImgTamanho.setBounds(6, 194, 27, 26);
+		panelImgTamanho.setBounds(360, 210, 27, 26);
 		painelProdutos.add(panelImgTamanho);
 
 		JLabel lblXTamanhoPro = new JLabel((Icon) null);
@@ -842,7 +842,7 @@ public class TelaEstoque extends JFrame {
 
 		panelImgCdBarras.setForeground(Color.WHITE);
 		panelImgCdBarras.setBackground(Color.WHITE);
-		panelImgCdBarras.setBounds(6, 301, 27, 26);
+		panelImgCdBarras.setBounds(360, 317, 27, 26);
 		painelProdutos.add(panelImgCdBarras);
 
 		JLabel lblXCdBarras = new JLabel((Icon) null);
@@ -851,7 +851,7 @@ public class TelaEstoque extends JFrame {
 		lblXCdBarras.setIcon(new ImageIcon(imagemX));
 
 		tfIdPro.setBackground(Color.WHITE);
-		tfIdPro.setBounds(1230, 141, 55, 32);
+		tfIdPro.setBounds(1584, 157, 55, 32);
 		painelProdutos.add(tfIdPro);
 
 		tfNomePro = new JTextField();
@@ -860,7 +860,7 @@ public class TelaEstoque extends JFrame {
 		tfNomePro.setColumns(10);
 		tfNomePro.setBorder(null);
 		tfNomePro.setBackground(Color.WHITE);
-		tfNomePro.setBounds(167, 141, 409, 32);
+		tfNomePro.setBounds(521, 157, 409, 32);
 		painelProdutos.add(tfNomePro);
 		tfNomePro.addFocusListener(new FocusAdapter() {
 			@Override
@@ -904,7 +904,7 @@ public class TelaEstoque extends JFrame {
 		});
 
 		tfPrecoProd.setOpaque(false);
-		tfPrecoProd.setBounds(221, 250, 307, 32);
+		tfPrecoProd.setBounds(575, 266, 307, 32);
 		tfPrecoProd.setForeground(corTexto);
 		tfPrecoProd.setFont(new Font("Roboto", Font.PLAIN, 20));
 		tfPrecoProd.setBorder(null);
@@ -912,7 +912,7 @@ public class TelaEstoque extends JFrame {
 
 		tfTamanho = new JTextField();
 		tfTamanho.setOpaque(false);
-		tfTamanho.setBounds(167, 199, 409, 32);
+		tfTamanho.setBounds(521, 215, 409, 32);
 		tfTamanho.setForeground(corTexto);
 		tfTamanho.setFont(new Font("Roboto", Font.PLAIN, 20));
 		tfTamanho.setBorder(null);
@@ -1010,7 +1010,7 @@ public class TelaEstoque extends JFrame {
 		tfCdBarras.setColumns(10);
 		tfCdBarras.setBorder(null);
 		tfCdBarras.setBackground(Color.WHITE);
-		tfCdBarras.setBounds(167, 301, 409, 32);
+		tfCdBarras.setBounds(521, 317, 409, 32);
 		painelProdutos.add(tfCdBarras);
 
 ////ewsdf
@@ -1028,7 +1028,7 @@ public class TelaEstoque extends JFrame {
 		tfBuscaNomePro.setColumns(10);
 		tfBuscaNomePro.setBorder(null);
 		tfBuscaNomePro.setBackground(Color.WHITE);
-		tfBuscaNomePro.setBounds(863, 466, 418, 32);
+		tfBuscaNomePro.setBounds(1158, 551, 418, 32);
 
 		tfBuscaNomePro.addCaretListener(new CaretListener() {
 			public void caretUpdate(CaretEvent arg0) {
@@ -1078,11 +1078,11 @@ public class TelaEstoque extends JFrame {
 		tfBuscaIdPro.setForeground(corTexto);
 		tfBuscaIdPro.setColumns(10);
 		tfBuscaIdPro.setBorder(null);
-		tfBuscaIdPro.setBounds(158, 468, 418, 31);
+		tfBuscaIdPro.setBounds(453, 553, 418, 31);
 		painelProdutos.add(tfBuscaIdPro);
 
 		cbFornecedoresProd = new JComboBox(new Object[] { "" });
-		cbFornecedoresProd.setBounds(774, 200, 409, 32);
+		cbFornecedoresProd.setBounds(1128, 216, 409, 32);
 
 		cbFornecedoresProd.setFont(new Font("Roboto", Font.PLAIN, 20));
 		cbFornecedoresProd.setForeground(corTexto);
@@ -1090,7 +1090,7 @@ public class TelaEstoque extends JFrame {
 		painelProdutos.add(cbFornecedoresProd);
 
 		cbCategoriaProd = new JComboBox(new Object[] { "" });
-		cbCategoriaProd.setBounds(774, 250, 409, 32);
+		cbCategoriaProd.setBounds(1128, 266, 409, 32);
 
 		cbCategoriaProd.setFont(new Font("Roboto", Font.PLAIN, 20));
 		cbCategoriaProd.setForeground(corTexto);
@@ -1101,19 +1101,19 @@ public class TelaEstoque extends JFrame {
 		painelProdutos.add(cbCategoriaProd);
 
 		spinnerQuant.setFont(new Font("Roboto", Font.PLAIN, 20));
-		spinnerQuant.setBounds(774, 141, 119, 32);
+		spinnerQuant.setBounds(1128, 157, 119, 32);
 		painelProdutos.add(spinnerQuant);
 
 		cbStatusPro.setModel(new DefaultComboBoxModel(new String[] { "Inativo", "Ativo" }));
 		cbStatusPro.setSelectedIndex(1);
 		cbStatusPro.setForeground(corTexto);
 		cbStatusPro.setFont(new Font("Roboto", Font.PLAIN, 20));
-		cbStatusPro.setBounds(774, 306, 409, 32);
+		cbStatusPro.setBounds(1128, 322, 409, 32);
 		painelProdutos.add(cbStatusPro);
 		AutoCompleteDecorator.decorate(cbStatusPro);
 
 		JScrollPane scrollPanePro = new JScrollPane();
-		scrollPanePro.setBounds(38, 520, 1301, 208);
+		scrollPanePro.setBounds(38, 630, 1850, 350);
 		painelProdutos.add(scrollPanePro);
 		scrollPanePro.setColumnHeaderView(tabelaProdutos);
 
@@ -1123,7 +1123,7 @@ public class TelaEstoque extends JFrame {
 		tabelaProdutos.setSelectionBackground(Color.LIGHT_GRAY);
 		tabelaProdutos.setIgnoreRepaint(true);
 		tabelaProdutos.setEditingRow(0);
-		tabelaProdutos.setFont(new Font("Roboto", Font.PLAIN, 14));
+		tabelaProdutos.setFont(new Font("Roboto", Font.PLAIN, 18));
 		tabelaProdutos.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent arg0) {
 				setCamposFromTabelaPro();
@@ -1138,70 +1138,70 @@ public class TelaEstoque extends JFrame {
 		painelCategoria.setLayout(null);
 		painelCategoria.setBorder(new EmptyBorder(5, 5, 5, 5));
 		painelCategoria.setBackground(Color.WHITE);
-		painelCategoria.setBounds(0, 0, 1386, 886);
+		painelCategoria.setBounds(0, 0, 1920, 1000);
 		mainPanel.add(painelCategoria);
 
 		JLabel lblDescontoCat = new JLabel("Desconto");
-		lblDescontoCat.setBounds(38, 190, 119, 42);
+		lblDescontoCat.setBounds(680, 221, 119, 42);
 		lblDescontoCat.setForeground(corTexto);
 		lblDescontoCat.setFont(new Font("Roboto", Font.PLAIN, 20));
 		painelCategoria.add(lblDescontoCat);
 
 		JLabel lblIdCat = new JLabel("ID");
-		lblIdCat.setBounds(38, 250, 42, 42);
+		lblIdCat.setBounds(680, 281, 42, 42);
 		lblIdCat.setForeground(corTexto);
 		lblIdCat.setFont(new Font("Roboto", Font.PLAIN, 20));
 		painelCategoria.add(lblIdCat);
 
 		JLabel lblDescricaoCat = new JLabel("Descri\u00E7\u00E3o");
-		lblDescricaoCat.setBounds(38, 136, 119, 42);
+		lblDescricaoCat.setBounds(680, 167, 119, 42);
 		lblDescricaoCat.setForeground(corTexto);
 		lblDescricaoCat.setFont(new Font("Roboto", Font.PLAIN, 20));
 		painelCategoria.add(lblDescricaoCat);
 
 		JLabel lblBuscarCat = new JLabel("Buscar");
 		lblBuscarCat.setForeground(corTexto);
-		lblBuscarCat.setFont(new Font("Roboto", Font.PLAIN, 24));
-		lblBuscarCat.setBounds(38, 427, 119, 42);
+		lblBuscarCat.setFont(new Font("Roboto", Font.PLAIN, 26));
+		lblBuscarCat.setBounds(102, 549, 119, 42);
 		painelCategoria.add(lblBuscarCat);
 
 		JLabel lblBuscaIdCat = new JLabel("ID");
 		lblBuscaIdCat.setForeground(corTexto);
 		lblBuscaIdCat.setFont(new Font("Roboto", Font.PLAIN, 18));
-		lblBuscaIdCat.setBounds(65, 467, 119, 42);
+		lblBuscaIdCat.setBounds(360, 552, 119, 42);
 		painelCategoria.add(lblBuscaIdCat);
 
 		JLabel lblBuscaNomeCat = new JLabel("Descri\u00E7\u00E3o");
 		lblBuscaNomeCat.setForeground(corTexto);
 		lblBuscaNomeCat.setFont(new Font("Roboto", Font.PLAIN, 18));
-		lblBuscaNomeCat.setBounds(774, 461, 79, 42);
+		lblBuscaNomeCat.setBounds(1069, 546, 79, 42);
 		painelCategoria.add(lblBuscaNomeCat);
-		spIdCat.setBounds(167, 290, 55, 2);
+		spIdCat.setBounds(809, 321, 55, 2);
 		spIdCat.setBackground(corGeral);
 		painelCategoria.add(spIdCat);
 
-		spDescontoCat.setBounds(167, 230, 55, 2);
+		spDescontoCat.setBounds(809, 261, 55, 2);
 		spDescontoCat.setBackground(corGeral);
 		painelCategoria.add(spDescontoCat);
 
 		JSeparator spBuscaNomeCat = new JSeparator();
 		spBuscaNomeCat.setBackground(corGeral);
-		spBuscaNomeCat.setBounds(867, 500, 418, 2);
+		spBuscaNomeCat.setBounds(1162, 585, 418, 2);
 		painelCategoria.add(spBuscaNomeCat);
 		JSeparator spBuscaIdCat = new JSeparator();
 
 		spBuscaIdCat.setBackground(corGeral);
-		spBuscaIdCat.setBounds(158, 501, 418, 2);
+		spBuscaIdCat.setBounds(502, 589, 418, 2);
 		painelCategoria.add(spBuscaIdCat);
 
 		spDesc1Cat.setBackground(corGeral);
-		spDesc1Cat.setBounds(167, 176, 407, 2);
+		spDesc1Cat.setBounds(809, 207, 407, 2);
 		painelCategoria.add(spDesc1Cat);
 
 		//
 
 		JScrollPane scrollPaneCat = new JScrollPane();
-		scrollPaneCat.setBounds(38, 520, 1301, 208);
+		scrollPaneCat.setBounds(38, 630, 1850, 350);
 		painelCategoria.add(scrollPaneCat);
 		scrollPaneCat.setColumnHeaderView(tabelaCategoria);
 
@@ -1211,7 +1211,7 @@ public class TelaEstoque extends JFrame {
 		tabelaCategoria.setSelectionBackground(Color.LIGHT_GRAY);
 		tabelaCategoria.setIgnoreRepaint(true);
 		tabelaCategoria.setEditingRow(0);
-		tabelaCategoria.setFont(new Font("Roboto", Font.PLAIN, 14));
+		tabelaCategoria.setFont(new Font("Roboto", Font.PLAIN, 18));
 		tabelaCategoria.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent arg0) {
 				setCamposFromTabelaCat();
@@ -1248,7 +1248,7 @@ public class TelaEstoque extends JFrame {
 			}
 
 		});
-		btCadastrarCat.setBounds(76, 362, 215, 54);
+		btCadastrarCat.setBounds(386, 415, 235, 80);
 		btCadastrarCat.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btCadastrarCat.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1272,7 +1272,7 @@ public class TelaEstoque extends JFrame {
 
 		});
 		btCadastrarCat.setForeground(corTexto);
-		btCadastrarCat.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btCadastrarCat.setFont(new Font("Roboto", Font.PLAIN, 22));
 		btCadastrarCat.setBorder(null);
 		btCadastrarCat.setUI((ButtonUI) BasicButtonUI.createUI(btCadastrarCat));
 		btCadastrarCat.setBackground(corGeral);
@@ -1322,9 +1322,9 @@ public class TelaEstoque extends JFrame {
 
 			}
 		});
-		btnEditarCat.setBounds(403, 362, 215, 54);
+		btnEditarCat.setBounds(713, 415, 235, 80);
 		btnEditarCat.setForeground(corTexto);
-		btnEditarCat.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btnEditarCat.setFont(new Font("Roboto", Font.PLAIN, 22));
 		btnEditarCat.setBorder(null);
 		btnEditarCat.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnEditarCat.setUI((ButtonUI) BasicButtonUI.createUI(btnEditarCat));
@@ -1401,9 +1401,9 @@ public class TelaEstoque extends JFrame {
 
 			}
 		});
-		btnExcluirCat.setBounds(728, 362, 215, 54);
+		btnExcluirCat.setBounds(1038, 415, 235, 80);
 		btnExcluirCat.setForeground(corTexto);
-		btnExcluirCat.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btnExcluirCat.setFont(new Font("Roboto", Font.PLAIN, 22));
 		btnExcluirCat.setBorder(null);
 		btnEditarCat.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnExcluirCat.setUI((ButtonUI) BasicButtonUI.createUI(btnExcluirCat));
@@ -1415,7 +1415,7 @@ public class TelaEstoque extends JFrame {
 				limparCat();
 			}
 		});
-		btnLimparCat.setBounds(1048, 362, 215, 54);
+		btnLimparCat.setBounds(1358, 415, 235, 80);
 		btnLimparCat.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -1443,14 +1443,14 @@ public class TelaEstoque extends JFrame {
 			}
 		});
 		btnLimparCat.setForeground(corTexto);
-		btnLimparCat.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btnLimparCat.setFont(new Font("Roboto", Font.PLAIN, 22));
 		btnLimparCat.setBorder(null);
 		btnLimparCat.setUI((ButtonUI) BasicButtonUI.createUI(btnLimparCat));
 		btnLimparCat.setBackground(corGeral);
 		btnLimparCat.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		painelCategoria.add(btnLimparCat);
 
-		panelImgDescontoCat.setBounds(6, 194, 27, 26);
+		panelImgDescontoCat.setBounds(648, 225, 27, 26);
 		painelCategoria.add(panelImgDescontoCat);
 		panelImgDescontoCat.setForeground(Color.WHITE);
 		panelImgDescontoCat.setBackground(Color.WHITE);
@@ -1461,7 +1461,7 @@ public class TelaEstoque extends JFrame {
 
 		panelImgDescCat.setForeground(Color.WHITE);
 		panelImgDescCat.setBackground(Color.WHITE);
-		panelImgDescCat.setBounds(6, 142, 27, 26);
+		panelImgDescCat.setBounds(648, 173, 27, 26);
 		painelCategoria.add(panelImgDescCat);
 
 		JLabel labelXDescCat = new JLabel(new ImageIcon(imagemX));
@@ -1469,7 +1469,7 @@ public class TelaEstoque extends JFrame {
 		panelImgDescCat.add(labelXDescCat);
 
 		tfIdCat = new JTextField();
-		tfIdCat.setBounds(167, 255, 55, 32);
+		tfIdCat.setBounds(809, 286, 55, 32);
 		tfIdCat.setForeground(corTexto);
 		tfIdCat.setFont(new Font("Roboto", Font.PLAIN, 20));
 		tfIdCat.setBackground(painelCategoria.getBackground());
@@ -1496,7 +1496,7 @@ public class TelaEstoque extends JFrame {
 		tfBuscaNomeCat.setColumns(10);
 		tfBuscaNomeCat.setBorder(null);
 		tfBuscaNomeCat.setBackground(Color.WHITE);
-		tfBuscaNomeCat.setBounds(863, 466, 418, 32);
+		tfBuscaNomeCat.setBounds(1158, 551, 418, 32);
 
 		tfBuscaNomeCat.addCaretListener(new CaretListener() {
 			public void caretUpdate(CaretEvent arg0) {
@@ -1545,7 +1545,7 @@ public class TelaEstoque extends JFrame {
 		tfBuscaIdCat.setForeground(corTexto);
 		tfBuscaIdCat.setColumns(10);
 		tfBuscaIdCat.setBorder(null);
-		tfBuscaIdCat.setBounds(158, 468, 418, 31);
+		tfBuscaIdCat.setBounds(453, 553, 418, 31);
 		painelCategoria.add(tfBuscaIdCat);
 
 		try {
@@ -1584,12 +1584,12 @@ public class TelaEstoque extends JFrame {
 			}
 		});
 		tfDescontoCat.setColumns(10);
-		tfDescontoCat.setBounds(177, 195, 45, 32);
+		tfDescontoCat.setBounds(819, 226, 45, 32);
 		painelCategoria.add(tfDescontoCat);
 
 		tfDescricaoCat = new JTextField();
 		tfDescricaoCat.setOpaque(false);
-		tfDescricaoCat.setBounds(167, 146, 417, 32);
+		tfDescricaoCat.setBounds(809, 177, 417, 32);
 		tfDescricaoCat.setForeground(corTexto);
 		tfDescricaoCat.setFont(new Font("Roboto", Font.PLAIN, 18));
 		tfDescricaoCat.setColumns(10);
@@ -1625,132 +1625,132 @@ public class TelaEstoque extends JFrame {
 		painelFornecedor.setLayout(null);
 		painelFornecedor.setBorder(new EmptyBorder(5, 5, 5, 5));
 		painelFornecedor.setBackground(Color.WHITE);
-		painelFornecedor.setBounds(0, 0, 1386, 886);
+		painelFornecedor.setBounds(0, 0, 1920, 1000);
 		mainPanel.add(painelFornecedor);
 
 		JLabel lblNome = new JLabel("Nome");
-		lblNome.setBounds(38, 136, 60, 42);
+		lblNome.setBounds(278, 141, 60, 42);
 		lblNome.setForeground(corTexto);
 		lblNome.setFont(new Font("Roboto", Font.PLAIN, 20));
 		painelFornecedor.add(lblNome);
 
 		JLabel lblCnpj = new JLabel("CNPJ");
-		lblCnpj.setBounds(38, 243, 119, 42);
+		lblCnpj.setBounds(278, 248, 119, 42);
 		lblCnpj.setForeground(corTexto);
 		lblCnpj.setFont(new Font("Roboto", Font.PLAIN, 20));
 		painelFornecedor.add(lblCnpj);
 
 		JLabel lblEmail = new JLabel("Email");
-		lblEmail.setBounds(38, 190, 119, 42);
+		lblEmail.setBounds(278, 195, 119, 42);
 		lblEmail.setForeground(corTexto);
 		lblEmail.setFont(new Font("Roboto", Font.PLAIN, 20));
 		painelFornecedor.add(lblEmail);
 
 		JLabel lblTelefone = new JLabel("Telefone");
-		lblTelefone.setBounds(38, 299, 119, 42);
+		lblTelefone.setBounds(278, 304, 119, 42);
 		lblTelefone.setForeground(corTexto);
 		lblTelefone.setFont(new Font("Roboto", Font.PLAIN, 20));
 		painelFornecedor.add(lblTelefone);
 
 		JLabel lblEstado = new JLabel("Estado");
-		lblEstado.setBounds(774, 148, 69, 42);
+		lblEstado.setBounds(1199, 156, 69, 42);
 		lblEstado.setForeground(corTexto);
 		lblEstado.setFont(new Font("Roboto", Font.PLAIN, 18));
 		painelFornecedor.add(lblEstado);
 
 		JLabel lblBairro = new JLabel("Bairro");
-		lblBairro.setBounds(774, 244, 79, 42);
+		lblBairro.setBounds(1199, 252, 79, 42);
 		lblBairro.setForeground(corTexto);
 		lblBairro.setFont(new Font("Roboto", Font.PLAIN, 18));
 		painelFornecedor.add(lblBairro);
 
 		JLabel lblCidade = new JLabel("Cidade");
-		lblCidade.setBounds(774, 196, 119, 42);
+		lblCidade.setBounds(1199, 204, 119, 42);
 		lblCidade.setForeground(corTexto);
 		lblCidade.setFont(new Font("Roboto", Font.PLAIN, 18));
 		painelFornecedor.add(lblCidade);
 
 		JLabel lblRua = new JLabel("Rua");
-		lblRua.setBounds(774, 296, 119, 42);
+		lblRua.setBounds(1199, 304, 119, 42);
 		lblRua.setForeground(corTexto);
 		lblRua.setFont(new Font("Roboto", Font.PLAIN, 18));
 		painelFornecedor.add(lblRua);
 
 		JLabel lblId = new JLabel("ID");
-		lblId.setBounds(1187, 136, 42, 42);
+		lblId.setBounds(1612, 144, 42, 42);
 		lblId.setForeground(corTexto);
 		lblId.setFont(new Font("Roboto", Font.PLAIN, 20));
 		painelFornecedor.add(lblId);
 
 		JLabel lblEndereo = new JLabel("Endere\u00E7o");
-		lblEndereo.setBounds(640, 136, 119, 42);
+		lblEndereo.setBounds(1029, 235, 119, 42);
 		lblEndereo.setForeground(corTexto);
-		lblEndereo.setFont(new Font("Roboto", Font.PLAIN, 20));
+		lblEndereo.setFont(new Font("Roboto", Font.PLAIN, 22));
 		painelFornecedor.add(lblEndereo);
 
 		JLabel lblBuscar = new JLabel("Buscar");
 		lblBuscar.setForeground(corTexto);
-		lblBuscar.setFont(new Font("Roboto", Font.PLAIN, 24));
-		lblBuscar.setBounds(38, 427, 119, 42);
+		lblBuscar.setFont(new Font("Roboto", Font.PLAIN, 26));
+		lblBuscar.setBounds(102, 549, 119, 42);
 		painelFornecedor.add(lblBuscar);
 
 		JLabel lblBuscaId = new JLabel("ID");
 		lblBuscaId.setForeground(corTexto);
 		lblBuscaId.setFont(new Font("Roboto", Font.PLAIN, 18));
-		lblBuscaId.setBounds(65, 467, 119, 42);
+		lblBuscaId.setBounds(360, 552, 119, 42);
 		painelFornecedor.add(lblBuscaId);
 
 		JLabel lblBuscaNome = new JLabel("Nome");
 		lblBuscaNome.setForeground(corTexto);
 		lblBuscaNome.setFont(new Font("Roboto", Font.PLAIN, 18));
-		lblBuscaNome.setBounds(774, 461, 79, 42);
+		lblBuscaNome.setBounds(1069, 546, 79, 42);
 		painelFornecedor.add(lblBuscaNome);
 
-		spNome.setBounds(167, 176, 409, 2);
+		spNome.setBounds(407, 181, 409, 2);
 		spNome.setBackground(corGeral);
 		painelFornecedor.add(spNome);
-		spCNPJ.setBounds(167, 283, 409, 2);
+		spCNPJ.setBounds(407, 288, 409, 2);
 		spCNPJ.setBackground(corGeral);
 		painelFornecedor.add(spCNPJ);
-		spId.setBounds(1230, 176, 55, 2);
+		spId.setBounds(1655, 184, 55, 2);
 		spId.setBackground(corGeral);
 		painelFornecedor.add(spId);
 
-		spEmail.setBounds(167, 230, 407, 2);
+		spEmail.setBounds(407, 235, 407, 2);
 		spEmail.setBackground(corGeral);
 		painelFornecedor.add(spEmail);
 
-		spTelefone.setBounds(167, 339, 409, 2);
+		spTelefone.setBounds(407, 344, 409, 2);
 		spTelefone.setBackground(corGeral);
 		painelFornecedor.add(spTelefone);
 
-		spCidade.setBounds(867, 230, 418, 2);
+		spCidade.setBounds(1292, 238, 418, 2);
 		spCidade.setBackground(corGeral);
 		painelFornecedor.add(spCidade);
 
-		spBairro.setBounds(867, 283, 418, 2);
+		spBairro.setBounds(1292, 291, 418, 2);
 		spBairro.setBackground(corGeral);
 		painelFornecedor.add(spBairro);
 
-		spRua.setBounds(868, 339, 417, 2);
+		spRua.setBounds(1293, 347, 417, 2);
 		spRua.setBackground(corGeral);
 		painelFornecedor.add(spRua);
 
 		JSeparator spBuscaNome = new JSeparator();
 		spBuscaNome.setBackground(corGeral);
-		spBuscaNome.setBounds(867, 500, 418, 2);
+		spBuscaNome.setBounds(1162, 585, 418, 2);
 		painelFornecedor.add(spBuscaNome);
 
 		JSeparator spBuscaID = new JSeparator();
 		spBuscaID.setBackground(corGeral);
-		spBuscaID.setBounds(158, 501, 418, 2);
+		spBuscaID.setBounds(453, 586, 418, 2);
 		painelFornecedor.add(spBuscaID);
 
 		cbEstado_1.setModel(new DefaultComboBoxModel(
 				new String[] { "AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PR",
 						"PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO" }));
 
-		cbEstado_1.setBounds(863, 158, 55, 20);
+		cbEstado_1.setBounds(1288, 166, 55, 20);
 		cbEstado_1.setBackground(Color.WHITE);
 		cbEstado_1.setForeground(new Color(0, 0, 0));
 		cbEstado_1.setFont(new Font("Roboto", Font.PLAIN, 18));
@@ -1759,7 +1759,7 @@ public class TelaEstoque extends JFrame {
 		//
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(38, 520, 1301, 208);
+		scrollPane.setBounds(38, 630, 1850, 350);
 		painelFornecedor.add(scrollPane);
 		scrollPane.setColumnHeaderView(tabelaFornecedor);
 
@@ -1769,7 +1769,7 @@ public class TelaEstoque extends JFrame {
 		tabelaFornecedor.setSelectionBackground(Color.LIGHT_GRAY);
 		tabelaFornecedor.setIgnoreRepaint(true);
 		tabelaFornecedor.setEditingRow(0);
-		tabelaFornecedor.setFont(new Font("Roboto", Font.PLAIN, 14));
+		tabelaFornecedor.setFont(new Font("Roboto", Font.PLAIN, 18));
 		tabelaFornecedor.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent arg0) {
 				setCamposFromTabela();
@@ -1812,7 +1812,7 @@ public class TelaEstoque extends JFrame {
 			}
 
 		});
-		btCadastrar.setBounds(76, 362, 215, 54);
+		btCadastrar.setBounds(386, 415, 235, 80);
 		btCadastrar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1854,7 +1854,7 @@ public class TelaEstoque extends JFrame {
 
 		});
 		btCadastrar.setForeground(corTexto);
-		btCadastrar.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btCadastrar.setFont(new Font("Roboto", Font.PLAIN, 22));
 		btCadastrar.setBorder(null);
 		btCadastrar.setUI((ButtonUI) BasicButtonUI.createUI(btCadastrar));
 		btCadastrar.setBackground(corGeral);
@@ -1910,9 +1910,9 @@ public class TelaEstoque extends JFrame {
 
 			}
 		});
-		btnEditar.setBounds(403, 362, 215, 54);
+		btnEditar.setBounds(713, 415, 235, 80);
 		btnEditar.setForeground(corTexto);
-		btnEditar.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btnEditar.setFont(new Font("Roboto", Font.PLAIN, 22));
 		btnEditar.setBorder(null);
 		btnEditar.setUI((ButtonUI) BasicButtonUI.createUI(btnEditar));
 		btnEditar.setBackground(corGeral);
@@ -1989,9 +1989,9 @@ public class TelaEstoque extends JFrame {
 
 			}
 		});
-		btnExcluir.setBounds(728, 362, 215, 54);
+		btnExcluir.setBounds(1038, 415, 235, 80);
 		btnExcluir.setForeground(corTexto);
-		btnExcluir.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btnExcluir.setFont(new Font("Roboto", Font.PLAIN, 22));
 		btnExcluir.setBorder(null);
 		btnExcluir.setUI((ButtonUI) BasicButtonUI.createUI(btnExcluir));
 		btnExcluir.setBackground(corGeral);
@@ -2003,7 +2003,7 @@ public class TelaEstoque extends JFrame {
 				deixarCerto();
 			}
 		});
-		btnLimpar.setBounds(1048, 362, 215, 54);
+		btnLimpar.setBounds(1358, 415, 235, 80);
 		btnLimpar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -2031,7 +2031,7 @@ public class TelaEstoque extends JFrame {
 			}
 		});
 		btnLimpar.setForeground(corTexto);
-		btnLimpar.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btnLimpar.setFont(new Font("Roboto", Font.PLAIN, 22));
 		btnLimpar.setBorder(null);
 		btnLimpar.setUI((ButtonUI) BasicButtonUI.createUI(btnLimpar));
 		btnLimpar.setBackground(corGeral);
@@ -2049,7 +2049,7 @@ public class TelaEstoque extends JFrame {
 		painelFornecedor.add(panelCampos);
 		panelCampos.setLayout(null);
 
-		panelImgNome.setBounds(6, 142, 27, 26);
+		panelImgNome.setBounds(246, 147, 27, 26);
 		painelFornecedor.add(panelImgNome);
 		panelImgNome.setBackground(Color.WHITE);
 		panelImgNome.setForeground(Color.WHITE);
@@ -2062,7 +2062,7 @@ public class TelaEstoque extends JFrame {
 		panelImgNome.add(labelXnome);
 		labelXnome.setIcon(new ImageIcon(imagemX));
 
-		panelImgEmail.setBounds(6, 194, 27, 26);
+		panelImgEmail.setBounds(246, 199, 27, 26);
 		painelFornecedor.add(panelImgEmail);
 		panelImgEmail.setForeground(Color.WHITE);
 		panelImgEmail.setBackground(Color.WHITE);
@@ -2071,7 +2071,7 @@ public class TelaEstoque extends JFrame {
 		labelXEmail.setToolTipText("O email \u00E9 obrigat\u00F3rio");
 		panelImgEmail.add(labelXEmail);
 
-		panelImgCNPJ.setBounds(6, 250, 27, 26);
+		panelImgCNPJ.setBounds(246, 255, 27, 26);
 		painelFornecedor.add(panelImgCNPJ);
 		panelImgCNPJ.setForeground(Color.WHITE);
 		panelImgCNPJ.setBackground(Color.WHITE);
@@ -2080,7 +2080,7 @@ public class TelaEstoque extends JFrame {
 		labelXCNPJ.setToolTipText("O CNPJ \u00E9 obrigat\u00F3rio");
 		panelImgCNPJ.add(labelXCNPJ);
 
-		panelImgTelefone.setBounds(6, 302, 27, 26);
+		panelImgTelefone.setBounds(246, 307, 27, 26);
 		painelFornecedor.add(panelImgTelefone);
 		panelImgTelefone.setForeground(Color.WHITE);
 		panelImgTelefone.setBackground(Color.WHITE);
@@ -2089,7 +2089,7 @@ public class TelaEstoque extends JFrame {
 		labelXTelefone.setToolTipText("O telefone \u00E9 obrigat\u00F3rio\r\n");
 		panelImgTelefone.add(labelXTelefone);
 
-		panelImgCidade.setBounds(737, 205, 27, 26);
+		panelImgCidade.setBounds(1162, 213, 27, 26);
 		painelFornecedor.add(panelImgCidade);
 		panelImgCidade.setForeground(Color.WHITE);
 		panelImgCidade.setBackground(Color.WHITE);
@@ -2098,7 +2098,7 @@ public class TelaEstoque extends JFrame {
 		lblXCidade.setToolTipText("A cidade \u00E9 obrigat\u00F3ria e n\u00E3o deve conter numeros e simbolos\r\n");
 		panelImgCidade.add(lblXCidade);
 
-		panelImgBairro.setBounds(737, 250, 27, 26);
+		panelImgBairro.setBounds(1162, 258, 27, 26);
 		painelFornecedor.add(panelImgBairro);
 		panelImgBairro.setForeground(Color.WHITE);
 		panelImgBairro.setBackground(Color.WHITE);
@@ -2107,7 +2107,7 @@ public class TelaEstoque extends JFrame {
 		lblXBairro.setToolTipText("O bairro \u00E9 obrigat\u00F3rio e n\u00E3o deve conter numeros e simbolos");
 		panelImgBairro.add(lblXBairro);
 
-		panelImgRua.setBounds(737, 302, 27, 26);
+		panelImgRua.setBounds(1162, 310, 27, 26);
 		painelFornecedor.add(panelImgRua);
 		panelImgRua.setToolTipText("A rua \u00E9 obrigat\u00F3ria e n\u00E3o deve conter numeros e simbolos\r\n");
 		panelImgRua.setForeground(Color.WHITE);
@@ -2117,7 +2117,7 @@ public class TelaEstoque extends JFrame {
 		panelImgRua.add(lblXRua);
 
 		tfId = new JTextField();
-		tfId.setBounds(1230, 141, 55, 32);
+		tfId.setBounds(1655, 149, 55, 32);
 		tfId.setForeground(corTexto);
 		tfId.setFont(new Font("Roboto", Font.PLAIN, 20));
 		tfId.setBackground(painelFornecedor.getBackground());
@@ -2134,7 +2134,7 @@ public class TelaEstoque extends JFrame {
 		tfId.setColumns(10);
 
 		tfNome = new JTextField();
-		tfNome.setBounds(167, 141, 409, 32);
+		tfNome.setBounds(407, 146, 409, 32);
 		painelFornecedor.add(tfNome);
 		tfNome.setForeground(corTexto);
 		tfNome.setFont(new Font("Roboto", Font.PLAIN, 20));
@@ -2169,7 +2169,7 @@ public class TelaEstoque extends JFrame {
 		tfNome.setColumns(10);
 
 		tfEmail = new JTextField();
-		tfEmail.setBounds(167, 195, 414, 32);
+		tfEmail.setBounds(407, 200, 414, 32);
 		painelFornecedor.add(tfEmail);
 		tfEmail.setForeground(corTexto);
 		tfEmail.setFont(new Font("Roboto", Font.PLAIN, 20));
@@ -2209,7 +2209,7 @@ public class TelaEstoque extends JFrame {
 			MaskFormatter tfCNPJFormatter = new MaskFormatter("##.###.###/####-##");
 			tfCNPJFormatter.setPlaceholderCharacter('_');
 			tfCNPJ = new JFormattedTextField(tfCNPJFormatter);
-			tfCNPJ.setBounds(167, 248, 409, 32);
+			tfCNPJ.setBounds(407, 253, 409, 32);
 			tfCNPJ.setForeground(corTexto);
 			tfCNPJ.setFont(new Font("Roboto", Font.PLAIN, 20));
 			tfCNPJ.setBorder(null);
@@ -2248,7 +2248,7 @@ public class TelaEstoque extends JFrame {
 			MaskFormatter tfTelefoneFormatter = new MaskFormatter("(##) ####-####");
 			tfTelefoneFormatter.setPlaceholderCharacter('_');
 			tfTelefone = new JFormattedTextField(tfTelefoneFormatter);
-			tfTelefone.setBounds(167, 304, 409, 32);
+			tfTelefone.setBounds(407, 309, 409, 32);
 			tfTelefone.setForeground(corTexto);
 			tfTelefone.setFont(new Font("Roboto", Font.PLAIN, 20));
 			tfTelefone.setBorder(null);
@@ -2286,7 +2286,7 @@ public class TelaEstoque extends JFrame {
 
 		tfCidade = new JTextField();
 		tfCidade.setToolTipText("");
-		tfCidade.setBounds(867, 197, 418, 31);
+		tfCidade.setBounds(1292, 205, 418, 31);
 		tfCidade.setForeground(corTexto);
 		tfCidade.setFont(new Font("Roboto", Font.PLAIN, 18));
 		tfCidade.setColumns(10);
@@ -2320,7 +2320,7 @@ public class TelaEstoque extends JFrame {
 		painelFornecedor.add(tfCidade);
 
 		tfBairro = new JTextField();
-		tfBairro.setBounds(863, 249, 418, 32);
+		tfBairro.setBounds(1288, 257, 418, 32);
 		tfBairro.setForeground(corTexto);
 		tfBairro.setFont(new Font("Roboto", Font.PLAIN, 18));
 		tfBairro.setColumns(10);
@@ -2357,7 +2357,7 @@ public class TelaEstoque extends JFrame {
 		painelFornecedor.add(tfBairro);
 
 		tfRua = new JTextField();
-		tfRua.setBounds(868, 305, 417, 32);
+		tfRua.setBounds(1293, 313, 417, 32);
 		tfRua.setForeground(corTexto);
 		tfRua.setFont(new Font("Roboto", Font.PLAIN, 18));
 		tfRua.setColumns(10);
@@ -2404,7 +2404,7 @@ public class TelaEstoque extends JFrame {
 		tfBuscaNome.setColumns(10);
 		tfBuscaNome.setBorder(null);
 		tfBuscaNome.setBackground(Color.WHITE);
-		tfBuscaNome.setBounds(863, 466, 418, 32);
+		tfBuscaNome.setBounds(1158, 551, 418, 32);
 
 		tfBuscaNome.addCaretListener(new CaretListener() {
 			public void caretUpdate(CaretEvent arg0) {
@@ -2456,7 +2456,7 @@ public class TelaEstoque extends JFrame {
 		tfBuscaId.setColumns(10);
 		tfBuscaId.setBorder(null);
 		tfBuscaId.setBackground(Color.WHITE);
-		tfBuscaId.setBounds(158, 468, 418, 31);
+		tfBuscaId.setBounds(453, 553, 418, 31);
 		painelFornecedor.add(tfBuscaId);
 
 		// tela Inicia Maximizada
