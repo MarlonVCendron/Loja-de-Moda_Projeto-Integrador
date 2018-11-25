@@ -234,11 +234,13 @@ public class Configuracoes extends JFrame {
 		btnEscolherCor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JColorChooser ccCor = new JColorChooser();
-				Color corEscolhida = ccCor.showDialog(panelConfigs, "Escolha a cor", new Color(241,114,25));
+				Color corEscolhida = ccCor.showDialog(panelConfigs, "Escolha a cor", corGeral);
 				
-				Preferencias.setR(corEscolhida.getRed());
-				Preferencias.setG(corEscolhida.getGreen());
-				Preferencias.setB(corEscolhida.getBlue());
+				if(corEscolhida != null) {
+					Preferencias.setR(corEscolhida.getRed());
+					Preferencias.setG(corEscolhida.getGreen());
+					Preferencias.setB(corEscolhida.getBlue());
+				}
 				Window[] janelas = Window.getWindows();
 
 				for(Window j : janelas) {
@@ -261,6 +263,7 @@ public class Configuracoes extends JFrame {
 	}
 	
 	void avisoReiniciar() {
-		JOptionPane.showMessageDialog(null, "Reinicie o programa para aplicar as mudanças definitivamente", "Reinicie", JOptionPane.INFORMATION_MESSAGE);
+		Mensagem mensagem = new Mensagem("Reinicie o programa para aplicar as mudanças definitivamente", "Reinicie");
+		mensagem.setVisible(true);
 	}
 }

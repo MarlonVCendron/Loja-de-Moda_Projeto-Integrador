@@ -8,6 +8,8 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.ButtonUI;
+import javax.swing.plaf.basic.BasicButtonUI;
 import javax.swing.text.MaskFormatter;
 
 import java.awt.Color;
@@ -183,6 +185,7 @@ public class TelaLogin extends JFrame {
 		panelSuperior.setLayout(null);
 		
 		JButton btnX = new JButton("X");
+		btnX.setUI((ButtonUI) BasicButtonUI.createUI(btnX));
 		btnX.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -215,6 +218,7 @@ public class TelaLogin extends JFrame {
 		panelSuperior.add(btnX);
 		
 		JButton btnMinimizar = new JButton("-");
+		btnMinimizar.setUI((ButtonUI) BasicButtonUI.createUI(btnMinimizar));
 		btnMinimizar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -602,6 +606,7 @@ public class TelaLogin extends JFrame {
 		panelCampos.setLayout(null);
 		
 		JButton btnCadastrar = new JButton("Cadastrar");
+		btnCadastrar.setUI((ButtonUI) BasicButtonUI.createUI(btnCadastrar));
 		btnCadastrar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -871,6 +876,7 @@ public class TelaLogin extends JFrame {
 		lblErroSenha.setBounds(87, 284, 331, 16);
 		
 		JButton btnEntrar = new JButton("Entrar");
+		btnEntrar.setUI((ButtonUI) BasicButtonUI.createUI(btnEntrar));
 		btnEntrar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
