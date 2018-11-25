@@ -74,8 +74,8 @@ public class Usuario {
 	public Timestamp getDataCadastro() {
 		return dataCadastro;
 	}
-	public void setDataCadastro(Timestamp dataCadastro) {
-		this.dataCadastro = dataCadastro;
+	public void setDataCadastro(Timestamp dadosUsuario) {
+		this.dataCadastro = dadosUsuario;
 	}
 	public int getStatus() {
 		return status;
