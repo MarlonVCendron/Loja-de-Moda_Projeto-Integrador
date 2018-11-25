@@ -58,8 +58,6 @@ public class TelaEditarFuncionario extends JFrame {
 	private JTextField tfCpf;
 	private JTextField tfNome;
 	private JTextField tfRg;
-
-	private JPanel panelImgNome;
 	private JPanel panelImgCpf;
 	private JPanel panelImgTelefone;
 	private JPanel panelImgRg;
@@ -79,7 +77,7 @@ public class TelaEditarFuncionario extends JFrame {
 	Color corVermelho = new Color(230, 20, 20);
 
 	Point posMouseInicial;
-	boolean[] camposCorretos = { false, false, false, false, false, false, false };
+	boolean[] camposCorretos = { true, false, false, false, false, false, false };
 
 	JSeparator spRg = new JSeparator();
 
@@ -278,35 +276,13 @@ public class TelaEditarFuncionario extends JFrame {
 
 		tfNome = new JTextField();
 		tfNome.setEditable(false);
-		tfNome.setText((String)usuario.getNome());
+		tfNome.setText(usuario.getNome());
 		tfNome.setBounds(238, 76, 215, 32);
 		tfNome.setForeground(corTexto);
 		tfNome.setFont(new Font("Roboto", Font.PLAIN, 18));
 		tfNome.setBorder(null);
 		tfNome.setBackground(panelCadastro.getBackground());
-		tfNome.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent arg0) {
-				camposCorretos[0] = (tfNome.getText().matches("[\\p{L}\\s]+")) ? true : false;
-
-				if (tfNome.getText().length() < 1) {
-					camposCorretos[0] = false;
-				}
-
-				if (camposCorretos[0]) {
-					spNome.setBackground(corSeparador);
-					panelImgNome.setVisible(false);
-				} else {
-					spNome.setBackground(corVermelho);
-					panelImgNome.setVisible(true);
-				}
-			}
-
-			@Override
-			public void focusGained(FocusEvent arg0) {
-				spNome.setBackground(corGeral);
-			}
-		});
+	
 
 		spRg.setBackground(new Color(176, 176, 176));
 		spRg.setBounds(238, 381, 215, 2);
@@ -322,7 +298,7 @@ public class TelaEditarFuncionario extends JFrame {
 			tfCpfFormatter.setPlaceholderCharacter('_');
 			tfCpf = new JFormattedTextField(tfCpfFormatter);
 			tfCpf.setBounds(238, 184, 215, 32);
-			tfCpf.setText((String)usuario.getCpf());
+			tfCpf.setText(usuario.getCpf());
 			tfCpf.setForeground(corTexto);
 			tfCpf.setFont(new Font("Roboto", Font.PLAIN, 18));
 			tfCpf.setBorder(null);
@@ -363,7 +339,7 @@ public class TelaEditarFuncionario extends JFrame {
 			MaskFormatter tfTelefoneFormatter = new MaskFormatter("(##) ####-####");
 			tfTelefoneFormatter.setPlaceholderCharacter('_');
 			tfTelefone = new JFormattedTextField(tfTelefoneFormatter);
-			tfTelefone.setText((String)usuario.getTelefone());
+			tfTelefone.setText(usuario.getTelefone());
 			tfTelefone.setBounds(238, 239, 215, 32);
 			tfTelefone.setForeground(corTexto);
 			tfTelefone.setFont(new Font("Roboto", Font.PLAIN, 18));
@@ -400,7 +376,7 @@ public class TelaEditarFuncionario extends JFrame {
 			tfCelularFormatter.setPlaceholderCharacter('_');
 			tfCelular = new JFormattedTextField(tfCelularFormatter);
 			tfCelular.setBounds(238, 294, 215, 32);
-			tfCelular.setText((String)usuario.getCelular());
+			tfCelular.setText(usuario.getCelular());
 			tfCelular.setForeground(corTexto);
 			tfCelular.setFont(new Font("Roboto", Font.PLAIN, 18));
 			tfCelular.setBorder(null);
@@ -431,7 +407,7 @@ public class TelaEditarFuncionario extends JFrame {
 			tfRg = new JFormattedTextField(tfRgFormatter);
 			tfRg.setForeground(corTexto);
 			tfRg.setFont(new Font("Roboto", Font.PLAIN, 18));
-			tfRg.setText((String)usuario.getRg());
+			tfRg.setText(usuario.getRg());
 			tfRg.setBorder(null);
 			tfRg.setBackground(panelCadastro.getBackground());
 		} catch (Exception e) {
@@ -463,7 +439,7 @@ public class TelaEditarFuncionario extends JFrame {
 		panelCadastro.add(tfRg);
 
 		tfEmail = new JTextField();
-		tfEmail.setText((String)usuario.getEmail());
+		tfEmail.setText(usuario.getEmail());
 		tfEmail.setForeground(new Color(75, 80, 85));
 		tfEmail.setFont(new Font("Roboto", Font.PLAIN, 18));
 		tfEmail.setBorder(null);
@@ -540,11 +516,6 @@ public class TelaEditarFuncionario extends JFrame {
 		lblNome.setBounds(76, 68, 119, 42);
 		panelCadastro.add(lblNome);
 
-		JLabel imgXNome = new JLabel(new ImageIcon(imagemX));
-		imgXNome.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-		imgXNome.setBackground(new Color(255, 255, 255));
-		imgXNome.setToolTipText("O nome é obrigatório e não pode conter símbolos");
-
 		JLabel imgXCpf = new JLabel(new ImageIcon(imagemX));
 		imgXCpf.setBackground(new Color(255, 255, 255));
 		imgXCpf.setToolTipText("O CPF é obrigatório");
@@ -560,15 +531,6 @@ public class TelaEditarFuncionario extends JFrame {
 		JLabel imgXEmail = new JLabel(new ImageIcon(imagemX));
 		imgXEmail.setBackground(new Color(255, 255, 255));
 		imgXEmail.setToolTipText("O email é obrigatorio e deve ser preenchido corretamente");
-
-		panelImgNome = new JPanel();
-		panelImgNome.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		panelImgNome.setOpaque(false);
-		panelImgNome.setVisible(false);
-		panelImgNome.setBackground(new Color(255, 255, 255));
-		panelImgNome.setBounds(39, 74, 32, 32);
-		panelCadastro.add(panelImgNome);
-		panelImgNome.add(imgXNome);
 
 		panelImgCpf = new JPanel();
 		panelImgCpf.setVisible(false);
@@ -651,20 +613,7 @@ public class TelaEditarFuncionario extends JFrame {
 	}
 
 	private void atualizaCamposPro() {
-		camposCorretos[0] = (tfNome.getText().matches("[\\p{L}\\s]+")) ? true : false;
-
-		if (tfNome.getText().length() < 1) {
-			camposCorretos[0] = false;
-		}
-
-		if (camposCorretos[0]) {
-			spNome.setBackground(corSeparador);
-			panelImgNome.setVisible(false);
-		} else {
-			spNome.setBackground(corVermelho);
-			panelImgNome.setVisible(true);
-		}
-
+		
 		String numerosCpf = tfCpf.getText();
 		numerosCpf = numerosCpf.replaceAll("[^\\d]", "");
 		camposCorretos[1] = (numerosCpf.length() < 11) ? false : true;

@@ -14,6 +14,8 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+import javax.swing.plaf.ButtonUI;
+import javax.swing.plaf.basic.BasicButtonUI;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -271,6 +273,8 @@ public class TelaEstoque extends JFrame {
 		panelSuperior.setLayout(null);
 		
 		JButton btnX = new JButton("X");
+		btnX.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		
 		btnX.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -289,13 +293,16 @@ public class TelaEstoque extends JFrame {
 				btnX.setBackground(corGeral);
 			}
 		});
+		btnX.setUI((ButtonUI) BasicButtonUI.createUI(btnX));
 		btnX.setBackground(corGeral);
-		btnX.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		btnX.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.exit(0);
+				System.exit(DISPOSE_ON_CLOSE);
 			}
 		});
+		
+		
+		
 		btnX.setBounds(1878, 0, 42, 30);
 		btnX.setMaximumSize(new Dimension(80, 50));
 		btnX.setFont(new Font("Roboto", Font.PLAIN, 13));
@@ -321,8 +328,9 @@ public class TelaEstoque extends JFrame {
 				btnMinimizar.setBackground(corGeral);
 			}
 		});
+		btnMinimizar.setUI((ButtonUI) BasicButtonUI.createUI(btnMinimizar));
 		btnMinimizar.setBackground(corGeral);
-		btnMinimizar.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		btnMinimizar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnMinimizar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setState(JFrame.ICONIFIED);
@@ -348,6 +356,8 @@ public class TelaEstoque extends JFrame {
 
 		btnFornecedor.setFont(new Font("Roboto", Font.PLAIN, 18));
 		btnFornecedor.setBorder(null);
+		btnFornecedor.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnFornecedor.setUI((ButtonUI) BasicButtonUI.createUI(btnFornecedor));
 		btnFornecedor.setBackground(corGeral);
 		btnFornecedor.setBounds(38, 57, 400, 54);
 		btnSuperior.add(btnFornecedor);
@@ -361,9 +371,11 @@ public class TelaEstoque extends JFrame {
 		btnCategoria.setForeground(corTexto);
 		btnCategoria.setFont(new Font("Roboto", Font.PLAIN, 18));
 		btnCategoria.setBorder(null);
+		btnCategoria.setUI((ButtonUI) BasicButtonUI.createUI(btnCategoria));
 		btnCategoria.setBackground(Color.LIGHT_GRAY);
 		btnCategoria.setBounds(482, 57, 400, 54);
 		btnSuperior.add(btnCategoria);
+		btnCategoria.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnProdutos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				clickarProdutos();
@@ -373,98 +385,11 @@ public class TelaEstoque extends JFrame {
 		btnProdutos.setForeground(corTexto);
 		btnProdutos.setFont(new Font("Roboto", Font.PLAIN, 18));
 		btnProdutos.setBorder(null);
+		btnProdutos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnProdutos.setUI((ButtonUI) BasicButtonUI.createUI(btnProdutos));
 		btnProdutos.setBackground(Color.LIGHT_GRAY);
 		btnProdutos.setBounds(927, 57, 400, 54);
 		btnSuperior.add(btnProdutos);
-
-		/*JButton btSair = new JButton("X");
-		btSair.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
-		
-		btSair.addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-
-				btSair.setBackground(corSecundaria);
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btSair.setBackground(corGeral);
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				btSair.setBackground(corTerciaria);
-
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				btSair.setBackground(corGeral);
-
-			}
-
-		});
-
-		
-		btSair.setMaximumSize(new Dimension(80, 50));
-		btSair.setFont(new Font("Roboto", Font.PLAIN, 13));
-		btSair.setBorder(null);
-		btSair.setBackground(corGeral);
-		btSair.setBounds(1326, 0, 42, 42);
-		btnSuperior.add(btSair);
-
-		JButton btMinimizar = new JButton("-");
-		btMinimizar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				setState(JFrame.ICONIFIED);
-
-			}
-		});
-		
-		
-		btMinimizar.addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-
-				btMinimizar.setBackground(corSecundaria);
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btMinimizar.setBackground(corGeral);
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				btMinimizar.setBackground(corTerciaria);
-
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				btMinimizar.setBackground(corGeral);
-
-			}
-
-		});
-
-		btMinimizar.setMaximumSize(new Dimension(80, 50));
-		btMinimizar.setFont(new Font("Roboto", Font.PLAIN, 15));
-		btMinimizar.setBorder(null);
-		btMinimizar.setBackground(corGeral);
-		btMinimizar.setBounds(1248, 0, 42, 42);
-		btnSuperior.add(btMinimizar);*/
 
 		try {
 			MaskFormatter tfDescontoCatFormatter = new MaskFormatter("##");
@@ -673,9 +598,11 @@ public class TelaEstoque extends JFrame {
 		btCadastrarPro.setForeground(corTexto);
 		btCadastrarPro.setFont(new Font("Roboto", Font.PLAIN, 18));
 		btCadastrarPro.setBorder(null);
+		btCadastrarPro.setUI((ButtonUI) BasicButtonUI.createUI(btCadastrarPro));
 		btCadastrarPro.setBackground(corGeral);
 		btCadastrarPro.setBounds(65, 362, 215, 54);
 		painelProdutos.add(btCadastrarPro);
+		btCadastrarPro.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		btEditarPro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -726,8 +653,10 @@ public class TelaEstoque extends JFrame {
 			}
 		});
 		btEditarPro.setForeground(corTexto);
+		btEditarPro.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btEditarPro.setFont(new Font("Roboto", Font.PLAIN, 18));
 		btEditarPro.setBorder(null);
+		btEditarPro.setUI((ButtonUI) BasicButtonUI.createUI(btEditarPro));
 		btEditarPro.setBackground(corGeral);
 		btEditarPro.setBounds(403, 362, 215, 54);
 		painelProdutos.add(btEditarPro);
@@ -797,8 +726,10 @@ public class TelaEstoque extends JFrame {
 		btExcluirPro.setForeground(corTexto);
 		btExcluirPro.setFont(new Font("Roboto", Font.PLAIN, 18));
 		btExcluirPro.setBorder(null);
+		btExcluirPro.setUI((ButtonUI) BasicButtonUI.createUI(btExcluirPro));
 		btExcluirPro.setBackground(corGeral);
 		btExcluirPro.setBounds(728, 362, 215, 54);
+		btExcluirPro.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		painelProdutos.add(btExcluirPro);
 		btLimparPro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -837,10 +768,11 @@ public class TelaEstoque extends JFrame {
 		btLimparPro.setForeground(corTexto);
 		btLimparPro.setFont(new Font("Roboto", Font.PLAIN, 18));
 		btLimparPro.setBorder(null);
+		btLimparPro.setUI((ButtonUI) BasicButtonUI.createUI(btLimparPro));
 		btLimparPro.setBackground(corGeral);
 		btLimparPro.setBounds(1048, 362, 215, 54);
 		painelProdutos.add(btLimparPro);
-		
+		btLimparPro.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
 		btLimparPro.addMouseListener(new MouseAdapter() {
 
@@ -964,6 +896,7 @@ public class TelaEstoque extends JFrame {
 
 		DecimalFormat df = new DecimalFormat("0.00", otherSymbols);
 		tfPrecoProd = new JMoneyField();
+		tfPrecoProd.setHorizontalAlignment(SwingConstants.LEFT);
 		tfPrecoProd.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) {
 
@@ -971,7 +904,7 @@ public class TelaEstoque extends JFrame {
 		});
 
 		tfPrecoProd.setOpaque(false);
-		tfPrecoProd.setBounds(221, 250, 355, 32);
+		tfPrecoProd.setBounds(221, 250, 307, 32);
 		tfPrecoProd.setForeground(corTexto);
 		tfPrecoProd.setFont(new Font("Roboto", Font.PLAIN, 20));
 		tfPrecoProd.setBorder(null);
@@ -1316,6 +1249,7 @@ public class TelaEstoque extends JFrame {
 
 		});
 		btCadastrarCat.setBounds(76, 362, 215, 54);
+		btCadastrarCat.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btCadastrarCat.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				atualizaCamposCat();
@@ -1340,6 +1274,7 @@ public class TelaEstoque extends JFrame {
 		btCadastrarCat.setForeground(corTexto);
 		btCadastrarCat.setFont(new Font("Roboto", Font.PLAIN, 18));
 		btCadastrarCat.setBorder(null);
+		btCadastrarCat.setUI((ButtonUI) BasicButtonUI.createUI(btCadastrarCat));
 		btCadastrarCat.setBackground(corGeral);
 		painelCategoria.add(btCadastrarCat);
 		btnEditarCat.addActionListener(new ActionListener() {
@@ -1391,6 +1326,8 @@ public class TelaEstoque extends JFrame {
 		btnEditarCat.setForeground(corTexto);
 		btnEditarCat.setFont(new Font("Roboto", Font.PLAIN, 18));
 		btnEditarCat.setBorder(null);
+		btnEditarCat.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnEditarCat.setUI((ButtonUI) BasicButtonUI.createUI(btnEditarCat));
 		btnEditarCat.setBackground(corGeral);
 		painelCategoria.add(btnEditarCat);
 
@@ -1468,6 +1405,8 @@ public class TelaEstoque extends JFrame {
 		btnExcluirCat.setForeground(corTexto);
 		btnExcluirCat.setFont(new Font("Roboto", Font.PLAIN, 18));
 		btnExcluirCat.setBorder(null);
+		btnEditarCat.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnExcluirCat.setUI((ButtonUI) BasicButtonUI.createUI(btnExcluirCat));
 		btnExcluirCat.setBackground(corGeral);
 		painelCategoria.add(btnExcluirCat);
 
@@ -1506,7 +1445,9 @@ public class TelaEstoque extends JFrame {
 		btnLimparCat.setForeground(corTexto);
 		btnLimparCat.setFont(new Font("Roboto", Font.PLAIN, 18));
 		btnLimparCat.setBorder(null);
+		btnLimparCat.setUI((ButtonUI) BasicButtonUI.createUI(btnLimparCat));
 		btnLimparCat.setBackground(corGeral);
+		btnLimparCat.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		painelCategoria.add(btnLimparCat);
 
 		panelImgDescontoCat.setBounds(6, 194, 27, 26);
@@ -1872,6 +1813,7 @@ public class TelaEstoque extends JFrame {
 
 		});
 		btCadastrar.setBounds(76, 362, 215, 54);
+		btCadastrar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				atualizarCampos();
@@ -1914,6 +1856,7 @@ public class TelaEstoque extends JFrame {
 		btCadastrar.setForeground(corTexto);
 		btCadastrar.setFont(new Font("Roboto", Font.PLAIN, 18));
 		btCadastrar.setBorder(null);
+		btCadastrar.setUI((ButtonUI) BasicButtonUI.createUI(btCadastrar));
 		btCadastrar.setBackground(corGeral);
 		painelFornecedor.add(btCadastrar);
 
@@ -1971,8 +1914,10 @@ public class TelaEstoque extends JFrame {
 		btnEditar.setForeground(corTexto);
 		btnEditar.setFont(new Font("Roboto", Font.PLAIN, 18));
 		btnEditar.setBorder(null);
+		btnEditar.setUI((ButtonUI) BasicButtonUI.createUI(btnEditar));
 		btnEditar.setBackground(corGeral);
 		painelFornecedor.add(btnEditar);
+		btnEditar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		btnExcluir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnExcluir.addMouseListener(new MouseAdapter() {
@@ -2048,8 +1993,10 @@ public class TelaEstoque extends JFrame {
 		btnExcluir.setForeground(corTexto);
 		btnExcluir.setFont(new Font("Roboto", Font.PLAIN, 18));
 		btnExcluir.setBorder(null);
+		btnExcluir.setUI((ButtonUI) BasicButtonUI.createUI(btnExcluir));
 		btnExcluir.setBackground(corGeral);
 		painelFornecedor.add(btnExcluir);
+		btnExcluir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnLimpar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				limpar();
@@ -2086,7 +2033,9 @@ public class TelaEstoque extends JFrame {
 		btnLimpar.setForeground(corTexto);
 		btnLimpar.setFont(new Font("Roboto", Font.PLAIN, 18));
 		btnLimpar.setBorder(null);
+		btnLimpar.setUI((ButtonUI) BasicButtonUI.createUI(btnLimpar));
 		btnLimpar.setBackground(corGeral);
+		btnLimpar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		painelFornecedor.add(btnLimpar);
 
 		JLabel imgXNome = new JLabel(new ImageIcon(imagemX));

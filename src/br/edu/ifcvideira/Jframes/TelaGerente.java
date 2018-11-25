@@ -93,30 +93,24 @@ import javax.swing.JSpinner;
 public class TelaGerente extends JFrame {
 
 	private JPanel painelPrincipal;
-	
-	
+
 	Cliente cl = new Cliente();
-	static ClienteDao clDao=new ClienteDao();
+	static ClienteDao clDao = new ClienteDao();
 	static UsuarioDao funDao = new UsuarioDao();
 	Usuario fun = new Usuario();
-	
-	
+
 	JButton btnInformacoes = new JButton("Informa\u00E7\u00F5es");
 
 	JButton btnEditar = new JButton("Editar");
 
 	JButton btnCompras = new JButton("Compras");
-	
+
 	JButton btnCadastrarCliente = new JButton("Cadastrar Cliente");
 
-	static JComboBox cbPesquisaCliente = new JComboBox(new Object[]{});
+	static JComboBox cbPesquisaCliente = new JComboBox(new Object[] {});
 	TelaCadastroCliente telaCadastroCliente = new TelaCadastroCliente();
 	TelaCadastroFuncionario telaCadastroFuncionario = new TelaCadastroFuncionario();
-	static JComboBox cbPesquisaFun = new JComboBox(new Object[]{});
-
-
-
-	
+	static JComboBox cbPesquisaFun = new JComboBox(new Object[] {});
 
 	Color corTexto = new Color(75, 80, 85);
 	Color corGeral = new Color(Preferencias.getR(), Preferencias.getG(), Preferencias.getB());
@@ -139,13 +133,12 @@ public class TelaGerente extends JFrame {
 
 	ProdutoDao proDao = new ProdutoDao();
 	Produto pro = new Produto();
-	
+
 	JButton btnInfFun = new JButton("Informa\u00E7\u00F5es");
 
 	JButton btnEditarFun = new JButton("Editar");
 
 	JButton btnCadastrarFuncionario = new JButton("Cadastrar");
-
 
 	/**
 	 * Launch the application.
@@ -171,12 +164,12 @@ public class TelaGerente extends JFrame {
 	public TelaGerente() {
 		addWindowListener(new WindowAdapter() {
 			public void windowOpened(WindowEvent arg0) {
-				
+
 			}
 		});
-		
+
 		ImageIcon imageIconLogo = new ImageIcon(Preferencias.getImagem());
-		Image imagemLogo = imageIconLogo.getImage().getScaledInstance(300, 300,  java.awt.Image.SCALE_SMOOTH);
+		Image imagemLogo = imageIconLogo.getImage().getScaledInstance(300, 300, java.awt.Image.SCALE_SMOOTH);
 		setIconImage(imagemLogo);
 		setTitle(Preferencias.getNomeLoja());
 
@@ -201,7 +194,7 @@ public class TelaGerente extends JFrame {
 				System.exit(0);
 			}
 		});
-		
+
 		btSair.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -231,7 +224,6 @@ public class TelaGerente extends JFrame {
 
 		});
 
-		
 		btSair.setMaximumSize(new Dimension(80, 50));
 		btSair.setFont(new Font("Roboto", Font.PLAIN, 13));
 		btSair.setBorder(null);
@@ -246,8 +238,7 @@ public class TelaGerente extends JFrame {
 
 			}
 		});
-		
-		
+
 		btMinimizar.addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -310,185 +301,190 @@ public class TelaGerente extends JFrame {
 		painelCliente.setBackground(Color.WHITE);
 		painelCliente.setBounds(0, 0, 1386, 886);
 		painelPrincipal.add(painelCliente);
-		
+
 		JLabel lblPesquisarCliente = new JLabel("Pesquisar Clientes");
 		lblPesquisarCliente.setFont(new Font("Roboto", Font.PLAIN, 18));
 		lblPesquisarCliente.setBounds(10, 198, 173, 32);
 		painelCliente.add(lblPesquisarCliente);
-		
+
 		cbPesquisaCliente.setForeground(new Color(25, 30, 35));
 		cbPesquisaCliente.setFont(new Font("Roboto", Font.PLAIN, 18));
 		cbPesquisaCliente.setBounds(10, 231, 346, 50);
 		painelCliente.add(cbPesquisaCliente);
 		cbPesquisaCliente.addPopupMenuListener(new PopupMenuListener() {
-	    	public void popupMenuCanceled(PopupMenuEvent arg0) {
-	    	}
-	    	public void popupMenuWillBecomeInvisible(PopupMenuEvent arg0) {
-	    		if(cbPesquisaCliente.getSelectedItem() != null) {
-		    		if(cbPesquisaCliente.getSelectedItem().equals("")) {
-		    			btnEditar.setEnabled(false);
+			public void popupMenuCanceled(PopupMenuEvent arg0) {
+			}
+
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent arg0) {
+				if (cbPesquisaCliente.getSelectedItem() != null) {
+					if (cbPesquisaCliente.getSelectedItem().equals("")) {
+						btnEditar.setEnabled(false);
 						btnCompras.setEnabled(false);
 						btnInformacoes.setEnabled(false);
-						
+
 						btnEditar.setBackground(new Color(200, 200, 200));
 						btnCompras.setBackground(new Color(200, 200, 200));
 						btnInformacoes.setBackground(new Color(200, 200, 200));
-					}else {
+					} else {
 						btnEditar.setEnabled(true);
 						btnCompras.setEnabled(true);
 						btnInformacoes.setEnabled(true);
-						
+
 						btnEditar.setBackground(corGeral);
 						btnCompras.setBackground(corGeral);
 						btnInformacoes.setBackground(corGeral);
 					}
-	    		}else {
-	    			btnEditar.setEnabled(false);
+				} else {
+					btnEditar.setEnabled(false);
 					btnCompras.setEnabled(false);
 					btnInformacoes.setEnabled(false);
-					
+
 					btnEditar.setBackground(new Color(200, 200, 200));
 					btnCompras.setBackground(new Color(200, 200, 200));
 					btnInformacoes.setBackground(new Color(200, 200, 200));
-	    		}
-	    		
-	    	}
-	    	public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
-	    		atualizarCbPesquisa();
-	    	}
-	    });
+				}
+
+			}
+
+			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
+				atualizarCbPesquisa();
+			}
+		});
 		cbPesquisaCliente.setFont(new Font("Roboto", Font.PLAIN, 18));
 		cbPesquisaCliente.setForeground(corTexto);
-	    AutoCompleteDecorator.decorate(cbPesquisaCliente);
-	    painelCliente.add(cbPesquisaCliente);
-	    btnInformacoes.setEnabled(false);
-	    btnInformacoes.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-	    btnInformacoes.addMouseListener(new MouseAdapter() {
+		AutoCompleteDecorator.decorate(cbPesquisaCliente);
+		painelCliente.add(cbPesquisaCliente);
+		btnInformacoes.setEnabled(false);
+		btnInformacoes.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnInformacoes.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				if(btnInformacoes.isEnabled()) {
+				if (btnInformacoes.isEnabled()) {
 					btnInformacoes.setBackground(corSecundaria);
 				}
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
-				if(btnInformacoes.isEnabled()) {
+				if (btnInformacoes.isEnabled()) {
 					btnInformacoes.setBackground(corGeral);
 				}
 			}
+
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				if(btnInformacoes.isEnabled()) {
+				if (btnInformacoes.isEnabled()) {
 					btnInformacoes.setBackground(corTerciaria);
 				}
 			}
+
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				if(btnInformacoes.isEnabled()) {
+				if (btnInformacoes.isEnabled()) {
 					btnInformacoes.setBackground(corGeral);
 				}
 			}
 		});
-	    btnInformacoes.addActionListener(new ActionListener() {
-	    	public void actionPerformed(ActionEvent arg0) {
-	    		String nomeCliente = cbPesquisaCliente.getSelectedItem().toString();
-	    		 
-	    		
-	    		try {
-	    			Object[] dadosCliente = clDao.buscarCliente(nomeCliente);
-	    			
-	    			Cliente cliente = new Cliente();
-	    			
-		    		cliente.setId((int) dadosCliente[0]);
-		    		cliente.setNome(dadosCliente[1].toString());
-		    		cliente.setCpf(dadosCliente[2].toString());
-		    		cliente.setTelefone(dadosCliente[3].toString());
-		    		cliente.setCelular(dadosCliente[4].toString());
-		    		cliente.setDataCadastro((Timestamp) dadosCliente[5]);
-		    		cliente.setRua(dadosCliente[6].toString());
-		    		cliente.setBairro(dadosCliente[7].toString());
-		    		cliente.setCidade(dadosCliente[8].toString());
-		    		cliente.setEstado(dadosCliente[9].toString());
-		    		
-		    		TelaInfoCliente telaInfoCliente = new TelaInfoCliente(cliente);
-		    		telaInfoCliente.setVisible(true);
-	    		}catch(Exception e) {
-	    			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro ao visualizar informações", JOptionPane.ERROR_MESSAGE);
-	    		}
-	    		
-	    	}
-	    });
-	    btnInformacoes.setForeground(corTexto);
-	    btnInformacoes.setFont(new Font("Roboto", Font.PLAIN, 18));
-	    btnInformacoes.setBorder(null);
-	    btnInformacoes.setBackground(new Color(200, 200, 200));	    
+		btnInformacoes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String nomeCliente = cbPesquisaCliente.getSelectedItem().toString();
+
+				try {
+					Object[] dadosCliente = clDao.buscarCliente(nomeCliente);
+
+					Cliente cliente = new Cliente();
+
+					cliente.setId((int) dadosCliente[0]);
+					cliente.setNome(dadosCliente[1].toString());
+					cliente.setCpf(dadosCliente[2].toString());
+					cliente.setTelefone(dadosCliente[3].toString());
+					cliente.setCelular(dadosCliente[4].toString());
+					cliente.setDataCadastro((Timestamp) dadosCliente[5]);
+					cliente.setRua(dadosCliente[6].toString());
+					cliente.setBairro(dadosCliente[7].toString());
+					cliente.setCidade(dadosCliente[8].toString());
+					cliente.setEstado(dadosCliente[9].toString());
+
+					TelaInfoCliente telaInfoCliente = new TelaInfoCliente(cliente);
+					telaInfoCliente.setVisible(true);
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, e.getMessage(), "Erro ao visualizar informações",
+							JOptionPane.ERROR_MESSAGE);
+				}
+
+			}
+		});
+		btnInformacoes.setForeground(corTexto);
+		btnInformacoes.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btnInformacoes.setBorder(null);
+		btnInformacoes.setBackground(new Color(200, 200, 200));
 		btnInformacoes.setBounds(10, 300, 162, 45);
 		painelCliente.add(btnInformacoes);
 
-		
-		  btnEditar.addActionListener(new ActionListener() {
-		    	public void actionPerformed(ActionEvent arg0) {
-		    		String nomeCliente = cbPesquisaCliente.getSelectedItem().toString();
-		    		 
-		    		
-		    		try {
-		    			Object[] dadosCliente = clDao.buscarCliente(nomeCliente);
-		    			
-		    			Cliente cliente = new Cliente();
-		    			
-			    		cliente.setId((int) dadosCliente[0]);
-			    		cliente.setNome(dadosCliente[1].toString());
-			    		cliente.setCpf(dadosCliente[2].toString());
-			    		cliente.setTelefone(dadosCliente[3].toString());
-			    		cliente.setCelular(dadosCliente[4].toString());
-			    		cliente.setDataCadastro((Timestamp) dadosCliente[5]);
-			    		cliente.setRua(dadosCliente[6].toString());
-			    		cliente.setBairro(dadosCliente[7].toString());
-			    		cliente.setCidade(dadosCliente[8].toString());
-			    		cliente.setEstado(dadosCliente[9].toString());
-			    		
-			    		TelaEditarCliente telaEditarCliente = new TelaEditarCliente(cliente);
-			    		telaEditarCliente.setVisible(true);
-		    		}catch(Exception e) {
-		    			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro ao alterar", JOptionPane.ERROR_MESSAGE);
-		    		}
-		    		
-		    		
-		    	}
-		    });
-		    btnEditar.setEnabled(false);
-		    btnEditar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		    btnEditar.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseEntered(MouseEvent arg0) {
-					if(btnEditar.isEnabled()) {
-						btnEditar.setBackground(corSecundaria);
-					}
+		btnEditar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String nomeCliente = cbPesquisaCliente.getSelectedItem().toString();
+
+				try {
+					Object[] dadosCliente = clDao.buscarCliente(nomeCliente);
+
+					Cliente cliente = new Cliente();
+
+					cliente.setId((int) dadosCliente[0]);
+					cliente.setNome(dadosCliente[1].toString());
+					cliente.setCpf(dadosCliente[2].toString());
+					cliente.setTelefone(dadosCliente[3].toString());
+					cliente.setCelular(dadosCliente[4].toString());
+					cliente.setDataCadastro((Timestamp) dadosCliente[5]);
+					cliente.setRua(dadosCliente[6].toString());
+					cliente.setBairro(dadosCliente[7].toString());
+					cliente.setCidade(dadosCliente[8].toString());
+					cliente.setEstado(dadosCliente[9].toString());
+
+					TelaEditarCliente telaEditarCliente = new TelaEditarCliente(cliente);
+					telaEditarCliente.setVisible(true);
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, e.getMessage(), "Erro ao alterar", JOptionPane.ERROR_MESSAGE);
 				}
-				@Override
-				public void mouseExited(MouseEvent e) {
-					if(btnEditar.isEnabled()) {
-						btnEditar.setBackground(corGeral);
-					}
+
+			}
+		});
+		btnEditar.setEnabled(false);
+		btnEditar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnEditar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				if (btnEditar.isEnabled()) {
+					btnEditar.setBackground(corSecundaria);
 				}
-				@Override
-				public void mousePressed(MouseEvent arg0) {
-					if(btnInformacoes.isEnabled()) {
-						btnEditar.setBackground(corTerciaria);
-					}
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				if (btnEditar.isEnabled()) {
+					btnEditar.setBackground(corGeral);
 				}
-				@Override
-				public void mouseReleased(MouseEvent e) {
-					if(btnEditar.isEnabled()) {
-						btnEditar.setBackground(corGeral);
-					}
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				if (btnInformacoes.isEnabled()) {
+					btnEditar.setBackground(corTerciaria);
 				}
-			});
-		    btnEditar.setForeground(corTexto);
-		    btnEditar.setFont(new Font("Roboto", Font.PLAIN, 18));
-		    btnEditar.setBorder(null);
-		    btnEditar.setBackground(new Color(200, 200, 200));
-		    
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				if (btnEditar.isEnabled()) {
+					btnEditar.setBackground(corGeral);
+				}
+			}
+		});
+		btnEditar.setForeground(corTexto);
+		btnEditar.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btnEditar.setBorder(null);
+		btnEditar.setBackground(new Color(200, 200, 200));
+
 		btnEditar.setBounds(194, 300, 162, 45);
 		painelCliente.add(btnEditar);
 
@@ -499,225 +495,209 @@ public class TelaGerente extends JFrame {
 		btnCompras.setBackground(SystemColor.scrollbar);
 		btnCompras.setBounds(375, 300, 162, 45);
 		painelCliente.add(btnCompras);
-		
-		
-		
-		
-		 btnCadastrarCliente.setBounds(375, 234, 162, 45);
-		    btnCadastrarCliente.addActionListener(new ActionListener() {
-		    	public void actionPerformed(ActionEvent arg0) {
-		    		telaCadastroCliente.setVisible(true);
-		    	}
-		    });
-		    btnCadastrarCliente.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseEntered(MouseEvent arg0) {
-					btnCadastrarCliente.setBackground(corSecundaria);
-				}
-				@Override
-				public void mouseExited(MouseEvent e) {
-					btnCadastrarCliente.setBackground(corGeral);
-				}
-				@Override
-				public void mousePressed(MouseEvent arg0) {
-					btnCadastrarCliente.setBackground(corTerciaria);
-				}
-				@Override
-				public void mouseReleased(MouseEvent e) {
-					btnCadastrarCliente.setBackground(corGeral);
-				}
-			});
-			painelCliente.add(btnCadastrarCliente);
-			btnCadastrarCliente.setBackground(corGeral);
-			btnCadastrarCliente.setBorder(null);
-			btnCadastrarCliente.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			btnCadastrarCliente.setFont(new Font("Roboto", Font.PLAIN, 18));
-			btnCadastrarCliente.setForeground(corTexto);
-			
-			JLabel lblPesquisarFuncionrio = new JLabel("Pesquisar Funcion\u00E1rio");
-			lblPesquisarFuncionrio.setFont(new Font("Roboto", Font.PLAIN, 18));
-			lblPesquisarFuncionrio.setBounds(707, 198, 222, 32);
-			painelCliente.add(lblPesquisarFuncionrio);
-			
-			cbPesquisaFun.setForeground(new Color(25, 30, 35));
-			cbPesquisaFun.setFont(new Font("Roboto", Font.PLAIN, 18));
-			cbPesquisaFun.setBounds(707, 231, 346, 50);
-			painelCliente.add(cbPesquisaFun);
-			
-			cbPesquisaFun.addPopupMenuListener(new PopupMenuListener() {
-		    	public void popupMenuCanceled(PopupMenuEvent arg0) {
-		    	}
-		    	public void popupMenuWillBecomeInvisible(PopupMenuEvent arg0) {
-		    		if(cbPesquisaFun.getSelectedItem() != null) {
-			    		if(cbPesquisaFun.getSelectedItem().equals("")) {
-			    			btnEditarFun.setEnabled(false);
-							btnInfFun.setEnabled(false);
-							
-							btnEditarFun.setBackground(new Color(200, 200, 200));
-							btnInfFun.setBackground(new Color(200, 200, 200));
-						}else {
-							btnEditarFun.setEnabled(true);
-							btnInfFun.setEnabled(true);
-							
-							btnEditarFun.setBackground(corGeral);
-							btnInfFun.setBackground(corGeral);
-						}
-		    		}else {
-		    			btnEditarFun.setEnabled(false);
+
+		btnCadastrarCliente.setBounds(375, 234, 162, 45);
+		btnCadastrarCliente.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				telaCadastroCliente.setVisible(true);
+			}
+		});
+		btnCadastrarCliente.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnCadastrarCliente.setBackground(corSecundaria);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnCadastrarCliente.setBackground(corGeral);
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				btnCadastrarCliente.setBackground(corTerciaria);
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				btnCadastrarCliente.setBackground(corGeral);
+			}
+		});
+		painelCliente.add(btnCadastrarCliente);
+		btnCadastrarCliente.setBackground(corGeral);
+		btnCadastrarCliente.setBorder(null);
+		btnCadastrarCliente.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnCadastrarCliente.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btnCadastrarCliente.setForeground(corTexto);
+
+		JLabel lblPesquisarFuncionrio = new JLabel("Pesquisar Funcion\u00E1rio");
+		lblPesquisarFuncionrio.setFont(new Font("Roboto", Font.PLAIN, 18));
+		lblPesquisarFuncionrio.setBounds(707, 198, 222, 32);
+		painelCliente.add(lblPesquisarFuncionrio);
+
+		cbPesquisaFun.setForeground(new Color(25, 30, 35));
+		cbPesquisaFun.setFont(new Font("Roboto", Font.PLAIN, 18));
+		cbPesquisaFun.setBounds(707, 231, 346, 50);
+		painelCliente.add(cbPesquisaFun);
+
+		cbPesquisaFun.addPopupMenuListener(new PopupMenuListener() {
+			public void popupMenuCanceled(PopupMenuEvent arg0) {
+			}
+
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent arg0) {
+				if (cbPesquisaFun.getSelectedItem() != null) {
+					if (cbPesquisaFun.getSelectedItem().equals("")) {
+						btnEditarFun.setEnabled(false);
 						btnInfFun.setEnabled(false);
-						
+
 						btnEditarFun.setBackground(new Color(200, 200, 200));
 						btnInfFun.setBackground(new Color(200, 200, 200));
-		    		}
-		    		
-		    	}
-		    	public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
-		    		atualizarCbPesquisaFun();
-		    	}
-		    });
-			
-			
-			
-			
-			btnInfFun.setForeground(new Color(75, 80, 85));
-			btnInfFun.setFont(new Font("Roboto", Font.PLAIN, 18));
-			btnInfFun.setEnabled(false);
-			btnInfFun.setBorder(null);
-			btnInfFun.setBackground(SystemColor.scrollbar);
-			btnInfFun.setBounds(707, 300, 162, 45);
-			painelCliente.add(btnInfFun);
-			  btnEditarFun.addActionListener(new ActionListener() {
-			    	public void actionPerformed(ActionEvent arg0) {
-			    		String nomeUs = cbPesquisaFun.getSelectedItem().toString();
-			    		 
-			    		
-			    		try {
-			    			Object[] dadosUsuario = funDao.buscarFun(nomeUs);
-			    			
-			    			Usuario usuario = new Usuario();
-			    			
-			    			
+					} else {
+						btnEditarFun.setEnabled(true);
+						btnInfFun.setEnabled(true);
 
-			    			System.out.println(dadosUsuario[0]);
-			    			System.out.println(dadosUsuario[1]);
-			    			System.out.println(dadosUsuario[2]);
-			    			System.out.println(dadosUsuario[3]);
-			    			System.out.println(dadosUsuario[4]);
-			    			System.out.println(dadosUsuario[5]);
-			    			System.out.println(dadosUsuario[6]);
-			    			System.out.println(dadosUsuario[7]);
-			    			System.out.println(dadosUsuario[8]);
-			    			System.out.println(dadosUsuario[9]);
-			    			System.out.println(dadosUsuario[10]);
-			    			
-			    			usuario.setId((int) dadosUsuario[0]);
-			    			usuario.setTipo((int) dadosUsuario[1]);
-			    			usuario.setNome(dadosUsuario[2].toString());
-			    			usuario.setSenha(dadosUsuario[3].toString());
-			    			usuario.setCpf(dadosUsuario[4].toString());
-			    			usuario.setRg(dadosUsuario[5].toString());
-			    			usuario.setTelefone(dadosUsuario[6].toString());
-			    			usuario.setCelular(dadosUsuario[7].toString());
-			    			usuario.setDataCadastro((Timestamp) dadosUsuario[8]);
-			    			usuario.setStatus((int)dadosUsuario[9]);
-			    			usuario.setEmail(dadosUsuario[10].toString());
-			    			
-			    			
-			    		
+						btnEditarFun.setBackground(corGeral);
+						btnInfFun.setBackground(corGeral);
+					}
+				} else {
+					btnEditarFun.setEnabled(false);
+					btnInfFun.setEnabled(false);
 
-			    			
-				    		TelaEditarFuncionario telaEditarFuncionario= new TelaEditarFuncionario(usuario);
-				    		telaEditarFuncionario.setVisible(true);
-			    		}catch(Exception e) {
-			    			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro ao alterar", JOptionPane.ERROR_MESSAGE);
-			    		}
-			    		
-			    		
-			    	}
-			    });
-			    btnEditarFun.setEnabled(false);
-			    btnEditarFun.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			    btnEditarFun.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseEntered(MouseEvent arg0) {
-						if(btnEditarFun.isEnabled()) {
-							btnEditarFun.setBackground(corSecundaria);
-						}
-					}
-					@Override
-					public void mouseExited(MouseEvent e) {
-						if(btnEditarFun.isEnabled()) {
-							btnEditarFun.setBackground(corGeral);
-						}
-					}
-					@Override
-					public void mousePressed(MouseEvent arg0) {
-						if(btnInformacoes.isEnabled()) {
-							btnEditarFun.setBackground(corTerciaria);
-						}
-					}
-					@Override
-					public void mouseReleased(MouseEvent e) {
-						if(btnEditarFun.isEnabled()) {
-							btnEditarFun.setBackground(corGeral);
-						}
-					}
-				});
-			    btnEditarFun.setForeground(corTexto);
-			    btnEditarFun.setFont(new Font("Roboto", Font.PLAIN, 18));
-			    btnEditarFun.setBorder(null);
-			    btnEditarFun.setBackground(new Color(200, 200, 200));
-			    
+					btnEditarFun.setBackground(new Color(200, 200, 200));
+					btnInfFun.setBackground(new Color(200, 200, 200));
+				}
 
-			
-			btnEditarFun.setForeground(new Color(75, 80, 85));
-			btnEditarFun.setFont(new Font("Roboto", Font.PLAIN, 18));
-			btnEditarFun.setEnabled(false);
-			btnEditarFun.setBorder(null);
-			btnEditarFun.setBackground(SystemColor.scrollbar);
-			btnEditarFun.setBounds(891, 300, 162, 45);
-			painelCliente.add(btnEditarFun);
+			}
 
-			
-			
-			
-			 btnCadastrarFuncionario.addActionListener(new ActionListener() {
-			    	public void actionPerformed(ActionEvent arg0) {
-			    		telaCadastroFuncionario.setVisible(true);
-			    	}
-			    });
-			    btnCadastrarFuncionario.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseEntered(MouseEvent arg0) {
-						btnCadastrarFuncionario.setBackground(corSecundaria);
-					}
-					@Override
-					public void mouseExited(MouseEvent e) {
-						btnCadastrarFuncionario.setBackground(corGeral);
-					}
-					@Override
-					public void mousePressed(MouseEvent arg0) {
-						btnCadastrarFuncionario.setBackground(corTerciaria);
-					}
-					@Override
-					public void mouseReleased(MouseEvent e) {
-						btnCadastrarFuncionario.setBackground(corGeral);
-					}
-				});
+			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
+				atualizarCbPesquisaFun();
+			}
+		});
 
-			btnCadastrarFuncionario.setForeground(new Color(75, 80, 85));
-			btnCadastrarFuncionario.setFont(new Font("Roboto", Font.PLAIN, 18));
-			btnCadastrarFuncionario.setBorder(null);
-			btnCadastrarFuncionario.setBackground(new Color(0, 153, 255));
-			btnCadastrarFuncionario.setBounds(1072, 234, 162, 45);
-			painelCliente.add(btnCadastrarFuncionario);
-		    		
-		
-		
-		
-		
-		
-		
+		btnInfFun.setForeground(new Color(75, 80, 85));
+		btnInfFun.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btnInfFun.setEnabled(false);
+		btnInfFun.setBorder(null);
+		btnInfFun.setBackground(SystemColor.scrollbar);
+		btnInfFun.setBounds(707, 300, 162, 45);
+		painelCliente.add(btnInfFun);
+		btnEditarFun.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String nomeUs = cbPesquisaFun.getSelectedItem().toString();
+
+				try {
+					Object[] dadosUsuario = funDao.buscarFun(nomeUs);
+
+					Usuario usuario = new Usuario();
+
+					System.out.println(dadosUsuario[0]);
+					System.out.println(dadosUsuario[1]);
+					System.out.println(dadosUsuario[2]);
+					System.out.println(dadosUsuario[3]);
+					System.out.println(dadosUsuario[4]);
+					System.out.println(dadosUsuario[5]);
+					System.out.println(dadosUsuario[6]);
+					System.out.println(dadosUsuario[7]);
+					System.out.println(dadosUsuario[8]);
+					System.out.println(dadosUsuario[9]);
+					System.out.println(dadosUsuario[10]);
+
+					usuario.setId((int) dadosUsuario[0]);
+					usuario.setTipo((int) dadosUsuario[1]);
+					usuario.setNome(dadosUsuario[2].toString());
+					usuario.setCpf(dadosUsuario[4].toString());
+					usuario.setRg(dadosUsuario[5].toString());
+					usuario.setTelefone(dadosUsuario[6].toString());
+					usuario.setCelular(dadosUsuario[7].toString());
+					usuario.setDataCadastro((Timestamp) dadosUsuario[8]);
+					usuario.setStatus((int) dadosUsuario[9]);
+					usuario.setEmail(dadosUsuario[10].toString());
+
+					TelaEditarFuncionario telaEditarFuncionario = new TelaEditarFuncionario(usuario);
+					telaEditarFuncionario.setVisible(true);
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, e.getMessage(), "Erro ao alterar", JOptionPane.ERROR_MESSAGE);
+				}
+
+			}
+		});
+		btnEditarFun.setEnabled(false);
+		btnEditarFun.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnEditarFun.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				if (btnEditarFun.isEnabled()) {
+					btnEditarFun.setBackground(corSecundaria);
+				}
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				if (btnEditarFun.isEnabled()) {
+					btnEditarFun.setBackground(corGeral);
+				}
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				if (btnInformacoes.isEnabled()) {
+					btnEditarFun.setBackground(corTerciaria);
+				}
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				if (btnEditarFun.isEnabled()) {
+					btnEditarFun.setBackground(corGeral);
+				}
+			}
+		});
+		btnEditarFun.setForeground(corTexto);
+		btnEditarFun.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btnEditarFun.setBorder(null);
+		btnEditarFun.setBackground(new Color(200, 200, 200));
+
+		btnEditarFun.setForeground(new Color(75, 80, 85));
+		btnEditarFun.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btnEditarFun.setEnabled(false);
+		btnEditarFun.setBorder(null);
+		btnEditarFun.setBackground(SystemColor.scrollbar);
+		btnEditarFun.setBounds(891, 300, 162, 45);
+		painelCliente.add(btnEditarFun);
+
+		btnCadastrarFuncionario.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				telaCadastroFuncionario.setVisible(true);
+			}
+		});
+		btnCadastrarFuncionario.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnCadastrarFuncionario.setBackground(corSecundaria);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnCadastrarFuncionario.setBackground(corGeral);
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				btnCadastrarFuncionario.setBackground(corTerciaria);
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				btnCadastrarFuncionario.setBackground(corGeral);
+			}
+		});
+
+		btnCadastrarFuncionario.setForeground(new Color(75, 80, 85));
+		btnCadastrarFuncionario.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btnCadastrarFuncionario.setBorder(null);
+		btnCadastrarFuncionario.setBackground(new Color(0, 153, 255));
+		btnCadastrarFuncionario.setBounds(1072, 234, 162, 45);
+		painelCliente.add(btnCadastrarFuncionario);
 
 		// tela Inicia Maximizada
 		Rectangle area = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
@@ -727,52 +707,51 @@ public class TelaGerente extends JFrame {
 		setExtendedState(MAXIMIZED_BOTH);
 		setUndecorated(true);
 
-		
-
 	}
-	
+
 	public static void atualizarCbPesquisa() {
-		List<Object> nomes = new ArrayList<>();	    		
+		List<Object> nomes = new ArrayList<>();
 		try {
 			nomes = clDao.buscarNomes();
-			
+
 			ArrayList<String> nomesTxt = new ArrayList<>();
-			for(Object n : nomes) {
+			for (Object n : nomes) {
 				nomesTxt.add(String.valueOf(n));
 			}
 			Collections.sort(nomesTxt);
-			
+
 			cbPesquisaCliente.removeAllItems();
 			cbPesquisaCliente.addItem("");
-			
-			for(Object n : nomesTxt) {
+
+			for (Object n : nomesTxt) {
 				cbPesquisaCliente.addItem(n);
 			}
-			
+
 			cbPesquisaCliente.setSelectedIndex(1);
-		}catch(Exception e) { }
+		} catch (Exception e) {
+		}
 	}
-	
-	
+
 	public static void atualizarCbPesquisaFun() {
-		List<Object> nomes = new ArrayList<>();	    		
+		List<Object> nomes = new ArrayList<>();
 		try {
 			nomes = funDao.buscarNomes();
-			
+
 			ArrayList<String> nomesTxt = new ArrayList<>();
-			for(Object n : nomes) {
+			for (Object n : nomes) {
 				nomesTxt.add(String.valueOf(n));
 			}
 			Collections.sort(nomesTxt);
-			
+
 			cbPesquisaFun.removeAllItems();
 			cbPesquisaFun.addItem("");
-			
-			for(Object n : nomesTxt) {
+
+			for (Object n : nomesTxt) {
 				cbPesquisaFun.addItem(n);
 			}
-			
+
 			cbPesquisaFun.setSelectedIndex(1);
-		}catch(Exception e) { }
+		} catch (Exception e) {
+		}
 	}
 }
