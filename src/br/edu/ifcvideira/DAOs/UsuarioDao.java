@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import br.edu.ifcvideira.Classes.Produto;
 import br.edu.ifcvideira.Classes.Usuario;
 import br.edu.ifcvideira.utils.Conexao;
 
@@ -195,4 +196,24 @@ public class UsuarioDao {
 		}
 		return info;
 	}
+	
+	public Boolean RetornarNomeExiste(Usuario us) throws SQLException, Exception{
+		try{
+			String sql = "SELECT id FROM usuario WHERE nome=?";
+			java.sql.PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
+
+			sqlPrep.setString(1, us.getNome());
+			
+			ResultSet rs = sqlPrep.executeQuery(); 
+			if (rs.next()){
+				return false;
+			}else{
+				return true;
+			}
+		} catch(Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			return true;
+		}
+	}
+
 }

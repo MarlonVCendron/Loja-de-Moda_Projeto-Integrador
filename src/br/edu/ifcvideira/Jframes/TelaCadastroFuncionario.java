@@ -298,6 +298,29 @@ public class TelaCadastroFuncionario extends JFrame {
 		tfNome.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent arg0) {
+				
+				try {
+						camposCorretos[0] = (tfNome.getText().matches("[\\p{L}\\s]+")) ? true : false;
+						
+						if(tfNome.getText().length() < 1) {
+							camposCorretos[0] = false;
+						}
+						
+						if(camposCorretos[0]) {
+							spNome.setBackground(corSeparador);
+							panelImgNome.setVisible(false);
+						}else {
+							spNome.setBackground(corVermelho);
+							panelImgNome.setVisible(true);
+						}					
+					
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}	
+				
+				
+				
 				camposCorretos[0] = (tfNome.getText().matches("[\\p{L}\\s]+")) ? true : false;
 				
 				if(tfNome.getText().length() < 1) {
@@ -311,6 +334,11 @@ public class TelaCadastroFuncionario extends JFrame {
 					spNome.setBackground(corVermelho);
 					panelImgNome.setVisible(true);
 				}
+				
+				
+			
+				
+				
 			}
 			@Override
 			public void focusGained(FocusEvent arg0) {
@@ -581,12 +609,14 @@ public class TelaCadastroFuncionario extends JFrame {
 		});
 		
 		cbTipo.setModel(new DefaultComboBoxModel(new String[] {"Caixa - Tipo 0", "Estoque - Tipo 1", "Gerente - Tipo 2"}));
+		cbTipo.setSelectedIndex(0);
 		cbTipo.setForeground(new Color(75, 80, 85));
 		cbTipo.setFont(new Font("Roboto", Font.PLAIN, 18));
 		cbTipo.setBackground(Color.WHITE);
 		cbTipo.setBounds(236, 349, 215, 32);
 		panelCadastro.add(cbTipo);
 		cbStatus.setModel(new DefaultComboBoxModel(new String[] {"Inativo", "Ativo"}));
+		cbStatus.setSelectedIndex(1);
 		cbStatus.setForeground(new Color(75, 80, 85));
 		cbStatus.setFont(new Font("Roboto", Font.PLAIN, 18));
 		cbStatus.setBackground(Color.WHITE);
@@ -744,6 +774,7 @@ public class TelaCadastroFuncionario extends JFrame {
 				atualizaCamposPro();
 
 				if(camposEstaoCorretos(camposCorretos)) {
+					
 					Timestamp dataDeHoje = new Timestamp(System.currentTimeMillis());
 							us.setDataCadastro(dataDeHoje);
 							us.setNome(tfNome.getText());
@@ -757,12 +788,19 @@ public class TelaCadastroFuncionario extends JFrame {
 							us.setEmail(tfEmail.getText());
 							
 							try {
-								usDao.CadastrarUsuario(us);
-								dispose();
-							} catch (Exception e) {
-								e.printStackTrace();
+								if (usDao.RetornarNomeExiste(us)) {
+									try {
+										usDao.CadastrarUsuario(us);
+										dispose();
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+								}else {
+									JOptionPane.showMessageDialog(null, "Usuario já cadastrado", "Erro", JOptionPane.ERROR_MESSAGE);
+								}
+							} catch (Exception e1) {
+								e1.printStackTrace();
 							}
-							
 						} else {
 								JOptionPane.showMessageDialog(null, "Um ou mais campos não foram preenchidos corretamente", "Erro", JOptionPane.ERROR_MESSAGE);
 						}
