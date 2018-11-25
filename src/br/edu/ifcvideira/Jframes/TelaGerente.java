@@ -111,6 +111,7 @@ public class TelaGerente extends JFrame {
 
 	static JComboBox cbPesquisaCliente = new JComboBox(new Object[]{});
 	TelaCadastroCliente telaCadastroCliente = new TelaCadastroCliente();
+	TelaCadastroFuncionario telaCadastroFuncionario = new TelaCadastroFuncionario();
 	static JComboBox cbPesquisaFun = new JComboBox(new Object[]{});
 
 
@@ -123,14 +124,9 @@ public class TelaGerente extends JFrame {
 	Color corTerciaria = Cor.corMaisClara(corGeral, 0.4f);
 	Color corVermelho = new Color(230, 20, 20);
 	Point posMouseInicial;
-	private List<Object> fornecedor = new ArrayList<Object>();
-	private List<Object> categoria = new ArrayList<Object>();
-	private List<Object> produto = new ArrayList<Object>();
 
 	boolean[] camposCorretos = { false, false, false, false, false, false, false };
-	public static JComboBox cbFornecedoresProd = new JComboBox();
 
-	boolean[] camposCorretosCat = { false, false };
 	boolean[] camposCorretosPro = { false, false, false };
 
 	ImageIcon imageIconX = new ImageIcon(TelaGerente.class.getResource("/br/edu/ifcvideira/img/xerro.png"));
@@ -590,6 +586,88 @@ public class TelaGerente extends JFrame {
 			btnInfFun.setBackground(SystemColor.scrollbar);
 			btnInfFun.setBounds(707, 300, 162, 45);
 			painelCliente.add(btnInfFun);
+			  btnEditarFun.addActionListener(new ActionListener() {
+			    	public void actionPerformed(ActionEvent arg0) {
+			    		String nomeUs = cbPesquisaFun.getSelectedItem().toString();
+			    		 
+			    		
+			    		try {
+			    			Object[] dadosUsuario = funDao.buscarFun(nomeUs);
+			    			
+			    			Usuario usuario = new Usuario();
+			    			
+			    			
+
+			    			System.out.println(dadosUsuario[0]);
+			    			System.out.println(dadosUsuario[1]);
+			    			System.out.println(dadosUsuario[2]);
+			    			System.out.println(dadosUsuario[3]);
+			    			System.out.println(dadosUsuario[4]);
+			    			System.out.println(dadosUsuario[5]);
+			    			System.out.println(dadosUsuario[6]);
+			    			System.out.println(dadosUsuario[7]);
+			    			System.out.println(dadosUsuario[8]);
+			    			System.out.println(dadosUsuario[9]);
+			    			System.out.println(dadosUsuario[10]);
+			    			
+			    			usuario.setId((int) dadosUsuario[0]);
+			    			usuario.setTipo((int) dadosUsuario[1]);
+			    			usuario.setNome(dadosUsuario[2].toString());
+			    			usuario.setSenha(dadosUsuario[3].toString());
+			    			usuario.setCpf(dadosUsuario[4].toString());
+			    			usuario.setRg(dadosUsuario[5].toString());
+			    			usuario.setTelefone(dadosUsuario[6].toString());
+			    			usuario.setCelular(dadosUsuario[7].toString());
+			    			usuario.setDataCadastro((Timestamp) dadosUsuario[8]);
+			    			usuario.setStatus((int)dadosUsuario[9]);
+			    			usuario.setEmail(dadosUsuario[10].toString());
+			    			
+			    			
+			    		
+
+			    			
+				    		TelaEditarFuncionario telaEditarFuncionario= new TelaEditarFuncionario(usuario);
+				    		telaEditarFuncionario.setVisible(true);
+			    		}catch(Exception e) {
+			    			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro ao alterar", JOptionPane.ERROR_MESSAGE);
+			    		}
+			    		
+			    		
+			    	}
+			    });
+			    btnEditarFun.setEnabled(false);
+			    btnEditarFun.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			    btnEditarFun.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseEntered(MouseEvent arg0) {
+						if(btnEditarFun.isEnabled()) {
+							btnEditarFun.setBackground(corSecundaria);
+						}
+					}
+					@Override
+					public void mouseExited(MouseEvent e) {
+						if(btnEditarFun.isEnabled()) {
+							btnEditarFun.setBackground(corGeral);
+						}
+					}
+					@Override
+					public void mousePressed(MouseEvent arg0) {
+						if(btnInformacoes.isEnabled()) {
+							btnEditarFun.setBackground(corTerciaria);
+						}
+					}
+					@Override
+					public void mouseReleased(MouseEvent e) {
+						if(btnEditarFun.isEnabled()) {
+							btnEditarFun.setBackground(corGeral);
+						}
+					}
+				});
+			    btnEditarFun.setForeground(corTexto);
+			    btnEditarFun.setFont(new Font("Roboto", Font.PLAIN, 18));
+			    btnEditarFun.setBorder(null);
+			    btnEditarFun.setBackground(new Color(200, 200, 200));
+			    
 
 			
 			btnEditarFun.setForeground(new Color(75, 80, 85));
@@ -599,6 +677,33 @@ public class TelaGerente extends JFrame {
 			btnEditarFun.setBackground(SystemColor.scrollbar);
 			btnEditarFun.setBounds(891, 300, 162, 45);
 			painelCliente.add(btnEditarFun);
+
+			
+			
+			
+			 btnCadastrarFuncionario.addActionListener(new ActionListener() {
+			    	public void actionPerformed(ActionEvent arg0) {
+			    		telaCadastroFuncionario.setVisible(true);
+			    	}
+			    });
+			    btnCadastrarFuncionario.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseEntered(MouseEvent arg0) {
+						btnCadastrarFuncionario.setBackground(corSecundaria);
+					}
+					@Override
+					public void mouseExited(MouseEvent e) {
+						btnCadastrarFuncionario.setBackground(corGeral);
+					}
+					@Override
+					public void mousePressed(MouseEvent arg0) {
+						btnCadastrarFuncionario.setBackground(corTerciaria);
+					}
+					@Override
+					public void mouseReleased(MouseEvent e) {
+						btnCadastrarFuncionario.setBackground(corGeral);
+					}
+				});
 
 			btnCadastrarFuncionario.setForeground(new Color(75, 80, 85));
 			btnCadastrarFuncionario.setFont(new Font("Roboto", Font.PLAIN, 18));

@@ -16,7 +16,6 @@ public class UsuarioDao {
 		try{
 			String sql = "INSERT INTO usuario (tipo, nome, senha, cpf, rg, telefone, celular, data_cadastro, status, email) VALUES (?,?,?,?,?,?,?,?,?,?)";
 			java.sql.PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
-			System.out.println("safas");
 			sqlPrep.setInt(1, us.getTipo());
 			sqlPrep.setString(2, us.getNome());
 			sqlPrep.setString(3, us.getSenha());
@@ -160,6 +159,26 @@ public class UsuarioDao {
 			while (rs.next())
 			{
 				info.add(rs.getString(1));
+			}
+			sqlPrep.close();
+			
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
+		return info;
+	}
+	public Object[] buscarFun(String nome) throws SQLException, Exception{
+		Object[] info = new Object[10];
+		try {
+			String sql = "SELECT * FROM usuario WHERE nome=?";
+			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
+			sqlPrep.setString(1, nome);
+			ResultSet rs = sqlPrep.executeQuery();
+			
+			while (rs.next())
+			{
+				Object[] linha = {rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9),rs.getString(10),rs.getString(11)};
+				info = linha;
 			}
 			sqlPrep.close();
 			
