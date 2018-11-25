@@ -35,6 +35,8 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.ButtonUI;
+import javax.swing.plaf.basic.BasicButtonUI;
 import javax.swing.text.MaskFormatter;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
@@ -43,11 +45,14 @@ import br.edu.ifcvideira.Classes.Cliente;
 import br.edu.ifcvideira.Classes.Usuario;
 import br.edu.ifcvideira.DAOs.ClienteDao;
 import br.edu.ifcvideira.DAOs.UsuarioDao;
+import br.edu.ifcvideira.DAOs.VendaDao;
 import br.edu.ifcvideira.utils.Cor;
 import br.edu.ifcvideira.utils.Preferencias;
 import br.edu.ifcvideira.utils.Senha;
 
 import javax.swing.Icon;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class TelaEditarFuncionario extends JFrame {
 
@@ -103,7 +108,7 @@ public class TelaEditarFuncionario extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TelaEditarFuncionario frame = new TelaEditarFuncionario(null);
+					TelaEditarFuncionario frame = new TelaEditarFuncionario(null,1);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -115,7 +120,7 @@ public class TelaEditarFuncionario extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public TelaEditarFuncionario(Usuario usuario) {
+	public TelaEditarFuncionario(Usuario usuario, int idUsuarioAtual) {
 		setName("Tela Cadastro Cliente");
 		Dimension tela = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		int largura = 512;
@@ -159,6 +164,7 @@ public class TelaEditarFuncionario extends JFrame {
 		panelSuperior.setLayout(null);
 
 		JButton btnX = new JButton("X");
+		btnX.setUI((ButtonUI) BasicButtonUI.createUI(btnX));
 		btnX.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -194,6 +200,7 @@ public class TelaEditarFuncionario extends JFrame {
 		panelSuperior.add(btnX);
 
 		JButton btnMinimizar = new JButton("-");
+		btnMinimizar.setUI((ButtonUI) BasicButtonUI.createUI(btnMinimizar));
 		btnMinimizar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -516,6 +523,7 @@ public class TelaEditarFuncionario extends JFrame {
 		
 		
 		cbStatus.setModel(new DefaultComboBoxModel(new String[] { "Inativo", "Ativo" }));
+		cbStatus.setEnabled((idUsuarioAtual == usuario.getId()) ? false : true);
 		cbStatus.setForeground(new Color(75, 80, 85));
 		cbStatus.setSelectedIndex(usuario.getStatus());
 		cbStatus.setFont(new Font("Roboto", Font.PLAIN, 18));
@@ -604,6 +612,7 @@ public class TelaEditarFuncionario extends JFrame {
 		panelImgEmail.add(imgXEmail);
 
 		JButton btnEditar = new JButton("Editar");
+		btnEditar.setUI((ButtonUI) BasicButtonUI.createUI(btnEditar));
 		btnEditar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -671,6 +680,28 @@ public class TelaEditarFuncionario extends JFrame {
 		btnEditar.setFont(new Font("Roboto", Font.PLAIN, 18));
 		btnEditar.setForeground(corTexto);
 
+		JButton btnExcluir = new JButton("Excluir");
+		btnExcluir.setUI((ButtonUI) BasicButtonUI.createUI(btnExcluir));
+		btnExcluir.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnExcluir.setBackground(corSecundaria);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnExcluir.setBackground(corGeral);
+			}
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				btnExcluir.setBackground(corTerciaria);
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				btnExcluir.setBackground(corGeral);
+			}
+		});
+		
+		
 	}
 
 	private void atualizaCamposPro() {

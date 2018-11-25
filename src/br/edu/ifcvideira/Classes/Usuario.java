@@ -12,16 +12,8 @@ public class Usuario {
 	private String telefone;
 	private String celular;
 	private Timestamp dataCadastro;
-	private int status;
-	private int id_Gerente;
+	private int status;	
 	
-	
-	public int getId_Gerente() {
-		return id_Gerente;
-	}
-	public void setId_Gerente(int id_Gerente) {
-		this.id_Gerente = id_Gerente;
-	}
 	public String getEmail() {
 		return email;
 	}
