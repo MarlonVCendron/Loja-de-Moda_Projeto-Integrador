@@ -11,7 +11,7 @@ public class Preferencias {
 	}
 	
 	public static String getImagem() {
-		return preferencias.get("Imagem", "");
+		return preferencias.get("Imagem", "./src/br/edu/ifcvideira/img/logo_padrao.png");
 	}
 	
 	public static void setR(int r) {

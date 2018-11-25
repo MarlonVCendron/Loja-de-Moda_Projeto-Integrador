@@ -6,7 +6,7 @@ import java.security.MessageDigest;
 public class Senha {
 	public static String encriptarSenha(String senha) {
 		try {
-			MessageDigest digest = MessageDigest.getInstance("SHA-256");
+			MessageDigest digest = MessageDigest.getInstance("SHA-512");
 			byte[] hash = digest.digest(senha.getBytes(StandardCharsets.UTF_8));
 			
 			StringBuffer hexString = new StringBuffer();

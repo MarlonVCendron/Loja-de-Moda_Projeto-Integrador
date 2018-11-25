@@ -154,7 +154,7 @@ public class TelaLogin extends JFrame {
 		
 		JPanel panelLogo = new JPanel();
 		panelLogo.setOpaque(false);
-		panelLogo.setBounds(88, 168, 300, 300);
+		panelLogo.setBounds(73, 169, 325, 321);
 		panelEsquerda.add(panelLogo);
 		
 		lblLogo = new JLabel("");
@@ -509,6 +509,7 @@ public class TelaLogin extends JFrame {
 		
 		pfSenha = new JPasswordField();
 		pfSenha.setForeground(corTexto);
+		pfSenha.setEchoChar('•');
 		pfSenha.setFont(new Font("Roboto", Font.PLAIN, 18));
 		pfSenha.setBorder(null);
 		pfSenha.setBackground(panelCadastro.getBackground());
@@ -538,6 +539,7 @@ public class TelaLogin extends JFrame {
 		pfRepetir = new JPasswordField();
 		pfRepetir.setForeground(corTexto);
 		pfRepetir.setFont(new Font("Roboto", Font.PLAIN, 18));
+		pfRepetir.setEchoChar('•');
 		pfRepetir.setBorder(null);
 		pfRepetir.setBackground(panelCadastro.getBackground());
 		pfRepetir.addFocusListener(new FocusAdapter() {
@@ -858,6 +860,7 @@ public class TelaLogin extends JFrame {
 			}
 		});	
 		pfSenhaLogin.setBorder(null);
+		pfSenhaLogin.setEchoChar('•');
 		pfSenhaLogin.setForeground(new Color(75, 80, 85));
 		pfSenhaLogin.setFont(new Font("Roboto", Font.PLAIN, 22));
 		pfSenhaLogin.setBounds(87, 330, 331, 57);
@@ -912,31 +915,38 @@ public class TelaLogin extends JFrame {
 						int idUsuario = (int) infoUsuario.get(0);
 						String senhaUsuario = String.valueOf(infoUsuario.get(3));
 						int tipoUsuario = Integer.parseInt(String.valueOf(infoUsuario.get(1)));
+						int statusUsuario = (int) infoUsuario.get(9);
 						
-						if(senha.equals(senhaUsuario)) {
-							lblErroSenha.setVisible(false);
-							spSenhaLogin.setBackground(corSeparador);
-							
-							if(tipoUsuario == 0) {
-								fecharJanelas();
-								TelaCaixa telaCaixa = new TelaCaixa(idUsuario);
+						if(statusUsuario != 0) {
+							if(senha.equals(senhaUsuario)) {
+								lblErroSenha.setVisible(false);
+								spSenhaLogin.setBackground(corSeparador);
 								
-								telaCaixa.setVisible(true);
-							}else if(tipoUsuario == 1) {
-								fecharJanelas();
-								TelaEstoque telaEstoque = new TelaEstoque();
-								
-								telaEstoque.setVisible(true);
-							}else if(tipoUsuario == 2) {
-								fecharJanelas();
-								
-								TelaGerente telaGerente = new TelaGerente(idUsuario);
-								
-								telaGerente.setVisible(true);
+								if(tipoUsuario == 0) {
+									fecharJanelas();
+									TelaCaixa telaCaixa = new TelaCaixa(idUsuario);
+									
+									telaCaixa.setVisible(true);
+								}else if(tipoUsuario == 1) {
+									fecharJanelas();
+									TelaEstoque telaEstoque = new TelaEstoque();
+									
+									telaEstoque.setVisible(true);
+								}else if(tipoUsuario == 2) {
+									fecharJanelas();
+									
+									TelaGerente telaGerente = new TelaGerente(idUsuario);
+									
+									telaGerente.setVisible(true);
+								}
+							}else {
+								lblErroSenha.setVisible(true);
+								spSenhaLogin.setBackground(corVermelho);
 							}
 						}else {
-							lblErroSenha.setVisible(true);
-							spSenhaLogin.setBackground(corVermelho);
+							lblErroNome.setText("Usuário inativo");
+							lblErroNome.setVisible(true);
+							spNomeLogin.setBackground(corVermelho);
 						}
 					}else {
 						lblErroNome.setText("Nome inexistente");

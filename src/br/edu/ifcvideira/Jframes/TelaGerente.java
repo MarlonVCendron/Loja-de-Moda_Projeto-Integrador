@@ -177,6 +177,7 @@ public class TelaGerente extends JFrame {
 		ImageIcon imageIconLogo = new ImageIcon(Preferencias.getImagem());
 		Image imagemLogo = imageIconLogo.getImage().getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH);
 		setIconImage(imagemLogo);
+		
 		setTitle(Preferencias.getNomeLoja());
 		
 		ImageIcon imageConf = new ImageIcon(TelaLogin.class.getResource("/br/edu/ifcvideira/img/engrenagem.png"));
@@ -201,7 +202,7 @@ public class TelaGerente extends JFrame {
 		
 		JPanel panelLogo = new JPanel();
 		panelLogo.setOpaque(false);
-		panelLogo.setBounds(112, 301, 400, 400);
+		panelLogo.setBounds(112, 301, 410, 420);
 		panelEsquerda.add(panelLogo);
 		
 		lblLogo = new JLabel("");

@@ -196,7 +196,7 @@ public class Configuracoes extends JFrame {
 				fcImagem.setDialogTitle("Escolha a logo");
 				fcImagem.setFileSelectionMode(JFileChooser.FILES_ONLY);
 				
-				FileNameExtensionFilter filtro = new FileNameExtensionFilter("Imagem", "png", "jpg", "gif");
+				FileNameExtensionFilter filtro = new FileNameExtensionFilter("Imagem", "png", "jpg");
 				fcImagem.setFileFilter(filtro);
 	
 				int op = fcImagem.showOpenDialog(Configuracoes.this);
@@ -308,7 +308,7 @@ public class Configuracoes extends JFrame {
 	}
 	
 	void avisoReiniciar() {
-		Mensagem mensagem = new Mensagem("Reinicie o programa para aplicar as mudanças definitivamente", "Reinicie");
+		Mensagem mensagem = new Mensagem("Reinicie o programa para aplicar as mudanças", "Reinicie");
 		mensagem.setVisible(true);
 	}
 }

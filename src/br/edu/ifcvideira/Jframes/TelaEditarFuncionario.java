@@ -653,22 +653,12 @@ public class TelaEditarFuncionario extends JFrame {
 					us.setTipo(cbTipo.getSelectedIndex());
 					us.setEmail(tfEmail.getText());
 					
-					if ((us.getTipo() == 2) && (us.getStatus() == 0) ) {
-						if (us.getId()== usuario.getId_Gerente()) {
-							JOptionPane.showMessageDialog(null, "Você não pode se auto-desativar, consulte outro gerente", "Erro", JOptionPane.ERROR_MESSAGE);
-						}
-					} else {
-						try {
-							usDao.AlterarUsuario(us);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
+					try {
+						usDao.AlterarUsuario(us);
+						dispose();
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
-					
-					
-					
-					
-				
 
 				} else {
 					JOptionPane.showMessageDialog(null, "Um ou mais campos não foram preenchidos corretamente", "Erro",

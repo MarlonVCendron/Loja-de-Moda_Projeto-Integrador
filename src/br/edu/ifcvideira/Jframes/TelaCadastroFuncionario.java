@@ -485,6 +485,7 @@ public class TelaCadastroFuncionario extends JFrame {
 
 		pfSenha.setFont(new Font("Roboto", Font.PLAIN, 18));
 		pfSenha.setBorder(null);
+		pfSenha.setEchoChar('•');
 		pfSenha.setBackground(panelCadastro.getBackground());
 		pfSenha.addFocusListener(new FocusAdapter() {
 			@Override
@@ -516,6 +517,7 @@ public class TelaCadastroFuncionario extends JFrame {
 		pfRepetir.setForeground(corTexto);
 		pfRepetir.setFont(new Font("Roboto", Font.PLAIN, 18));
 		pfRepetir.setBorder(null);
+		pfRepetir.setEchoChar('•');
 		pfRepetir.setBackground(panelCadastro.getBackground());
 		pfRepetir.addFocusListener(new FocusAdapter() {
 			@Override
@@ -756,6 +758,7 @@ public class TelaCadastroFuncionario extends JFrame {
 							
 							try {
 								usDao.CadastrarUsuario(us);
+								dispose();
 							} catch (Exception e) {
 								e.printStackTrace();
 							}
