@@ -297,7 +297,7 @@ public class TelaEstoque extends JFrame {
 		btnX.setBackground(corGeral);
 		btnX.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.exit(DISPOSE_ON_CLOSE);
+				dispose();
 			}
 		});
 		

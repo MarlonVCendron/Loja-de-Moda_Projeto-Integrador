@@ -139,7 +139,7 @@ public class Configuracoes extends JFrame {
 		btnX.setBackground(corGeral);
 		btnX.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				setVisible(false);
+				dispose();
 			}
 		});
 		btnX.setBounds(207, 0, 42, 30);
@@ -206,8 +206,16 @@ public class Configuracoes extends JFrame {
 					Preferencias.setImagem(arquivoImg.getPath());
 					ImageIcon imageIconLogo = new ImageIcon(Preferencias.getImagem());
 					Image imagemLogo = imageIconLogo.getImage().getScaledInstance(300, 300,  java.awt.Image.SCALE_SMOOTH);
-					TelaLogin.lblLogo.setIcon(new ImageIcon(imagemLogo));
+				//	TelaLogin.lblLogo.setIcon(new ImageIcon(imagemLogo));
 				}
+				Window[] janelas = Window.getWindows();
+
+				for(Window j : janelas) {
+					j.dispose();
+				}
+				
+				TelaLogin telaLogin = new TelaLogin();				
+				telaLogin.setVisible(true);
 				avisoReiniciar();
 			}
 		});
@@ -257,8 +265,45 @@ public class Configuracoes extends JFrame {
 		btnEscolherCor.setFont(new Font("Roboto", Font.PLAIN, 15));
 		btnEscolherCor.setBorder(null);
 		btnEscolherCor.setBackground(corGeral);
-		btnEscolherCor.setBounds(49, 185, 161, 42);
+		btnEscolherCor.setBounds(49, 123, 161, 42);
 		panelConfigs.add(btnEscolherCor);
+		
+		
+		
+		
+		btnEscolherLogo.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnEscolherLogo.setMaximumSize(new Dimension(80, 50));
+		btnEscolherLogo.setFont(new Font("Roboto", Font.PLAIN, 15));
+		btnEscolherLogo.setBorder(null);
+		btnEscolherLogo.setBackground(corGeral);
+		btnEscolherLogo.setBounds(49, 56, 161, 42);
+		panelConfigs.add(btnEscolherLogo);
+		
+		JButton btnConfigLoja = new JButton("Configura\u00E7\u00F5es da Loja");
+		btnConfigLoja.setUI((ButtonUI) BasicButtonUI.createUI(btnConfigLoja));
+		btnConfigLoja.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnConfigLoja.setBackground(corSecundaria);
+			}
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				btnConfigLoja.setBackground(corGeral);
+			}
+		});
+		btnConfigLoja.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TelaConfigEmpresa telaConfigEmpresa= new TelaConfigEmpresa();
+				telaConfigEmpresa.setVisible(true);
+			}
+		});
+		btnConfigLoja.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnConfigLoja.setMaximumSize(new Dimension(80, 50));
+		btnConfigLoja.setFont(new Font("Roboto", Font.PLAIN, 15));
+		btnConfigLoja.setBorder(null);
+		btnConfigLoja.setBackground(corGeral);
+		btnConfigLoja.setBounds(49, 190, 161, 42);
+		panelConfigs.add(btnConfigLoja);
 		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{btnEscolherLogo, btnEscolherCor}));
 	}
 	

@@ -650,7 +650,11 @@ public class TelaLogin extends JFrame {
 					try {
 						daoUs.CadastrarUsuario(us);
 						fecharJanelas();
-						TelaGerente telaGerente = new TelaGerente();
+						
+						
+						Usuario usuario =new Usuario();
+						usuario.setId_Gerente(us.getId());
+						TelaGerente telaGerente = new TelaGerente(usuario);
 						
 						telaGerente.setVisible(true);
 					}catch(Exception e) { }
@@ -912,6 +916,11 @@ public class TelaLogin extends JFrame {
 						String senhaUsuario = String.valueOf(infoUsuario.get(3));
 						int tipoUsuario = Integer.parseInt(String.valueOf(infoUsuario.get(1)));
 						
+						Usuario usuario = new Usuario();
+						usuario.setId_Gerente(idUsuario);
+						
+						
+						
 						if(senha.equals(senhaUsuario)) {
 							lblErroSenha.setVisible(false);
 							spSenhaLogin.setBackground(corSeparador);
@@ -928,7 +937,10 @@ public class TelaLogin extends JFrame {
 								telaEstoque.setVisible(true);
 							}else if(tipoUsuario == 2) {
 								fecharJanelas();
-								TelaGerente telaGerente = new TelaGerente();
+								
+								usuario.getNome();
+								
+								TelaGerente telaGerente = new TelaGerente(usuario);
 								
 								telaGerente.setVisible(true);
 							}

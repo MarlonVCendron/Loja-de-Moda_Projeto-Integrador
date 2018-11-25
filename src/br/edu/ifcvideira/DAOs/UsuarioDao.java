@@ -39,19 +39,16 @@ public class UsuarioDao {
 
 	public void AlterarUsuario(Usuario us) throws Exception {
 		try{
-			String sql = "UPDATE usuario SET tipo=?, nome=?, senha=?, cpf=?, rg=?, telefone=?, celular=?, data_cadastro=?, status=?,email=? WHERE id=?";
+			String sql = "UPDATE usuario SET tipo=?, cpf=?, rg=?, telefone=?, celular=?, status=?,email=? WHERE id=?";
 			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
 			sqlPrep.setInt(1, us.getTipo());
-			sqlPrep.setString(2, us.getNome());
-			sqlPrep.setString(3, us.getSenha());
-			sqlPrep.setString(4, us.getCpf());
-			sqlPrep.setString(5, us.getRg());
-			sqlPrep.setString(6, us.getTelefone());
-			sqlPrep.setString(7, us.getCelular());
-			sqlPrep.setTimestamp(8, us.getDataCadastro());
-			sqlPrep.setInt(9, us.getStatus());
-			sqlPrep.setString(10, us.getEmail());
-			sqlPrep.setInt(11, us.getId());
+			sqlPrep.setString(2, us.getCpf());
+			sqlPrep.setString(3, us.getRg());
+			sqlPrep.setString(4, us.getTelefone());
+			sqlPrep.setString(5, us.getCelular());
+			sqlPrep.setInt(6, us.getStatus());
+			sqlPrep.setString(7, us.getEmail());
+			sqlPrep.setInt(8, us.getId());
 			sqlPrep.execute();
 		}catch(Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
@@ -70,17 +67,6 @@ public class UsuarioDao {
 		}
 	}
 
-	public void deletarUsuario(Usuario us) throws Exception{
-		try{
-			String sql = "DELETE FROM usuario WHERE id=? ";
-			PreparedStatement sqlPrep = (PreparedStatement) Conexao.conectar().prepareStatement(sql);
-			sqlPrep.setInt(1, us.getId());
-			sqlPrep.execute();
-		} catch (SQLException e){
-			JOptionPane.showMessageDialog(null, e.getMessage());
-		}
-	}
-	
 	public List<Object> buscarTodos() throws SQLException, Exception{
 		List<Object> Usuario = new ArrayList<Object>();
 		try {
@@ -179,6 +165,28 @@ public class UsuarioDao {
 			{
 				Object[] linha = {rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getTimestamp(9),rs.getInt(10),rs.getString(11)};
 				info = linha;
+			}
+			sqlPrep.close();
+			
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
+		return info;
+	}
+	
+	public List<Object> buscarId(String nome) throws SQLException, Exception{
+		List<Object> info = new ArrayList<>();
+		try {
+			String sql = "SELECT id FROM usuario WHERE nome=?";
+			//java.sql.Statement state = Conexao.conectar().createStatement();
+			PreparedStatement sqlPrep = Conexao.conectar().prepareStatement(sql);
+			sqlPrep.setString(1, nome);
+			ResultSet rs = sqlPrep.executeQuery();
+			
+			while (rs.next())
+			{
+				info.add(rs.getInt(1));
+		
 			}
 			sqlPrep.close();
 			

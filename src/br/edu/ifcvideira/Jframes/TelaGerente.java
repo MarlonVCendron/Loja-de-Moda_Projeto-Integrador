@@ -14,6 +14,8 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+import javax.swing.plaf.ButtonUI;
+import javax.swing.plaf.basic.BasicButtonUI;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -50,6 +52,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
@@ -72,6 +75,7 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
+import javax.print.attribute.standard.MediaSize.Engineering;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.Dimension;
 import javax.swing.JTextField;
@@ -105,19 +109,25 @@ public class TelaGerente extends JFrame {
 
 	JButton btnCompras = new JButton("Compras");
 
-	JButton btnCadastrarCliente = new JButton("Cadastrar Cliente");
+	JButton btnCadastrarCliente = new JButton("Cadastrar");
 
 	static JComboBox cbPesquisaCliente = new JComboBox(new Object[] {});
 	TelaCadastroCliente telaCadastroCliente = new TelaCadastroCliente();
 	TelaCadastroFuncionario telaCadastroFuncionario = new TelaCadastroFuncionario();
 	static JComboBox cbPesquisaFun = new JComboBox(new Object[] {});
 
-	Color corTexto = new Color(75, 80, 85);
+	Color corTexto = new Color(0, 0, 0);
 	Color corGeral = new Color(Preferencias.getR(), Preferencias.getG(), Preferencias.getB());
 	Color corSecundaria = Cor.corMaisClara(corGeral, 0.2f);
 	Color corTerciaria = Cor.corMaisClara(corGeral, 0.4f);
 	Color corVermelho = new Color(230, 20, 20);
 	Point posMouseInicial;
+
+	
+	
+	JLabel lblLogo = new JLabel("");
+
+	
 
 	boolean[] camposCorretos = { false, false, false, false, false, false, false };
 
@@ -139,6 +149,8 @@ public class TelaGerente extends JFrame {
 	JButton btnEditarFun = new JButton("Editar");
 
 	JButton btnCadastrarFuncionario = new JButton("Cadastrar");
+	private final JButton btnTelaEstoque = new JButton("Tela Estoque");
+	private final JButton btnConfig = new JButton("");
 
 	/**
 	 * Launch the application.
@@ -147,7 +159,7 @@ public class TelaGerente extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TelaGerente frame = new TelaGerente();
+					TelaGerente frame = new TelaGerente(null);
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 					frame.setVisible(true);
 
@@ -161,7 +173,7 @@ public class TelaGerente extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public TelaGerente() {
+	public TelaGerente(Usuario usuario) {
 		addWindowListener(new WindowAdapter() {
 			public void windowOpened(WindowEvent arg0) {
 
@@ -172,6 +184,10 @@ public class TelaGerente extends JFrame {
 		Image imagemLogo = imageIconLogo.getImage().getScaledInstance(300, 300, java.awt.Image.SCALE_SMOOTH);
 		setIconImage(imagemLogo);
 		setTitle(Preferencias.getNomeLoja());
+		
+		ImageIcon imageConf = new ImageIcon(TelaLogin.class.getResource("/br/edu/ifcvideira/img/engrenagem.png"));
+		Image imagemConfig = imageConf.getImage().getScaledInstance(40, 40,  java.awt.Image.SCALE_SMOOTH);
+		
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1386, 886);
@@ -180,100 +196,36 @@ public class TelaGerente extends JFrame {
 		painelPrincipal.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(painelPrincipal);
 		painelPrincipal.setLayout(null);
+		
 
-		JPanel btnSuperior = new JPanel();
-		btnSuperior.setLayout(null);
-		btnSuperior.setBorder(new EmptyBorder(5, 5, 5, 5));
-		btnSuperior.setBackground(Color.WHITE);
-		btnSuperior.setBounds(0, 0, 1386, 43);
-		painelPrincipal.add(btnSuperior);
 
-		JButton btSair = new JButton("X");
-		btSair.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
+		JPanel panelEsquerda = new JPanel();
+		panelEsquerda.setBounds(0, 0, 476, 738);
+		painelPrincipal.add(panelEsquerda);
+		panelEsquerda.setBackground(corGeral);
+		panelEsquerda.setLayout(null);
+		
+		JPanel panelLogo = new JPanel();
+		panelLogo.setOpaque(false);
+		panelLogo.setBounds(88, 168, 300, 300);
+		panelEsquerda.add(panelLogo);
+		
+		lblLogo = new JLabel("");
+		lblLogo.setIcon(new ImageIcon(imagemLogo));
+		panelLogo.add(lblLogo);
+		
+		JLabel lblConfig = new JLabel("");
+		lblConfig.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		lblConfig.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Configuracoes telaConfig =new Configuracoes();
+				telaConfig.setVisible(true);
 			}
 		});
-
-		btSair.addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-
-				btSair.setBackground(corSecundaria);
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btSair.setBackground(corGeral);
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				btSair.setBackground(corTerciaria);
-
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				btSair.setBackground(corGeral);
-
-			}
-
-		});
-
-		btSair.setMaximumSize(new Dimension(80, 50));
-		btSair.setFont(new Font("Roboto", Font.PLAIN, 13));
-		btSair.setBorder(null);
-		btSair.setBackground(corGeral);
-		btSair.setBounds(1326, 0, 42, 42);
-		btnSuperior.add(btSair);
-
-		JButton btMinimizar = new JButton("-");
-		btMinimizar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				setState(JFrame.ICONIFIED);
-
-			}
-		});
-
-		btMinimizar.addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-
-				btMinimizar.setBackground(corSecundaria);
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btMinimizar.setBackground(corGeral);
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				btMinimizar.setBackground(corTerciaria);
-
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				btMinimizar.setBackground(corGeral);
-
-			}
-
-		});
-
-		btMinimizar.setMaximumSize(new Dimension(80, 50));
-		btMinimizar.setFont(new Font("Roboto", Font.PLAIN, 15));
-		btMinimizar.setBorder(null);
-		btMinimizar.setBackground(corGeral);
-		btMinimizar.setBounds(1248, 0, 42, 42);
-		btnSuperior.add(btMinimizar);
+		lblConfig.setIcon(new ImageIcon (imagemConfig));
+		lblConfig.setBounds(428, 692, 48, 46);
+		panelEsquerda.add(lblConfig);
 
 		try {
 			MaskFormatter tfDescontoCatFormatter = new MaskFormatter("##");
@@ -299,17 +251,17 @@ public class TelaGerente extends JFrame {
 		painelCliente.setLayout(null);
 		painelCliente.setBorder(new EmptyBorder(5, 5, 5, 5));
 		painelCliente.setBackground(Color.WHITE);
-		painelCliente.setBounds(0, 0, 1386, 886);
+		painelCliente.setBounds(0, 0, 1365, 738);
 		painelPrincipal.add(painelCliente);
 
 		JLabel lblPesquisarCliente = new JLabel("Pesquisar Clientes");
 		lblPesquisarCliente.setFont(new Font("Roboto", Font.PLAIN, 18));
-		lblPesquisarCliente.setBounds(10, 198, 173, 32);
+		lblPesquisarCliente.setBounds(722, 119, 173, 32);
 		painelCliente.add(lblPesquisarCliente);
 
 		cbPesquisaCliente.setForeground(new Color(25, 30, 35));
 		cbPesquisaCliente.setFont(new Font("Roboto", Font.PLAIN, 18));
-		cbPesquisaCliente.setBounds(10, 231, 346, 50);
+		cbPesquisaCliente.setBounds(722, 152, 346, 50);
 		painelCliente.add(cbPesquisaCliente);
 		cbPesquisaCliente.addPopupMenuListener(new PopupMenuListener() {
 			public void popupMenuCanceled(PopupMenuEvent arg0) {
@@ -354,6 +306,8 @@ public class TelaGerente extends JFrame {
 		cbPesquisaCliente.setForeground(corTexto);
 		AutoCompleteDecorator.decorate(cbPesquisaCliente);
 		painelCliente.add(cbPesquisaCliente);
+		
+		
 		btnInformacoes.setEnabled(false);
 		btnInformacoes.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnInformacoes.addMouseListener(new MouseAdapter() {
@@ -415,10 +369,12 @@ public class TelaGerente extends JFrame {
 			}
 		});
 		btnInformacoes.setForeground(corTexto);
+		btnInformacoes.setUI((ButtonUI) BasicButtonUI.createUI(btnInformacoes));
+
 		btnInformacoes.setFont(new Font("Roboto", Font.PLAIN, 18));
 		btnInformacoes.setBorder(null);
 		btnInformacoes.setBackground(new Color(200, 200, 200));
-		btnInformacoes.setBounds(10, 300, 162, 45);
+		btnInformacoes.setBounds(722, 221, 162, 45);
 		painelCliente.add(btnInformacoes);
 
 		btnEditar.addActionListener(new ActionListener() {
@@ -451,6 +407,8 @@ public class TelaGerente extends JFrame {
 		});
 		btnEditar.setEnabled(false);
 		btnEditar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnEditar.setUI((ButtonUI) BasicButtonUI.createUI(btnEditar));
+
 		btnEditar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -485,18 +443,69 @@ public class TelaGerente extends JFrame {
 		btnEditar.setBorder(null);
 		btnEditar.setBackground(new Color(200, 200, 200));
 
-		btnEditar.setBounds(194, 300, 162, 45);
+		btnEditar.setBounds(906, 221, 162, 45);
 		painelCliente.add(btnEditar);
+		 btnCompras.setEnabled(false);
+		    btnCompras.setUI((ButtonUI) BasicButtonUI.createUI(btnCompras));
+		    btnCompras.addActionListener(new ActionListener() {
+		    	public void actionPerformed(ActionEvent arg0) {
+		    		String nomeCliente = cbPesquisaCliente.getSelectedItem().toString();
+		    		 
+		    		
+		    		try {
+		    			Object[] dadosCliente = clDao.buscarCliente(nomeCliente);
+		    			
+		    			Cliente cliente = new Cliente();
+		    			
+			    		cliente.setId((int) dadosCliente[0]);
+			    		cliente.setNome(dadosCliente[1].toString());
+			    		cliente.setDataCadastro((Timestamp) dadosCliente[5]);
+			    		
+			    		TelaConsultaDeVendas telaConsultaDeVendas = new TelaConsultaDeVendas(cliente);
+			    		telaConsultaDeVendas.setVisible(true);
+		    		}catch(Exception e) {
+		    			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro ao visualizar informações", JOptionPane.ERROR_MESSAGE);
+		    		}
+		    	}
+		    });
+		    btnCompras.setBounds(1087, 221, 162, 45);
+		    btnCompras.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		    btnCompras.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseEntered(MouseEvent arg0) {
+					if(btnInformacoes.isEnabled()) {
+						btnCompras.setBackground(corSecundaria);
+					}
+				}
+				@Override
+				public void mouseExited(MouseEvent e) {
+					if(btnCompras.isEnabled()) {
+						btnCompras.setBackground(corGeral);
+					}
+				}
+				@Override
+				public void mousePressed(MouseEvent arg0) {
+					if(btnCompras.isEnabled()) {
+						btnCompras.setBackground(corTerciaria);
+					}
+				}
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					if(btnCompras.isEnabled()) {
+						btnCompras.setBackground(corGeral);
+					}
+				}
+			});
+		    btnCompras.setForeground(corTexto);
+		    btnCompras.setFont(new Font("Roboto", Font.PLAIN, 18));
+		    btnCompras.setBorder(null);
+		    btnCompras.setBackground(new Color(200, 200, 200));
+		    painelCliente.add(btnCompras);
+		    
 
-		btnCompras.setForeground(new Color(25, 30, 35));
-		btnCompras.setFont(new Font("Roboto", Font.PLAIN, 18));
-		btnCompras.setEnabled(false);
-		btnCompras.setBorder(null);
-		btnCompras.setBackground(SystemColor.scrollbar);
-		btnCompras.setBounds(375, 300, 162, 45);
-		painelCliente.add(btnCompras);
+		btnCadastrarCliente.setBounds(1087, 155, 162, 45);
+		btnCadastrarCliente.setUI((ButtonUI) BasicButtonUI.createUI(btnCadastrarCliente));
 
-		btnCadastrarCliente.setBounds(375, 234, 162, 45);
 		btnCadastrarCliente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				telaCadastroCliente.setVisible(true);
@@ -532,12 +541,13 @@ public class TelaGerente extends JFrame {
 
 		JLabel lblPesquisarFuncionrio = new JLabel("Pesquisar Funcion\u00E1rio");
 		lblPesquisarFuncionrio.setFont(new Font("Roboto", Font.PLAIN, 18));
-		lblPesquisarFuncionrio.setBounds(707, 198, 222, 32);
+		lblPesquisarFuncionrio.setBounds(722, 374, 222, 32);
 		painelCliente.add(lblPesquisarFuncionrio);
 
 		cbPesquisaFun.setForeground(new Color(25, 30, 35));
+		AutoCompleteDecorator.decorate(cbPesquisaFun);
 		cbPesquisaFun.setFont(new Font("Roboto", Font.PLAIN, 18));
-		cbPesquisaFun.setBounds(707, 231, 346, 50);
+		cbPesquisaFun.setBounds(722, 407, 346, 50);
 		painelCliente.add(cbPesquisaFun);
 
 		cbPesquisaFun.addPopupMenuListener(new PopupMenuListener() {
@@ -549,6 +559,7 @@ public class TelaGerente extends JFrame {
 					if (cbPesquisaFun.getSelectedItem().equals("")) {
 						btnEditarFun.setEnabled(false);
 						btnInfFun.setEnabled(false);
+						
 
 						btnEditarFun.setBackground(new Color(200, 200, 200));
 						btnInfFun.setBackground(new Color(200, 200, 200));
@@ -574,12 +585,74 @@ public class TelaGerente extends JFrame {
 			}
 		});
 
-		btnInfFun.setForeground(new Color(75, 80, 85));
+		btnInfFun.setForeground(corTexto);
 		btnInfFun.setFont(new Font("Roboto", Font.PLAIN, 18));
+		btnInfFun.setUI((ButtonUI) BasicButtonUI.createUI(btnInfFun));
 		btnInfFun.setEnabled(false);
 		btnInfFun.setBorder(null);
+		
+		btnInfFun.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String nomeUs = cbPesquisaFun.getSelectedItem().toString();
+
+				try {
+					Object[] dadosUsuario = funDao.buscarFun(nomeUs);
+
+					Usuario usuario = new Usuario();
+
+					usuario.setId((int) dadosUsuario[0]);
+					usuario.setTipo((int) dadosUsuario[1]);
+					usuario.setNome(dadosUsuario[2].toString());
+					usuario.setCpf(dadosUsuario[4].toString());
+					usuario.setRg(dadosUsuario[5].toString());
+					usuario.setTelefone(dadosUsuario[6].toString());
+					usuario.setCelular(dadosUsuario[7].toString());
+					usuario.setDataCadastro((Timestamp) dadosUsuario[8]);
+					usuario.setStatus((int) dadosUsuario[9]);
+					usuario.setEmail(dadosUsuario[10].toString());
+
+					TelaInfoFuncionario telaInfFuncionario = new TelaInfoFuncionario(usuario);
+					telaInfFuncionario.setVisible(true);
+				} catch (Exception e) {
+				}
+
+			}
+		});
+		btnInfFun.setEnabled(false);
+		btnInfFun.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnInfFun.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				if (btnInfFun.isEnabled()) {
+					btnInfFun.setBackground(corSecundaria);
+				}
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				if (btnInfFun.isEnabled()) {
+					btnInfFun.setBackground(corGeral);
+				}
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				if (btnInformacoes.isEnabled()) {
+					btnInfFun.setBackground(corTerciaria);
+				}
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				if (btnInfFun.isEnabled()) {
+					btnInfFun.setBackground(corGeral);
+				}
+			}
+		});
+		
+		
 		btnInfFun.setBackground(SystemColor.scrollbar);
-		btnInfFun.setBounds(707, 300, 162, 45);
+		btnInfFun.setBounds(722, 476, 162, 45);
 		painelCliente.add(btnInfFun);
 		btnEditarFun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -589,18 +662,6 @@ public class TelaGerente extends JFrame {
 					Object[] dadosUsuario = funDao.buscarFun(nomeUs);
 
 					Usuario usuario = new Usuario();
-
-					System.out.println(dadosUsuario[0]);
-					System.out.println(dadosUsuario[1]);
-					System.out.println(dadosUsuario[2]);
-					System.out.println(dadosUsuario[3]);
-					System.out.println(dadosUsuario[4]);
-					System.out.println(dadosUsuario[5]);
-					System.out.println(dadosUsuario[6]);
-					System.out.println(dadosUsuario[7]);
-					System.out.println(dadosUsuario[8]);
-					System.out.println(dadosUsuario[9]);
-					System.out.println(dadosUsuario[10]);
 
 					usuario.setId((int) dadosUsuario[0]);
 					usuario.setTipo((int) dadosUsuario[1]);
@@ -622,6 +683,8 @@ public class TelaGerente extends JFrame {
 			}
 		});
 		btnEditarFun.setEnabled(false);
+		btnEditarFun.setUI((ButtonUI) BasicButtonUI.createUI(btnEditarFun));
+
 		btnEditarFun.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnEditarFun.addMouseListener(new MouseAdapter() {
 			@Override
@@ -657,13 +720,14 @@ public class TelaGerente extends JFrame {
 		btnEditarFun.setBorder(null);
 		btnEditarFun.setBackground(new Color(200, 200, 200));
 
-		btnEditarFun.setForeground(new Color(75, 80, 85));
+		btnEditarFun.setForeground(corTexto);
 		btnEditarFun.setFont(new Font("Roboto", Font.PLAIN, 18));
 		btnEditarFun.setEnabled(false);
 		btnEditarFun.setBorder(null);
 		btnEditarFun.setBackground(SystemColor.scrollbar);
-		btnEditarFun.setBounds(891, 300, 162, 45);
+		btnEditarFun.setBounds(906, 476, 162, 45);
 		painelCliente.add(btnEditarFun);
+		btnCadastrarFuncionario.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		btnCadastrarFuncionario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -692,12 +756,121 @@ public class TelaGerente extends JFrame {
 			}
 		});
 
-		btnCadastrarFuncionario.setForeground(new Color(75, 80, 85));
+		btnCadastrarFuncionario.setForeground(corTexto);
 		btnCadastrarFuncionario.setFont(new Font("Roboto", Font.PLAIN, 18));
 		btnCadastrarFuncionario.setBorder(null);
-		btnCadastrarFuncionario.setBackground(new Color(0, 153, 255));
-		btnCadastrarFuncionario.setBounds(1072, 234, 162, 45);
+		btnCadastrarFuncionario.setBackground(corGeral);
+		btnCadastrarFuncionario.setBounds(1087, 410, 162, 45);
+		btnCadastrarFuncionario.setUI((ButtonUI) BasicButtonUI.createUI(btnCadastrarFuncionario));
+
 		painelCliente.add(btnCadastrarFuncionario);
+		btnTelaEstoque.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnTelaEstoque.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				TelaEstoque telaEstoque = new TelaEstoque();
+				telaEstoque.setVisible(true);
+			}
+		});
+		
+		
+		
+		btnTelaEstoque.setForeground(corTexto);
+		btnTelaEstoque.setFont(new Font("Roboto", Font.PLAIN, 30));
+		btnTelaEstoque.setBorder(null);
+		btnTelaEstoque.setBackground(corGeral);
+		btnTelaEstoque.setUI((ButtonUI) BasicButtonUI.createUI(btnTelaEstoque));
+
+		btnTelaEstoque.setBounds(722, 608, 527, 66);
+		
+		painelCliente.add(btnTelaEstoque);
+		JPanel panelSuperior = new JPanel();
+		panelSuperior.setBounds(382, 0, 983, 32);
+		painelCliente.add(panelSuperior);
+		panelSuperior.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				posMouseInicial = e.getPoint();
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				posMouseInicial = null;
+			}
+		});
+		panelSuperior.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent arg0) {
+				Point posMouseAtual = arg0.getLocationOnScreen();
+				setLocation(posMouseAtual.x - posMouseInicial.x, posMouseAtual.y - posMouseInicial.y);
+			}
+		});
+		panelSuperior.setBackground(new Color(255, 255, 255));
+		panelSuperior.setLayout(null);
+		
+		JButton btnX = new JButton("X");
+		btnX.setUI((ButtonUI) BasicButtonUI.createUI(btnX));
+		btnX.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnX.setBackground(corSecundaria);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnX.setBackground(corGeral);
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				btnX.setBackground(corTerciaria);
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				btnX.setBackground(corGeral);
+			}
+		});
+		btnX.setBackground(corGeral);
+		btnX.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		btnX.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.exit(0);
+			}
+		});
+		btnX.setBounds(940, 0, 42, 30);
+		btnX.setMaximumSize(new Dimension(80, 50));
+		btnX.setFont(new Font("Roboto", Font.PLAIN, 13));
+		btnX.setBorder(null);
+		panelSuperior.add(btnX);
+		
+		JButton btnMinimizar = new JButton("-");
+		btnMinimizar.setUI((ButtonUI) BasicButtonUI.createUI(btnMinimizar));
+		btnMinimizar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnMinimizar.setBackground(corSecundaria);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnMinimizar.setBackground(corGeral);
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				btnMinimizar.setBackground(corTerciaria);
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				btnMinimizar.setBackground(corGeral);
+			}
+		});
+		btnMinimizar.setBackground(corGeral);
+		btnMinimizar.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		btnMinimizar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setState(JFrame.ICONIFIED);
+			}
+		});
+		btnMinimizar.setMaximumSize(new Dimension(80, 50));
+		btnMinimizar.setFont(new Font("Roboto", Font.PLAIN, 15));
+		btnMinimizar.setBorder(null);
+		btnMinimizar.setBounds(897, 0, 42, 30);
+		panelSuperior.add(btnMinimizar);
 
 		// tela Inicia Maximizada
 		Rectangle area = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
