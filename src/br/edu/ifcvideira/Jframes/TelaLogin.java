@@ -248,7 +248,7 @@ public class TelaLogin extends JFrame {
 		
 		JPanel panelCadastro = new JPanel();
 		panelCadastro.setBackground(new Color(255, 255, 255));
-		panelCadastro.setBounds(1000/*477*/, 32, 512, 621);
+		panelCadastro.setBounds(477, 32, 512, 621);
 		contentPane.add(panelCadastro);
 		panelCadastro.setLayout(null);
 		

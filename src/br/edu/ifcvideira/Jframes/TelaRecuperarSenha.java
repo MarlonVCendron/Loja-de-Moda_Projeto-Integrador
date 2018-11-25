@@ -215,12 +215,12 @@ public class TelaRecuperarSenha extends JFrame {
 		panelCadastro.add(lblCodigo);
 		
 		JSeparator spEmail = new JSeparator();
-		spEmail.setBounds(96, 131, 215, 2);
+		spEmail.setBounds(96, 131, 245, 2);
 		spEmail.setBackground(corSeparador);
 		panelCadastro.add(spEmail);
 		
 		JSeparator spCodigo = new JSeparator();
-		spCodigo.setBounds(96, 224, 215, 2);
+		spCodigo.setBounds(96, 224, 245, 2);
 		spCodigo.setBackground(corSeparador);
 		panelCadastro.add(spCodigo);
 		
@@ -228,7 +228,7 @@ public class TelaRecuperarSenha extends JFrame {
 		tfEmail.setEditable(false);
 		tfEmail.setBorder(null);
 		tfEmail.setText(us.getEmail());
-		tfEmail.setBounds(96, 99, 215, 32);
+		tfEmail.setBounds(96, 99, 245, 32);
 		tfEmail.setForeground(corTexto);
 		tfEmail.setFont(new Font("Roboto", Font.PLAIN, 18));
 		tfEmail.setBackground(panelCadastro.getBackground());
@@ -248,7 +248,7 @@ public class TelaRecuperarSenha extends JFrame {
 		
 		tfCodigo = new JTextField();
 		tfCodigo.setBorder(null);
-		tfCodigo.setBounds(96, 192, 215, 32);
+		tfCodigo.setBounds(96, 192, 245, 32);
 		tfCodigo.setForeground(corTexto);
 		tfCodigo.setFont(new Font("Roboto", Font.PLAIN, 18));
 		tfCodigo.setBackground(panelCadastro.getBackground());
